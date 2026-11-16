@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>جامعة حلب - الهندسة الإلكترونية | محاكي الدوائر v7.0 (الموسوعة الهندسية + محرك الصوتيات)</title>
+  <title>جامعة حلب - الهندسة الإلكترونية | محاكي الدوائر v8.0 (Enterprise UX & Vector Schematics)</title>
   <meta name="theme-color" content="#0f172a">
   <link rel="manifest" href="./manifest.json">
   <link rel="apple-touch-icon" href="./1000233248.jpg">
   <style>
     :root {
       --bg-dark: #0f172a;
-      --bg-panel: #1e293b;
+      --bg-panel: rgba(30, 41, 59, 0.94);
       --bg-card: #334155;
       --accent-green: #10b981;
       --accent-cyan: #06b6d4;
@@ -18,13 +18,13 @@
       --accent-red: #ef4444;
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
-      --grid-line: rgba(148, 163, 184, 0.12);
-      --border-soft: rgba(255, 255, 255, 0.1);
+      --grid-line: rgba(148, 163, 184, 0.11);
+      --border-soft: rgba(255, 255, 255, 0.12);
     }
 
     body.solarpunk-light {
       --bg-dark: #f4fbf7;
-      --bg-panel: #e2f2ea;
+      --bg-panel: rgba(226, 242, 234, 0.95);
       --bg-card: #ffffff;
       --accent-green: #059669;
       --accent-cyan: #0284c7;
@@ -32,7 +32,7 @@
       --accent-red: #dc2626;
       --text-main: #064e3b;
       --text-muted: #475569;
-      --grid-line: rgba(5, 150, 105, 0.14);
+      --grid-line: rgba(5, 150, 105, 0.13);
       --border-soft: rgba(5, 150, 105, 0.22);
     }
 
@@ -54,54 +54,71 @@
       transition: background-color 0.25s, color 0.25s;
     }
 
+    /* شريط الإعلانات العامة المصنف حسب الأهمية (Admin #7) */
     #globalAnnouncementBanner {
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
       height: 26px;
-      background: linear-gradient(90deg, #f59e0b, #10b981);
-      color: #020617;
       font-size: 11px;
       font-weight: 700;
       display: none;
       align-items: center;
       justify-content: center;
-      z-index: 150;
+      z-index: 160;
       padding: 0 10px;
+      color: #fff;
+    }
+    #globalAnnouncementBanner.sev-info { background: linear-gradient(90deg, #0284c7, #06b6d4); }
+    #globalAnnouncementBanner.sev-update { background: linear-gradient(90deg, #059669, #10b981); }
+    #globalAnnouncementBanner.sev-urgent { background: linear-gradient(90deg, #dc2626, #f59e0b); animation: pulseUrgent 1.4s infinite; }
+
+    @keyframes pulseUrgent {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.82; }
     }
 
+    /* الشريط العلوي */
     .top-bar {
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
-      height: 56px;
+      height: 54px;
       background: var(--bg-panel);
+      backdrop-filter: blur(10px);
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 0 10px;
       border-bottom: 1px solid var(--border-soft);
       z-index: 100;
+      transition: transform 0.3s ease;
     }
+
+    body.zen-mode .top-bar { transform: translateY(-120%); }
+    body.zen-mode .bottom-dock { transform: translateY(120%); }
+    body.zen-mode .scope-panel { transform: translateX(-120%); }
+    body.zen-mode #workspace-container { top: 0; bottom: 0; }
 
     .brand {
       display: flex;
       align-items: center;
       gap: 8px;
+      cursor: pointer;
     }
 
     .brand img {
-      width: 38px;
-      height: 38px;
+      width: 36px;
+      height: 36px;
       border-radius: 9px;
       border: 1px solid var(--accent-cyan);
       object-fit: cover;
     }
 
     .brand-title h1 {
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 700;
       color: var(--accent-green);
       line-height: 1.2;
@@ -110,26 +127,24 @@
     .brand-title .meta-row {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       font-size: 10px;
       color: var(--text-muted);
     }
 
     .conn-dot {
-      width: 8px;
-      height: 8px;
+      width: 7px;
+      height: 7px;
       border-radius: 50%;
       background: var(--accent-green);
       display: inline-block;
     }
-    .conn-dot.offline {
-      background: var(--accent-amber);
-    }
+    .conn-dot.offline { background: var(--accent-amber); }
 
     .nav-actions {
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 4px;
       flex-wrap: wrap;
     }
 
@@ -137,7 +152,7 @@
       background: var(--bg-card);
       color: var(--text-main);
       border: 1px solid var(--border-soft);
-      padding: 6px 9px;
+      padding: 5px 8px;
       border-radius: 8px;
       font-size: 11px;
       font-weight: 600;
@@ -151,6 +166,7 @@
     .btn:active { transform: scale(0.95); }
     .btn-primary { background: linear-gradient(135deg, var(--accent-green), #059669); color: #fff; border: none; }
     .btn-cyan { background: linear-gradient(135deg, var(--accent-cyan), #0284c7); color: #fff; border: none; }
+    .btn-amber { background: linear-gradient(135deg, var(--accent-amber), #d97706); color: #fff; border: none; }
     .btn-danger { background: rgba(239, 68, 68, 0.18); color: #ef4444; border-color: var(--accent-red); }
     .btn-secret {
       background: linear-gradient(135deg, #f59e0b, #b45309);
@@ -160,43 +176,82 @@
       box-shadow: 0 0 12px rgba(245, 158, 11, 0.5);
     }
 
-    .quick-ribbon {
+    /* زر وضع التركيز الكامل + القائمة الجانبية القابلة للطي (Student #4 & #15) */
+    .fab-container {
       position: fixed;
       top: 62px;
       right: 10px;
+      z-index: 95;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .fab-main {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent-cyan), #0284c7);
+      color: #fff;
+      border: none;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .quick-ribbon {
       display: flex;
       flex-direction: column;
       gap: 4px;
-      z-index: 82;
+      background: var(--bg-panel);
+      backdrop-filter: blur(8px);
+      padding: 5px;
+      border-radius: 12px;
+      border: 1px solid var(--border-soft);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+      transition: opacity 0.2s, transform 0.2s;
+    }
+
+    .quick-ribbon.collapsed {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-10px) scale(0.9);
     }
 
     .ribbon-btn {
-      width: 35px;
-      height: 35px;
-      border-radius: 9px;
-      background: var(--bg-panel);
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      background: var(--bg-card);
       border: 1px solid var(--border-soft);
       color: var(--text-main);
-      font-size: 14px;
+      font-size: 13px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
     }
 
     .ribbon-btn.active {
-      border-color: var(--accent-cyan);
-      background: rgba(6, 182, 212, 0.2);
+      border-color: var(--accent-green);
+      background: rgba(16, 185, 129, 0.22);
+      color: var(--accent-green);
     }
 
+    /* مساحة العمل */
     #workspace-container {
       position: fixed;
-      top: 56px;
-      bottom: 106px;
+      top: 54px;
+      bottom: 108px;
       left: 0;
       right: 0;
       overflow: hidden;
+      transition: top 0.3s, bottom 0.3s;
     }
 
     #circuitCanvas {
@@ -207,12 +262,59 @@
       background-color: var(--bg-dark);
     }
 
+    /* الخريطة المصغرة للتنقل Mini-Map Radar (Student #8) */
+    #miniMapCanvas {
+      position: fixed;
+      bottom: 118px;
+      right: 10px;
+      width: 96px;
+      height: 68px;
+      background: rgba(2, 6, 23, 0.82);
+      border: 1px solid var(--accent-cyan);
+      border-radius: 8px;
+      z-index: 80;
+      pointer-events: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    }
+    body.zen-mode #miniMapCanvas { bottom: 14px; }
+
+    /* حلقة التحكم الدائرية السريعة حول العنصر Radial Context Menu (Student #7) */
+    .radial-menu {
+      position: fixed;
+      width: 120px;
+      height: 120px;
+      pointer-events: none;
+      z-index: 90;
+      display: none;
+      transform: translate(-50%, -50%);
+    }
+
+    .radial-btn {
+      position: absolute;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--bg-panel);
+      border: 1.5px solid var(--accent-cyan);
+      color: var(--text-main);
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: auto;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    }
+    .radial-btn:active { transform: scale(0.9); }
+
+    /* راسم الإشارة ثنائي القنوات (Student #11: Dual-Channel Oscilloscope) */
     .scope-panel {
       position: fixed;
-      top: 62px;
+      top: 60px;
       left: 10px;
-      width: 250px;
+      width: 260px;
       background: var(--bg-panel);
+      backdrop-filter: blur(8px);
       border: 1px solid var(--accent-cyan);
       border-radius: 12px;
       padding: 8px;
@@ -222,22 +324,22 @@
     }
 
     .scope-panel.collapsed {
-      transform: translateX(-220px);
+      transform: translateX(-230px);
     }
 
     .scope-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 11px;
+      font-size: 10px;
       color: var(--accent-cyan);
-      margin-bottom: 5px;
+      margin-bottom: 4px;
       font-weight: 700;
     }
 
     #scopeCanvas {
       width: 100%;
-      height: 82px;
+      height: 84px;
       background: #020617;
       border-radius: 6px;
       border: 1px solid rgba(6, 182, 212, 0.3);
@@ -251,9 +353,10 @@
       color: var(--text-muted);
     }
 
+    /* المقياس المتعدد اللحظي */
     .multimeter-widget {
       position: fixed;
-      top: 205px;
+      top: 200px;
       left: 10px;
       width: 215px;
       background: var(--bg-panel);
@@ -278,32 +381,37 @@
       line-height: 1.4;
     }
 
+    /* شريط الفحص مع محدد الوحدات الذكية SI Prefix (Student #3) */
     .inspector-bar {
       position: fixed;
-      bottom: 112px;
+      bottom: 114px;
       left: 10px;
-      right: 10px;
+      right: 115px;
       background: var(--bg-panel);
+      backdrop-filter: blur(10px);
       border: 1px solid var(--accent-green);
       border-radius: 12px;
-      padding: 9px 12px;
+      padding: 8px 12px;
       display: none;
       flex-direction: column;
-      gap: 7px;
+      gap: 6px;
       z-index: 85;
       box-shadow: 0 6px 20px rgba(0,0,0,0.45);
+    }
+    @media (max-width: 600px) {
+      .inspector-bar { right: 10px; bottom: 112px; }
     }
 
     .inspector-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 8px;
+      gap: 6px;
       flex-wrap: wrap;
     }
 
     .inspector-bar input[type="number"] {
-      width: 82px;
+      width: 72px;
       padding: 4px 6px;
       border-radius: 6px;
       border: 1px solid var(--accent-cyan);
@@ -313,6 +421,16 @@
       text-align: center;
     }
 
+    .si-select {
+      padding: 4px;
+      border-radius: 6px;
+      background: var(--bg-dark);
+      color: var(--accent-green);
+      border: 1px solid var(--border-soft);
+      font-size: 11px;
+      font-weight: bold;
+    }
+
     .inspector-bar input[type="range"] {
       flex: 1;
       accent-color: var(--accent-green);
@@ -320,8 +438,8 @@
     }
 
     .wire-color-swatch {
-      width: 20px;
-      height: 20px;
+      width: 18px;
+      height: 18px;
       border-radius: 50%;
       cursor: pointer;
       border: 2px solid transparent;
@@ -331,37 +449,50 @@
       transform: scale(1.15);
     }
 
-    /* الدرج السفلي متعدد التصنيفات للموسوعة الإلكترونية الشاملة (35+ قطعة) */
+    /* الدرج السفلي مع البحث الفوري عن القطع والقطع المستخدمة مؤخراً (Student #5 & #6) */
     .bottom-dock {
       position: fixed;
       bottom: 0;
       left: 0;
       right: 0;
-      height: 106px;
+      height: 108px;
       background: var(--bg-panel);
+      backdrop-filter: blur(10px);
       border-top: 1px solid var(--border-soft);
       display: flex;
       flex-direction: column;
       z-index: 100;
+      transition: transform 0.3s ease;
     }
 
     .category-bar {
       display: flex;
       align-items: center;
       gap: 5px;
-      padding: 4px 10px;
+      padding: 4px 8px;
       border-bottom: 1px solid var(--border-soft);
       overflow-x: auto;
-      height: 36px;
+      height: 38px;
+    }
+
+    .comp-search-pill {
+      width: 125px;
+      padding: 3px 8px;
+      border-radius: 99px;
+      border: 1px solid var(--accent-cyan);
+      background: var(--bg-dark);
+      color: var(--text-main);
+      font-size: 11px;
+      flex-shrink: 0;
     }
 
     .cat-tab {
       background: var(--bg-dark);
       color: var(--text-muted);
       border: 1px solid var(--border-soft);
-      padding: 3px 10px;
+      padding: 3px 9px;
       border-radius: 99px;
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 700;
       cursor: pointer;
       white-space: nowrap;
@@ -378,13 +509,13 @@
       flex: 1;
       display: flex;
       align-items: center;
-      gap: 7px;
-      padding: 0 10px;
+      gap: 6px;
+      padding: 0 8px;
       overflow-x: auto;
     }
 
     .tool-item {
-      min-width: 68px;
+      min-width: 66px;
       height: 56px;
       background: var(--bg-card);
       border: 1px solid var(--border-soft);
@@ -397,31 +528,32 @@
       color: var(--text-main);
       cursor: pointer;
       flex-shrink: 0;
-      padding: 2px 5px;
+      padding: 2px 4px;
       text-align: center;
     }
 
     .tool-item.active {
       border-color: var(--accent-green);
-      background: rgba(16, 185, 129, 0.2);
+      background: rgba(16, 185, 129, 0.22);
       color: var(--accent-green);
     }
 
     .tool-item span.icon {
-      font-size: 16px;
+      font-size: 15px;
       font-weight: bold;
       margin-bottom: 2px;
     }
 
+    /* النوافذ الزجاجية الموحدة (Admin #3 Glassmorphic Modals) */
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(2, 6, 23, 0.85);
-      backdrop-filter: blur(6px);
+      background: rgba(2, 6, 23, 0.82);
+      backdrop-filter: blur(7px);
       display: none;
       align-items: center;
       justify-content: center;
-      padding: 14px;
+      padding: 12px;
       z-index: 200;
     }
 
@@ -432,19 +564,19 @@
       border: 1px solid var(--border-soft);
       border-radius: 16px;
       width: 100%;
-      max-width: 560px;
+      max-width: 580px;
       max-height: 90vh;
       overflow-y: auto;
-      padding: 18px;
+      padding: 16px;
       position: relative;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.65);
     }
 
     .modal-card.fullscreen-admin {
       max-width: 98vw;
       width: 98vw;
-      height: 94vh;
-      max-height: 94vh;
+      height: 95vh;
+      max-height: 95vh;
       display: flex;
       flex-direction: column;
     }
@@ -453,21 +585,23 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       padding-bottom: 8px;
       border-bottom: 1px solid var(--border-soft);
+      flex-wrap: wrap;
+      gap: 6px;
     }
 
-    .form-group { margin-bottom: 12px; }
+    .form-group { margin-bottom: 10px; }
     .form-group label { display: block; font-size: 12px; margin-bottom: 4px; color: var(--text-muted); }
     .form-control {
       width: 100%;
-      padding: 9px 11px;
+      padding: 8px 10px;
       background: var(--bg-dark);
       border: 1px solid var(--border-soft);
       border-radius: 8px;
       color: var(--text-main);
-      font-size: 13px;
+      font-size: 12px;
     }
 
     .project-card {
@@ -476,6 +610,11 @@
       border-radius: 10px;
       padding: 10px;
       margin-bottom: 8px;
+      transition: border-color 0.2s;
+    }
+    .project-card.featured-gold {
+      border: 1.5px solid var(--accent-amber);
+      box-shadow: 0 0 14px rgba(245, 158, 11, 0.18);
     }
 
     .badge {
@@ -486,20 +625,37 @@
     }
     .badge-public { background: rgba(16, 185, 129, 0.2); color: #10b981; }
     .badge-private { background: rgba(148, 163, 184, 0.2); color: var(--text-muted); }
+    .badge-featured { background: rgba(245, 158, 11, 0.25); color: #fbbf24; }
+
+    /* أيقونة الأحرف الأولى للطالب (Admin #4 Student Avatar) */
+    .avatar-circle {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #0284c7, #10b981);
+      color: #fff;
+      font-weight: 800;
+      font-size: 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      border: 2px solid #34d399;
+    }
 
     .admin-tabs {
       display: flex;
       gap: 6px;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       overflow-x: auto;
       padding-bottom: 4px;
     }
 
     .stats-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(125px, 1fr));
       gap: 8px;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
 
     .stat-box {
@@ -508,9 +664,24 @@
       border-radius: 10px;
       padding: 8px;
       text-align: center;
+      position: relative;
     }
-    .stat-box .num { font-size: 18px; font-weight: 800; color: var(--accent-cyan); }
+    .stat-box .num { font-size: 17px; font-weight: 800; color: var(--accent-cyan); }
     .stat-box .lbl { font-size: 10px; color: var(--text-muted); }
+
+    .progress-bar-bg {
+      width: 100%;
+      height: 5px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 99px;
+      margin-top: 4px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent-green), var(--accent-cyan));
+      border-radius: 99px;
+    }
 
     .cyber-watermark {
       position: absolute;
@@ -522,34 +693,40 @@
       height: 110px;
     }
 
+    /* التنبيه العائم مع زر التراجع الإداري (Admin #11 Undo Toast) */
     #toastBox {
       position: fixed;
-      top: 64px;
+      top: 62px;
       left: 50%;
       transform: translateX(-50%);
       background: var(--bg-panel);
       color: var(--text-main);
       border-right: 4px solid var(--accent-green);
-      padding: 10px 16px;
-      border-radius: 8px;
+      padding: 9px 14px;
+      border-radius: 10px;
       font-size: 12px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.55);
       z-index: 300;
       display: none;
+      align-items: center;
+      gap: 10px;
     }
   </style>
 </head>
 <body>
 
-  <!-- شريط الإعلانات العامة السحابي -->
-  <div id="globalAnnouncementBanner"></div>
+  <!-- شريط الإعلانات العامة السحابي المصنف -->
+  <div id="globalAnnouncementBanner" class="sev-info"></div>
 
-  <!-- تنبيه عائم -->
-  <div id="toastBox"></div>
+  <!-- تنبيه عائم مع دعم التراجع الإداري -->
+  <div id="toastBox">
+    <span id="toastText"></span>
+    <button id="toastUndoBtn" class="btn btn-amber" style="display:none; padding:2px 8px; font-size:10px;">تراجع ↶</button>
+  </div>
 
   <!-- الشريط العلوي -->
   <header class="top-bar" id="topBar">
-    <div class="brand">
+    <div class="brand" onclick="openStudentProfileModal()" title="افتح ملفك الشخصي وأوسمتك">
       <img src="./1000233248.jpg" alt="شعار جامعة حلب" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%230f172a%22/><circle cx=%2250%22 cy=%2250%22 r=%2235%22 stroke=%22%2310b981%22 stroke-width=%224%22 fill=%22none%22/></svg>'">
       <div class="brand-title">
         <h1>جامعة حلب - الهندسة الإلكترونية</h1>
@@ -564,28 +741,31 @@
     </div>
 
     <div class="nav-actions">
-      <button id="secretRoomBtn" class="btn btn-secret" onclick="playSFX('tap'); openModal('secretRoomModal')">★ الغرفة السرية</button>
-      <button class="btn" onclick="playSFX('tap'); openModal('templatesModal')">قوالب جاهزة</button>
-      <button class="btn btn-cyan" onclick="playSFX('tap'); openRepositoryModal()">المستودع والبحث</button>
+      <button id="secretRoomBtn" class="btn btn-secret" onclick="playSFX('tap'); requestOpenSecretRoom()">★ الغرفة السرية</button>
+      <button class="btn" onclick="playSFX('tap'); openStudentProfileModal()">👤 ملفي</button>
+      <button class="btn" onclick="playSFX('tap'); openModal('templatesModal')">قوالب وتحديات</button>
+      <button class="btn btn-cyan" onclick="playSFX('tap'); openRepositoryModal()">المستودع</button>
+      <button class="btn" onclick="playSFX('tap'); openQRShareModal()" title="مشاركة الدائرة بـ QR Code">📲 QR</button>
       <button class="btn btn-primary" onclick="playSFX('tap'); openSaveProjectModal()">حفظ</button>
       <button id="simToggleBtn" class="btn" onclick="toggleSimulation()">▶ تشغيل</button>
     </div>
   </header>
 
-  <!-- راسم الإشارة العائم (Mini-Oscilloscope) -->
+  <!-- راسم الإشارة ثنائي القنوات (Student #11: Dual-Channel Oscilloscope) -->
   <div class="scope-panel" id="scopePanel">
     <div class="scope-header">
-      <span>راسم الإشارة اللحظي (True MNA v7)</span>
-      <button class="btn" style="padding:2px 6px; font-size:10px;" onclick="playSFX('tap'); document.getElementById('scopePanel').classList.toggle('collapsed')">طي/فتح</button>
+      <span>راسم إشارة ثنائي القنوات (CH1 دخل / CH2 خرج)</span>
+      <button class="btn" style="padding:2px 6px; font-size:9px;" onclick="playSFX('tap'); document.getElementById('scopePanel').classList.toggle('collapsed')">طي/فتح</button>
     </div>
-    <canvas id="scopeCanvas" width="230" height="82"></canvas>
+    <canvas id="scopeCanvas" width="242" height="84"></canvas>
     <div class="telemetry-bar">
-      <span id="maxVoltReadout">أعلى جهد: 0.00V</span>
+      <span id="maxVoltReadout" style="color:#00ff88;">CH2: 0.00V</span>
+      <span style="color:#38bdf8;">CH1: المنبع</span>
       <span id="simStatusReadout" style="color:var(--accent-green);">جاهز</span>
     </div>
   </div>
 
-  <!-- أداة المقياس المتعدد اللحظي و RMS (Live DMM) -->
+  <!-- أداة المقياس المتعدد اللحظي و RMS -->
   <div class="multimeter-widget" id="multimeterWidget">
     <div style="display:flex; justify-content:space-between; align-items:center; font-size:11px; color:var(--accent-amber); font-weight:bold;">
       <span>📟 المقياس المتعدد اللحظي (DMM)</span>
@@ -597,67 +777,96 @@
     </div>
   </div>
 
-  <!-- شريط الأدوات الجانبي السريع للطالب (مع زر كتم/تفعيل الصوتيات البرمجية 🔊) -->
-  <aside class="quick-ribbon">
-    <button class="ribbon-btn active" id="soundToggleBtn" title="تفعيل/كتم المؤثرات الصوتية (Web Audio SFX)" onclick="toggleSoundEngine()">🔊</button>
-    <button class="ribbon-btn" title="تراجع (Undo)" onclick="undoAction()">↶</button>
-    <button class="ribbon-btn" title="إعادة (Redo)" onclick="redoAction()">↷</button>
-    <button class="ribbon-btn" title="تدوير العنصر 360° (Rotate 90°)" onclick="rotateSelectedComponent()">↻</button>
-    <button class="ribbon-btn" title="تكبير (+)" onclick="zoomWorkspace(0.15)">＋</button>
-    <button class="ribbon-btn" title="تصغير (-)" onclick="zoomWorkspace(-0.15)">－</button>
-    <button class="ribbon-btn" title="إعادة ضبط الرؤية" onclick="resetViewport()">🎯</button>
-    <button class="ribbon-btn" id="dmmRibbonBtn" title="المقياس المتعدد اللحظي (DMM)" onclick="toggleMultimeter()">📟</button>
-    <button class="ribbon-btn" id="gridRibbonBtn" title="إظهار/إخفاء الشبكة" onclick="toggleGridDisplay()">▦</button>
-    <button class="ribbon-btn" title="الوضع الفاتح Solarpunk / الداكن" onclick="toggleSolarpunkTheme()">☀️</button>
-    <button class="ribbon-btn" title="تصدير صورة التقرير (PNG)" onclick="exportCircuitImage()">📸</button>
-  </aside>
+  <!-- القائمة العائمة القابلة للطي + وضع التركيز الكامل Zen Mode (Student #4 & #15) -->
+  <div class="fab-container">
+    <button class="fab-main" onclick="toggleQuickRibbonMenu()" title="أدوات التحكم السريع">⚙️</button>
+    <aside class="quick-ribbon" id="quickRibbonMenu">
+      <button class="ribbon-btn" id="zenModeBtn" title="وضع التركيز الكامل (ملء الشاشة 100%)" onclick="toggleZenMode()">⛶</button>
+      <button class="ribbon-btn active" id="soundToggleBtn" title="تفعيل/كتم المؤثرات الصوتية" onclick="toggleSoundEngine()">🔊</button>
+      <button class="ribbon-btn active" id="currentDotsBtn" title="إظهار/إخفاء نقاط التيار المتحركة" onclick="toggleCurrentDots()">✨</button>
+      <button class="ribbon-btn" id="heatmapWiresBtn" title="تلوين الأسلاك الحراري حسب الفولتية" onclick="toggleVoltageHeatmap()">🌡️</button>
+      <button class="ribbon-btn" title="ترتيب ومحاذاة الدائرة تلقائياً (Auto-Tidy)" onclick="autoAlignCircuit()">📐</button>
+      <button class="ribbon-btn" title="إضافة ملصق ملاحظة نصية على الدائرة" onclick="addStickyNote()">📝</button>
+      <button class="ribbon-btn" title="تراجع (Undo)" onclick="undoAction()">↶</button>
+      <button class="ribbon-btn" title="إعادة (Redo)" onclick="redoAction()">↷</button>
+      <button class="ribbon-btn" title="تكبير (+)" onclick="zoomWorkspace(0.15)">＋</button>
+      <button class="ribbon-btn" title="تصغير (-)" onclick="zoomWorkspace(-0.15)">－</button>
+      <button class="ribbon-btn" title="إعادة ضبط الرؤية" onclick="resetViewport()">🎯</button>
+      <button class="ribbon-btn" id="dmmRibbonBtn" title="المقياس المتعدد اللحظي (DMM)" onclick="toggleMultimeter()">📟</button>
+      <button class="ribbon-btn" id="gridRibbonBtn" title="إظهار/إخفاء الشبكة" onclick="toggleGridDisplay()">▦</button>
+      <button class="ribbon-btn" title="الوضع النهاري Solarpunk / الليلي" onclick="toggleSolarpunkTheme()">☀️</button>
+      <button class="ribbon-btn" title="تصدير صورة التقرير (PNG)" onclick="exportCircuitImage()">📸</button>
+    </aside>
+  </div>
+
+  <!-- حلقة التحكم الدائرية السريعة حول العنصر المحدد (Student #7 Radial Context Menu) -->
+  <div class="radial-menu" id="radialContextMenu">
+    <button class="radial-btn" style="top:0; left:44px;" title="تدوير 90°" onclick="rotateSelectedComponent()">↻</button>
+    <button class="radial-btn" style="bottom:8px; right:4px;" title="تكرار العنصر (Duplicate)" onclick="duplicateSelectedComponent()">❐</button>
+    <button class="radial-btn" style="bottom:8px; left:4px; border-color:var(--accent-red); color:var(--accent-red);" title="حذف العنصر" onclick="deleteSelectedComponent()">🗑️</button>
+  </div>
 
   <!-- مساحة العمل (Canvas) -->
   <main id="workspace-container">
     <canvas id="circuitCanvas"></canvas>
   </main>
 
-  <!-- شريط فحص وتعديل العنصر المحدد مع ميزة المعاينة الواقعية للقطعة -->
+  <!-- الخريطة المصغرة للتنقل Mini-Map Radar (Student #8) -->
+  <canvas id="miniMapCanvas" width="96" height="68"></canvas>
+
+  <!-- شريط فحص وتعديل العنصر مع الوحدات الهندسية الذكية SI Prefix (Student #3) -->
   <div class="inspector-bar" id="inspectorBar">
     <div class="inspector-row">
       <div style="display:flex; align-items:center; gap:8px;">
-        <div id="inspRealisticIcon" style="width:36px; height:36px; background:#0f172a; border-radius:6px; border:1px solid var(--accent-cyan); display:flex; align-items:center; justify-content:center; font-size:16px;" title="المظهر الواقعي في المخبر">🔌</div>
+        <div id="inspRealisticIcon" style="width:34px; height:34px; background:#0f172a; border-radius:6px; border:1px solid var(--accent-cyan); display:flex; align-items:center; justify-content:center; font-size:15px;">🔌</div>
         <div>
-          <strong id="inspCompName" style="color:var(--accent-cyan); font-size:13px;">مقاومة R1</strong>
+          <strong id="inspCompName" style="color:var(--accent-cyan); font-size:12px;">مقاومة R1</strong>
           <div style="font-size:10px; color:var(--accent-amber);" id="inspRealisticDesc">قطعة كربونية قياسية</div>
-          <span id="inspNodeVoltage" style="font-size:11px; color:var(--text-muted);"></span>
+          <span id="inspNodeVoltage" style="font-size:10px; color:var(--text-muted);"></span>
         </div>
       </div>
-      <div style="display:flex; align-items:center; gap:5px;">
+      <div style="display:flex; align-items:center; gap:4px; flex-wrap:wrap;">
         <label style="font-size:11px;">القيمة:</label>
-        <input type="number" id="inspValueInput" step="any" oninput="updateSelectedComponentValue(this.value)">
-        <span id="inspUnitLabel" style="font-size:12px; color:var(--accent-green);">Ω</span>
-        <button class="btn btn-cyan" onclick="rotateSelectedComponent()">↻ تدوير 90°</button>
-        <button class="btn btn-danger" onclick="deleteSelectedComponent()">حذف</button>
+        <input type="number" id="inspValueInput" step="any" oninput="updateSelectedComponentValueWithUnit()">
+        <select id="inspSiPrefix" class="si-select" onchange="updateSelectedComponentValueWithUnit()">
+          <option value="1e-12">p (بيكو)</option>
+          <option value="1e-9">n (نانو)</option>
+          <option value="1e-6">µ (ميكرو)</option>
+          <option value="1e-3">m (ملي)</option>
+          <option value="1" selected>1 (أساسي)</option>
+          <option value="1e3">k (كيلو)</option>
+          <option value="1e6">M (ميغا)</option>
+        </select>
+        <span id="inspUnitLabel" style="font-size:11px; color:var(--accent-green);">Ω</span>
+        <button class="btn btn-cyan" onclick="rotateSelectedComponent()">↻</button>
+        <button class="btn" onclick="duplicateSelectedComponent()" title="نسخ العنصر">❐</button>
+        <button class="btn btn-danger" onclick="deleteSelectedComponent()">✖</button>
       </div>
     </div>
     <div class="inspector-row">
-      <span style="font-size:11px; color:var(--text-muted);">تمرير سريع للقيمة:</span>
-      <input type="range" id="inspRangeSlider" min="1" max="10000" step="1" oninput="updateSelectedComponentValue(this.value)">
-      <div style="display:flex; align-items:center; gap:5px;">
-        <span style="font-size:11px; color:var(--text-muted);">لون السلك:</span>
-        <div class="wire-color-swatch selected" style="background:#10b981;" onclick="setWireColor('#10b981', this)" title="أخضر قياسي"></div>
-        <div class="wire-color-swatch" style="background:#ef4444;" onclick="setWireColor('#ef4444', this)" title="أحمر (موجب VCC)"></div>
-        <div class="wire-color-swatch" style="background:#38bdf8;" onclick="setWireColor('#38bdf8', this)" title="أزرق (إشارة)"></div>
-        <div class="wire-color-swatch" style="background:#f59e0b;" onclick="setWireColor('#f59e0b', this)" title="ذهبي (قياس)"></div>
-        <div class="wire-color-swatch" style="background:#94a3b8;" onclick="setWireColor('#94a3b8', this)" title="رمادي (أرضي GND)"></div>
+      <span style="font-size:10px; color:var(--text-muted);">تمرير سريع:</span>
+      <input type="range" id="inspRangeSlider" min="1" max="10000" step="1" oninput="updateSelectedComponentFromSlider(this.value)">
+      <div style="display:flex; align-items:center; gap:4px;">
+        <span style="font-size:10px; color:var(--text-muted);">لون السلك:</span>
+        <div class="wire-color-swatch selected" style="background:#10b981;" onclick="setWireColor('#10b981', this)"></div>
+        <div class="wire-color-swatch" style="background:#ef4444;" onclick="setWireColor('#ef4444', this)"></div>
+        <div class="wire-color-swatch" style="background:#38bdf8;" onclick="setWireColor('#38bdf8', this)"></div>
+        <div class="wire-color-swatch" style="background:#f59e0b;" onclick="setWireColor('#f59e0b', this)"></div>
+        <div class="wire-color-swatch" style="background:#94a3b8;" onclick="setWireColor('#94a3b8', this)"></div>
       </div>
     </div>
   </div>
 
-  <!-- الدرج السفلي المقسم إلى 5 عائلات إلكترونية شاملة (أكثر من 38 قطعة هندسية) -->
+  <!-- الدرج السفلي مع شريط البحث الفوري والقطع المستخدمة مؤخراً (Student #5 & #6) -->
   <footer class="bottom-dock">
     <div class="category-bar">
-      <button class="cat-tab active" onclick="switchComponentCategory('CAT_SOURCES', this)">⚡ أدوات ومنابع (10)</button>
-      <button class="cat-tab" onclick="switchComponentCategory('CAT_PASSIVE', this)">⌇ مقاومات ومكثفات وحساسات (10)</button>
-      <button class="cat-tab" onclick="switchComponentCategory('CAT_LEDS', this)">💡 ليدات وديودات وضوئيات (11)</button>
-      <button class="cat-tab" onclick="switchComponentCategory('CAT_ACTIVE', this)">🎛️ ترانزستورات ومفاتيح وصوتيات (11)</button>
-      <button class="cat-tab" onclick="switchComponentCategory('CAT_LOGIC', this)">🔢 بوابات منطقية وأجهزة قياس (9)</button>
+      <input type="text" id="compQuickSearch" class="comp-search-pill" placeholder="🔍 ابحث عن قطعة..." oninput="filterComponentsBySearch(this.value)">
+      <button class="cat-tab" onclick="switchComponentCategory('CAT_RECENT', this)">🕒 الأخيرة</button>
+      <button class="cat-tab active" onclick="switchComponentCategory('CAT_SOURCES', this)">⚡ أدوات ومنابع</button>
+      <button class="cat-tab" onclick="switchComponentCategory('CAT_PASSIVE', this)">⌇ مقاومات وحساسات</button>
+      <button class="cat-tab" onclick="switchComponentCategory('CAT_LEDS', this)">💡 ليدات وديودات</button>
+      <button class="cat-tab" onclick="switchComponentCategory('CAT_ACTIVE', this)">🎛️ ترانزستورات ومفاتيح</button>
+      <button class="cat-tab" onclick="switchComponentCategory('CAT_LOGIC', this)">🔢 بوابات وقياس</button>
     </div>
     <div class="bottom-toolbar" id="dynamicToolbar"></div>
   </footer>
@@ -666,9 +875,9 @@
   <div class="modal-overlay" id="onboardingModal">
     <div class="modal-card">
       <div class="modal-header">
-        <h2 style="font-size:17px; color:var(--accent-green);">تسجيل بيانات الطالب - جامعة حلب</h2>
+        <h2 style="font-size:16px; color:var(--accent-green);">تسجيل بيانات الطالب - جامعة حلب</h2>
       </div>
-      <p style="font-size:13px; color:var(--text-muted); margin-bottom:14px;">
+      <p style="font-size:12px; color:var(--text-muted); margin-bottom:12px;">
         مرحباً بك في مختبر محاكاة الدوائر الإلكترونية. يُرجى إدخال اسمك الثلاثي ورقمك الجامعي لمرة واحدة فقط لربط مستودع مشاريعك السحابي.
       </p>
       <div class="form-group">
@@ -680,22 +889,59 @@
         <input type="text" id="uniIdInput" class="form-control" placeholder="مثال: 240512" inputmode="numeric">
       </div>
       <div id="onboardingError" style="color:var(--accent-red); font-size:12px; margin-bottom:10px; display:none;"></div>
-      <button class="btn btn-primary" style="width:100%; justify-content:center; padding:11px;" onclick="handleOnboardingSubmit()">
+      <button class="btn btn-primary" style="width:100%; justify-content:center; padding:10px;" onclick="handleOnboardingSubmit()">
         تأكيد الدخول وحفظ الهوية الجامعية
       </button>
     </div>
   </div>
 
-  <!-- 2. نافذة نماذج الدوائر الجاهزة -->
+  <!-- 2. نافذة الملف الشخصي للطالب وأوسمته (Student #13 Profile Drawer) -->
+  <div class="modal-overlay" id="studentProfileModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 style="font-size:15px; color:var(--accent-cyan);">👤 الملف الهندسي للطالب والأوسمة</h3>
+        <button class="btn" onclick="closeModal('studentProfileModal')">إغلاق</button>
+      </div>
+      <div id="studentProfileBody"></div>
+    </div>
+  </div>
+
+  <!-- 3. نافذة مشاركة الدائرة عبر QR Code فوري (Student #14) -->
+  <div class="modal-overlay" id="qrShareModal">
+    <div class="modal-card" style="text-align:center;">
+      <div class="modal-header">
+        <h3 style="font-size:15px; color:var(--accent-green);">📲 مشاركة الدائرة الفورية عبر QR Code</h3>
+        <button class="btn" onclick="closeModal('qrShareModal')">إغلاق</button>
+      </div>
+      <p style="font-size:12px; color:var(--text-muted); margin-bottom:10px;">
+        اطلب من زميلك في المخبر مسح هذا الرمز بكاميرا هاتفه لفتح الدائرة وتجربتها فوراً:
+      </p>
+      <canvas id="qrCodeCanvas" width="200" height="200" style="background:#fff; padding:10px; border-radius:12px; margin:0 auto 12px; display:block;"></canvas>
+      <input type="text" id="shareableLinkInput" class="form-control" readonly style="text-align:center; font-size:11px; margin-bottom:8px;">
+      <button class="btn btn-cyan" style="width:100%; justify-content:center; padding:9px;" onclick="copyShareableCircuitLink()">📋 نسخ رابط الدائرة المباشر</button>
+    </div>
+  </div>
+
+  <!-- 4. نافذة نماذج الدوائر الجاهزة + التحدي الأسبوعي من الإدارة (Admin #13) -->
   <div class="modal-overlay" id="templatesModal">
     <div class="modal-card">
       <div class="modal-header">
-        <h3 style="font-size:15px; color:var(--accent-green);">نماذج دوائر هندسية قياسية جاهزة</h3>
+        <h3 style="font-size:15px; color:var(--accent-green);">نماذج دوائر قياسية وتحدي الأسبوع</h3>
         <button class="btn" onclick="closeModal('templatesModal')">إغلاق</button>
+      </div>
+      <div class="project-card featured-gold" id="weeklyChallengeCard">
+        <div style="display:flex; justify-content:space-between;">
+          <strong style="color:var(--accent-amber);">🏆 تحدي المختبر الأسبوعي: اكتشف العطل وأصلح الدائرة!</strong>
+          <span class="badge badge-featured">واجب عملي</span>
+        </div>
+        <p style="font-size:11px; color:var(--text-muted); margin:4px 0 8px;" id="weeklyChallengeDesc">
+          دارة ليد وجرس لا تعمل بسبب قطبية معكوسة وقيمة مقاومة خاطئة. قم بتحميلها وإصلاحها!
+        </p>
+        <button class="btn btn-amber" onclick="loadCircuitTemplate('CHALLENGE')">بدء التحدي الهندسي</button>
       </div>
       <div class="project-card">
         <strong>1. مرشح تمرير منخفض (RC Low-Pass Filter)</strong>
-        <p style="font-size:11px; color:var(--text-muted); margin:4px 0 8px;">منبع متناوب AC مع مقاومة ومكثف لمشاهدة شحن وتفريغ المكثف وفرق الطور الحقيقي.</p>
+        <p style="font-size:11px; color:var(--text-muted); margin:4px 0 8px;">منبع متناوب AC مع مقاومة ومكثف لمشاهدة شحن وتفريغ المكثف وفرق الطور بين القناتين CH1 و CH2.</p>
         <button class="btn btn-cyan" onclick="loadCircuitTemplate('RC_FILTER')">تحميل الدائرة</button>
       </div>
       <div class="project-card">
@@ -705,7 +951,7 @@
       </div>
       <div class="project-card">
         <strong>3. دارة إنذار ضوئي وصوتي بالليد والجرس (LED & Piezo Buzzer Circuit)</strong>
-        <p style="font-size:11px; color:var(--text-muted); margin:4px 0 8px;">بطارية 9V مع مفتاح، مقاومة حماية، ليد أحمر متوهج، وجرس بيزو يصدر رنيناً صوتياً عند إغلاق المفتاح.</p>
+        <p style="font-size:11px; color:var(--text-muted); margin:4px 0 8px;">بطارية 9V مع مفتاح، مقاومة حماية، ليد أحمر متوهج، وجرس يصدر رنيناً عند إغلاق المفتاح.</p>
         <button class="btn btn-cyan" onclick="loadCircuitTemplate('LED_BUZZER')">تحميل الدائرة</button>
       </div>
       <div class="project-card">
@@ -716,11 +962,11 @@
     </div>
   </div>
 
-  <!-- 3. نافذة حفظ المشروع -->
+  <!-- 5. نافذة حفظ المشروع -->
   <div class="modal-overlay" id="saveProjectModal">
     <div class="modal-card">
       <div class="modal-header">
-        <h3 style="font-size:16px;">حفظ الدائرة في المستودع السحابي</h3>
+        <h3 style="font-size:15px;">حفظ الدائرة في المستودع السحابي</h3>
         <button class="btn" onclick="closeModal('saveProjectModal')">إغلاق</button>
       </div>
       <div class="form-group">
@@ -737,21 +983,21 @@
     </div>
   </div>
 
-  <!-- 4. نافذة مستودع المشاريع والبحث الذكي -->
+  <!-- 6. نافذة مستودع المشاريع والبحث الذكي -->
   <div class="modal-overlay" id="repoModal">
     <div class="modal-card">
       <div class="modal-header">
-        <h3 style="font-size:16px; color:var(--accent-cyan);">مستودع مشاريع الطلاب والبحث الذكي</h3>
+        <h3 style="font-size:15px; color:var(--accent-cyan);">مستودع مشاريع الطلاب والبحث الذكي</h3>
         <button class="btn" onclick="closeModal('repoModal')">إغلاق</button>
       </div>
       <div class="form-group">
         <input type="text" id="smartSearchInput" class="form-control" placeholder="ابحث باسم المشروع أو اسم الطالب أو الرقم الجامعي..." oninput="renderRepositoryList()">
       </div>
-      <div id="repoProjectsList" style="max-height:58vh; overflow-y:auto;"></div>
+      <div id="repoProjectsList" style="max-height:60vh; overflow-y:auto;"></div>
     </div>
   </div>
 
-  <!-- 5. نافذة الغرفة السرية بملء الشاشة -->
+  <!-- 7. نافذة الغرفة السرية بملء الشاشة (Admin Dashboard v8.0 - 15 تحسيناً إدارياً وبصرياً) -->
   <div class="modal-overlay" id="secretRoomModal">
     <div class="modal-card fullscreen-admin" style="border-color:var(--accent-amber);">
       <svg class="cyber-watermark" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
@@ -765,80 +1011,140 @@
 
       <div class="modal-header">
         <div>
-          <h3 style="font-size:16px; color:var(--accent-amber);">★ غرفة القيادة السرية - الإدارة الهندسية الشاملة</h3>
+          <h3 style="font-size:15px; color:var(--accent-amber); display:flex; align-items:center; gap:8px;">
+            <span>★ غرفة القيادة السرية - الإدارة الهندسية الشاملة</span>
+            <span class="badge badge-public" id="activeNowPulse">🟢 متصل الآن: 1</span>
+          </h3>
           <span style="font-size:11px; color:var(--text-muted);">المسؤول: معاذ حسين العلي (1461997)</span>
         </div>
-        <div style="display:flex; gap:6px; flex-wrap:wrap;">
-          <button class="btn btn-cyan" onclick="exportStudentsToCSV()">📥 تصدير الطلاب CSV</button>
-          <button class="btn" onclick="exportDatabaseBackupJSON()">💾 نسخ احتياطي JSON</button>
-          <button class="btn btn-danger" onclick="lockAllProjectsForExams()">🔒 إغلاق شامل للامتحانات</button>
+        <div style="display:flex; gap:5px; flex-wrap:wrap;">
+          <button class="btn btn-amber" onclick="setAdminQuickPIN()">🔐 تعيين PIN سريع</button>
+          <button class="btn btn-cyan" onclick="exportStudentsToCSV()">📥 تصدير CSV</button>
+          <button class="btn" onclick="printOfficialUniversityReport()">🖨️ تقرير رسمي PDF</button>
+          <button class="btn" onclick="exportDatabaseBackupJSON()">💾 نسخ JSON</button>
+          <button class="btn btn-danger" onclick="lockAllProjectsForExams()">🔒 إغلاق للامتحانات</button>
           <button class="btn" onclick="closeModal('secretRoomModal')">إغلاق ✖</button>
         </div>
       </div>
 
+      <!-- لوحة الرسوم البيانية التحليلية (Admin #1 Visual Analytics Charts) -->
       <div class="stats-grid">
         <div class="stat-box">
           <div class="num" id="statTotalUsers">0</div>
-          <div class="lbl">إجمالي الطلاب</div>
+          <div class="lbl">إجمالي الطلاب المسجلين</div>
+          <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:85%;"></div></div>
         </div>
         <div class="stat-box">
           <div class="num" id="statTotalProjects">0</div>
-          <div class="lbl">إجمالي المشاريع</div>
+          <div class="lbl">المشاريع (نسبة العام للخاص)</div>
+          <div class="progress-bar-bg"><div class="progress-bar-fill" id="pubRatioBar" style="width:70%;"></div></div>
         </div>
         <div class="stat-box">
           <div class="num" id="statBannedUsers" style="color:var(--accent-red);">0</div>
-          <div class="lbl">المحظورون</div>
+          <div class="lbl">الحسابات المحظورة</div>
+          <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:10%; background:var(--accent-red);"></div></div>
         </div>
         <div class="stat-box">
           <div class="num" id="statReportsCount" style="color:var(--accent-amber);">0</div>
           <div class="lbl">التبليغات المعلقة</div>
+          <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:20%; background:var(--accent-amber);"></div></div>
         </div>
         <div class="stat-box">
           <div class="num" id="statQuotaReads" style="color:var(--accent-green);">0.04%</div>
           <div class="lbl">استهلاك Spark اليومي</div>
+          <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:4%;"></div></div>
         </div>
       </div>
 
-      <div style="display:flex; gap:6px; margin-bottom:10px;">
-        <input type="text" id="adminAnnouncementInput" class="form-control" style="padding:6px 10px; font-size:12px;" placeholder="اكتب إعلاناً عاماً يُبث سحابياً أعلى شاشة جميع طلاب الكلية...">
-        <button class="btn btn-primary" onclick="publishGlobalAnnouncement()">📢 بث الإعلان السحابي</button>
+      <!-- نظام الإعلانات المصنفة بالألوان + نشر التحدي الأسبوعي (Admin #7 & #13) -->
+      <div style="display:flex; gap:5px; margin-bottom:8px; flex-wrap:wrap;">
+        <select id="adminAnnSeverity" class="form-control" style="width:130px; padding:5px; font-size:11px;">
+          <option value="sev-info">🔵 إعلان معلوماتي</option>
+          <option value="sev-update">🟢 تحديث جديد</option>
+          <option value="sev-urgent">🔴 تنبيه امتحاني عاجل</option>
+        </select>
+        <input type="text" id="adminAnnouncementInput" class="form-control" style="flex:1; min-width:180px; padding:5px 10px; font-size:11px;" placeholder="اكتب إعلاناً عاماً يُبث أعلى شاشة جميع الطلاب...">
+        <button class="btn btn-primary" onclick="publishGlobalAnnouncement()">📢 بث الإعلان</button>
+        <button class="btn btn-amber" onclick="publishCurrentCircuitAsChallenge()">🏆 نشر الدارة الحالية كتحدي أسبوعي</button>
         <button class="btn btn-danger" onclick="clearGlobalAnnouncement()">إخفاء</button>
       </div>
 
+      <!-- تبويبات الإدارة -->
       <div class="admin-tabs">
         <button class="btn btn-cyan" onclick="switchAdminTab('USERS')">👥 سجل الطلاب النشطين</button>
         <button class="btn" onclick="switchAdminTab('BANNED')">🚫 قائمة المحظورين</button>
-        <button class="btn" onclick="switchAdminTab('PROJECTS')">📂 محكمة المشاريع والتعليقات</button>
+        <button class="btn" onclick="switchAdminTab('PROJECTS')">📂 محكمة المشاريع والتوسيم الذهبي</button>
         <button class="btn" onclick="switchAdminTab('REPORTS')">🚩 طابور التبليغات (<span id="tabReportBadge">0</span>)</button>
       </div>
 
-      <div style="display:flex; gap:6px; margin-bottom:10px; flex-wrap:wrap; align-items:center;">
-        <input type="text" id="adminSearchInput" class="form-control" style="flex:1; min-width:180px; padding:6px 10px; font-size:12px;" placeholder="بحث إداري بالاسم أو الرقم الجامعي أو اسم المشروع..." oninput="renderSecretRoomDashboard()">
-        <select id="adminSortSelect" class="form-control" style="width:150px; padding:6px; font-size:12px;" onchange="renderSecretRoomDashboard()">
+      <!-- أدوات البحث، فلتر الدفعة الجامعية، تحديد الكل، والفرز (Admin #5, #8, #12) -->
+      <div style="display:flex; gap:5px; margin-bottom:8px; flex-wrap:wrap; align-items:center;">
+        <label style="font-size:11px; display:flex; align-items:center; gap:4px; cursor:pointer; background:var(--bg-dark); padding:5px 8px; border-radius:8px; border:1px solid var(--border-soft);">
+          <input type="checkbox" id="adminSelectAllToggle" onchange="toggleSelectAllAdminItems(this.checked)">
+          <span>تحديد الكل</span>
+        </label>
+        <input type="text" id="adminSearchInput" class="form-control" style="flex:1; min-width:150px; padding:5px 10px; font-size:11px;" placeholder="بحث إداري بالاسم أو الرقم الجامعي أو اسم المشروع..." oninput="adminPage=1; renderSecretRoomDashboard()">
+        <select id="adminBatchFilter" class="form-control" style="width:125px; padding:5px; font-size:11px;" onchange="adminPage=1; renderSecretRoomDashboard()">
+          <option value="ALL">كل الدفعات الجامعية</option>
+          <option value="21">دفعة 2021 (21xxxx)</option>
+          <option value="22">دفعة 2022 (22xxxx)</option>
+          <option value="23">دفعة 2023 (23xxxx)</option>
+          <option value="24">دفعة 2024 (24xxxx)</option>
+          <option value="25">دفعة 2025 (25xxxx)</option>
+          <option value="26">دفعة 2026 (26xxxx)</option>
+        </select>
+        <select id="adminSortSelect" class="form-control" style="width:135px; padding:5px; font-size:11px;" onchange="renderSecretRoomDashboard()">
           <option value="NEWEST">الترتيب: الأحدث</option>
-          <option value="RATING">الترتيب: الأعلى تقييماً</option>
-          <option value="COMMENTS">الترتيب: الأكثر تعليقاً</option>
+          <option value="FEATURED">المشاريع المعتمدة أولاً ★</option>
+          <option value="RATING">الأعلى تقييماً</option>
+          <option value="COMMENTS">الأكثر تعليقاً</option>
         </select>
         <button class="btn btn-danger" onclick="executeBulkBanSelected()">حظر المحددين ☑</button>
         <button class="btn btn-danger" onclick="executeBulkDeleteSelected()">حذف المحددين ☑</button>
       </div>
 
+      <!-- محتوى التبويب الإداري المتغير -->
       <div id="adminDynamicViewport" style="flex:1; overflow-y:auto; padding-right:4px;"></div>
+
+      <!-- شريط تقسيم الصفحات الذكي (Admin #8 Smart Pagination) -->
+      <div style="display:flex; justify-content:space-between; align-items:center; padding-top:8px; border-top:1px solid var(--border-soft); font-size:11px;">
+        <span id="adminPaginationInfo" style="color:var(--text-muted);">صفحة 1</span>
+        <div style="display:flex; gap:5px;">
+          <button class="btn" onclick="changeAdminPage(-1)">◀ السابق</button>
+          <button class="btn" onclick="changeAdminPage(1)">التالي ▶</button>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- 6. نافذة معاينة الدائرة قبل الحذف -->
+  <!-- 8. نافذة معاينة الدائرة الحية بالكانفاس المصغر + ملف الطالب 360° (Admin #2 & #9) -->
   <div class="modal-overlay" id="adminPreviewModal">
     <div class="modal-card">
       <div class="modal-header">
-        <h3 style="font-size:15px; color:var(--accent-cyan);" id="previewModalTitle">معاينة محتوى المشروع</h3>
+        <h3 style="font-size:15px; color:var(--accent-cyan);" id="previewModalTitle">معاينة حية لمخطط الدائرة</h3>
         <button class="btn" onclick="closeModal('adminPreviewModal')">إغلاق</button>
       </div>
+      <canvas id="adminLivePreviewCanvas" width="480" height="200" style="width:100%; height:180px; background:#020617; border-radius:10px; border:1px solid var(--accent-cyan); margin-bottom:10px; display:none;"></canvas>
       <div id="previewModalBody" style="font-size:12px; line-height:1.6;"></div>
     </div>
   </div>
 
-  <!-- محرك التطبيق والـ Web Worker والـ Web Audio SFX والـ Firebase -->
+  <!-- 9. نافذة حوار زجاجية موحدة بدلاً من prompt/confirm (Admin #3 Custom Glassmorphic Dialog) -->
+  <div class="modal-overlay" id="customDialogModal" style="z-index:260;">
+    <div class="modal-card" style="max-width:400px;">
+      <div class="modal-header">
+        <h3 style="font-size:14px; color:var(--accent-amber);" id="customDialogTitle">إدخال بيانات</h3>
+      </div>
+      <p id="customDialogMessage" style="font-size:12px; color:var(--text-muted); margin-bottom:10px;"></p>
+      <div id="customDialogInputs"></div>
+      <div style="display:flex; justify-content:flex-end; gap:6px; margin-top:12px;">
+        <button class="btn" onclick="closeCustomDialog(null)">إلغاء</button>
+        <button class="btn btn-primary" id="customDialogConfirmBtn">تأكيد</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- محرك التطبيق الشامل v8.0 -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { 
@@ -848,7 +1154,46 @@
     import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
     // ============================================================================
-    // 1. محرك الصوتيات التفاعلي البرمجي (Web Audio API ASMR & Lab SFX Engine)
+    // 1. نافذة الحوار الزجاجية الموحدة بدلاً من prompt/confirm (Admin #3)
+    // ============================================================================
+    let dialogResolver = null;
+
+    window.openCustomDialog = function({ title, message, fields = [], confirmText = 'تأكيد' }) {
+      return new Promise((resolve) => {
+        dialogResolver = resolve;
+        document.getElementById('customDialogTitle').innerText = title || 'تنبيه';
+        document.getElementById('customDialogMessage').innerText = message || '';
+        const inputsContainer = document.getElementById('customDialogInputs');
+        inputsContainer.innerHTML = fields.map((f, i) => `
+          <div class="form-group">
+            <label>${f.label}</label>
+            <input type="${f.type || 'text'}" id="dlg_field_${i}" class="form-control" value="${f.value || ''}" placeholder="${f.placeholder || ''}">
+          </div>
+        `).join('');
+        const confirmBtn = document.getElementById('customDialogConfirmBtn');
+        confirmBtn.innerText = confirmText;
+        confirmBtn.onclick = () => {
+          if (fields.length === 0) {
+            closeCustomDialog(true);
+          } else {
+            const vals = fields.map((_, i) => document.getElementById('dlg_field_' + i).value.trim());
+            closeCustomDialog(vals);
+          }
+        };
+        document.getElementById('customDialogModal').classList.add('active');
+      });
+    };
+
+    window.closeCustomDialog = function(result) {
+      document.getElementById('customDialogModal').classList.remove('active');
+      if (dialogResolver) {
+        dialogResolver(result);
+        dialogResolver = null;
+      }
+    };
+
+    // ============================================================================
+    // 2. محرك الصوتيات التفاعلي البرمجي (Web Audio API ASMR & Lab SFX Engine)
     // ============================================================================
     let soundEnabled = true;
     let audioCtx = null;
@@ -885,7 +1230,6 @@
       gain.connect(ctxAudio.destination);
 
       if (type === 'tap') {
-        // نقرة واجهة ناعمة جداً (UI Micro-click)
         osc.type = 'sine';
         osc.frequency.setValueAtTime(520, now);
         osc.frequency.exponentialRampToValueAtTime(220, now + 0.03);
@@ -894,7 +1238,6 @@
         osc.start(now);
         osc.stop(now + 0.03);
       } else if (type === 'drop') {
-        // صوت إفلات مغناطيسي للقطعة الإلكترونية على الشبكة
         osc.type = 'triangle';
         osc.frequency.setValueAtTime(280, now);
         osc.frequency.exponentialRampToValueAtTime(580, now + 0.065);
@@ -903,7 +1246,6 @@
         osc.start(now);
         osc.stop(now + 0.065);
       } else if (type === 'wire') {
-        // صوت التحام السلك بالقطب (Crisp Spark Snap)
         osc.type = 'sine';
         osc.frequency.setValueAtTime(750, now);
         osc.frequency.exponentialRampToValueAtTime(1180, now + 0.05);
@@ -912,7 +1254,6 @@
         osc.start(now);
         osc.stop(now + 0.05);
       } else if (type === 'switch') {
-        // طقطقة ميكانيكية للمفتاح أو الريليه
         osc.type = 'square';
         osc.frequency.setValueAtTime(420, now);
         osc.frequency.setValueAtTime(640, now + 0.02);
@@ -937,7 +1278,6 @@
         osc.start(now);
         osc.stop(now + 0.08);
       } else if (type === 'buzzer_beep') {
-        // رنين الجرس الإلكتروني Piezo Buzzer عند مرور تيار فيه أثناء المحاكاة
         osc.type = 'square';
         osc.frequency.setValueAtTime(2200, now);
         gain.gain.setValueAtTime(0.04, now);
@@ -945,7 +1285,6 @@
         osc.start(now);
         osc.stop(now + 0.055);
       } else if (type === 'error') {
-        // صوت إنذار القصر الكهربائي أو انصهار الفيوز
         osc.type = 'sawtooth';
         osc.frequency.setValueAtTime(155, now);
         osc.frequency.setValueAtTime(115, now + 0.11);
@@ -957,7 +1296,7 @@
     };
 
     // ============================================================================
-    // 2. موسوعة القطع الإلكترونية الشاملة (38+ أداة وقطعة هندسية مصنفة في 5 عائلات)
+    // 3. موسوعة القطع الإلكترونية الشاملة (مع دعم البحث الفوري والقطع الأخيرة)
     // ============================================================================
     const COMPONENT_CATALOG = {
       CAT_SOURCES: [
@@ -969,8 +1308,8 @@
         { tool: 'BATTERY_9V', icon: '🔋', label: 'بطارية 9V', defVal: 9, unit: 'V', sym: 'BAT', rIcon: '🔋', rDesc: 'بطارية قلوية قياسية 9 فولت (9V Alkaline Battery)' },
         { tool: 'AC_SOURCE', icon: '∿', label: 'منبع متناوب AC', defVal: 10, unit: 'V', sym: 'AC', rIcon: '〰️', rDesc: 'مولد إشارات جيبية (AC Function Generator)' },
         { tool: 'SQUARE_SOURCE', icon: '⊓⊔', label: 'موجة مربعة PWM', defVal: 5, unit: 'V', sym: 'SQR', rIcon: '📟', rDesc: 'مولد نبضات مربعة وميقاتية (Square Wave Clock)' },
-        { tool: 'PULSE_SOURCE', icon: ' pulse', label: 'منبع نبضي Pulse', defVal: 5, unit: 'V', sym: 'PLS', rIcon: '⚡', rDesc: 'مولد نبضات سريعة (Pulse Generator)' },
-        { tool: 'CURRENT_SOURCE', icon: 'up', label: 'منبع تيار I', defVal: 0.02, unit: 'A', sym: 'I_SRC', rIcon: '🔄', rDesc: 'منبع تيار مستمر ثابت (Constant Current Source)' }
+        { tool: 'PULSE_SOURCE', icon: '⚡', label: 'منبع نبضي Pulse', defVal: 5, unit: 'V', sym: 'PLS', rIcon: '⚡', rDesc: 'مولد نبضات سريعة (Pulse Generator)' },
+        { tool: 'CURRENT_SOURCE', icon: '⇈', label: 'منبع تيار I', defVal: 0.02, unit: 'A', sym: 'I_SRC', rIcon: '🔄', rDesc: 'منبع تيار مستمر ثابت (Constant Current Source)' }
       ],
       CAT_PASSIVE: [
         { tool: 'RESISTOR', icon: '⌇', label: 'مقاومة ثابتة R', defVal: 1000, unit: 'Ω', sym: 'R', rIcon: '🟫', rDesc: 'مقاومة كربونية حلقية (Axial Carbon Resistor)' },
@@ -981,7 +1320,7 @@
         { tool: 'ELEC_CAP', icon: '⊣(⊢', label: 'مكثف كيميائي +C', defVal: 0.001, unit: 'F', sym: 'C_EL', rIcon: '🛢️', rDesc: 'مكثف كيميائي ألمنيوم مستقطب (Electrolytic Capacitor)' },
         { tool: 'INDUCTOR', icon: '➿', label: 'وشيعة / ملف L', defVal: 0.2, unit: 'H', sym: 'L', rIcon: '🌀', rDesc: 'وشيعة قلب فيريت سلكية (Ferrite Core Inductor)' },
         { tool: 'TRANSFORMER', icon: '⌇||⌇', label: 'محولة كهربائية', defVal: 220, unit: 'Ω', sym: 'TR', rIcon: '🧱', rDesc: 'محولة خافضة للجهد بقلب حديدي (Step-Down Transformer)' },
-        { tool: 'FUSE', icon: 'infty', label: 'صمامة حماية Fuse', defVal: 0.5, unit: 'A', sym: 'FUSE', rIcon: '🧪', rDesc: 'فيوز زجاجي لحماية الدارة من التيار الزائد (Glass Fuse)' },
+        { tool: 'FUSE', icon: '⊶⊷', label: 'صمامة حماية Fuse', defVal: 0.5, unit: 'A', sym: 'FUSE', rIcon: '🧪', rDesc: 'فيوز زجاجي لحماية الدارة من التيار الزائد (Glass Fuse)' },
         { tool: 'CRYSTAL', icon: '▭|▭', label: 'كريستالة كوارتز', defVal: 16, unit: 'MHz', sym: 'XTAL', rIcon: '🪙', rDesc: 'مهتز كريستالي لتوليد الترددات الدقيقة (Quartz Crystal)' }
       ],
       CAT_LEDS: [
@@ -998,17 +1337,17 @@
         { tool: 'PHOTO_DIODE', icon: '☀️⊳|', label: 'فوتوديود مستقبل', defVal: 0.6, unit: 'V', sym: 'PD', rIcon: '👁️', rDesc: 'ثنائي ضوئي حساس للأشعة تحت الحمراء (Photodiode)' }
       ],
       CAT_ACTIVE: [
-        { tool: 'NPN_BJT', icon: ' transistor', label: 'ترانزستور NPN 2N2222', defVal: 100, unit: 'β', sym: 'NPN', rIcon: '🕷️', rDesc: 'ترانزستور ثنائي القطبية NPN للتضخيم والقيادة (2N2222)' },
-        { tool: 'PNP_BJT', icon: ' transistor', label: 'ترانزستور PNP 2N3906', defVal: 100, unit: 'β', sym: 'PNP', rIcon: '🕷️', rDesc: 'ترانزستور ثنائي القطبية PNP (2N3906 BJT)' },
-        { tool: 'NMOS', icon: ' mosfet', label: 'موسفت N-MOSFET', defVal: 0.05, unit: 'Ω', sym: 'NMOS', rIcon: '🔲', rDesc: 'ترانزستور أثر الحقل للمفاتيح الاستطاعية (IRFZ44N N-MOS)' },
-        { tool: 'PMOS', icon: ' mosfet', label: 'موسفت P-MOSFET', defVal: 0.08, unit: 'Ω', sym: 'PMOS', rIcon: '🔲', rDesc: 'ترانزستور أثر الحقل قناة P (P-Channel MOSFET)' },
-        { tool: 'OPAMP', icon: '▷', label: 'مضخم عمليات LM741', defVal: 10, unit: 'Gain', sym: 'OPAMP', rIcon: '芯片', rDesc: 'دارة متكاملة لمضخم العمليات التماثلي (LM741 Op-Amp)' },
+        { tool: 'NPN_BJT', icon: '┫‹', label: 'ترانزستور NPN 2N2222', defVal: 100, unit: 'β', sym: 'NPN', rIcon: '🕷️', rDesc: 'ترانزستور ثنائي القطبية NPN للتضخيم والقيادة (2N2222)' },
+        { tool: 'PNP_BJT', icon: '┫›', label: 'ترانزستور PNP 2N3906', defVal: 100, unit: 'β', sym: 'PNP', rIcon: '🕷️', rDesc: 'ترانزستور ثنائي القطبية PNP (2N3906 BJT)' },
+        { tool: 'NMOS', icon: '||┫', label: 'موسفت N-MOSFET', defVal: 0.05, unit: 'Ω', sym: 'NMOS', rIcon: '🔲', rDesc: 'ترانزستور أثر الحقل للمفاتيح الاستطاعية (IRFZ44N N-MOS)' },
+        { tool: 'PMOS', icon: '||┫', label: 'موسفت P-MOSFET', defVal: 0.08, unit: 'Ω', sym: 'PMOS', rIcon: '🔲', rDesc: 'ترانزستور أثر الحقل قناة P (P-Channel MOSFET)' },
+        { tool: 'OPAMP', icon: '▷', label: 'مضخم عمليات LM741', defVal: 10, unit: 'Gain', sym: 'OPAMP', rIcon: '📐', rDesc: 'دارة متكاملة لمضخم العمليات التماثلي (LM741 Op-Amp)' },
         { tool: 'SWITCH', icon: '🔌', label: 'مفتاح قاطع SPST', defVal: 1, unit: 'State', sym: 'SW', rIcon: '🎚️', rDesc: 'مفتاح ميكانيكي فصل/وصل (Toggle Switch ON/OFF)' },
-        { tool: 'PUSH_BUTTON', icon: '🔘', label: 'زر ضاغط Push', defVal: 0, unit: 'State', sym: 'BTN', rIcon: '🔘', rDesc: 'زر ضغط لحظي لوحات التجارب (Tactile Push Button)' },
+        { tool: 'PUSH_BUTTON', icon: '🔘', label: 'زر ضاغط Push', defVal: 0, unit: 'State', sym: 'BTN', rIcon: '🔘', rDesc: 'زر ضغط لحظي للوحات التجارب (Tactile Push Button)' },
         { tool: 'RELAY', icon: '🧲🔌', label: 'ريليه كهرومغناطيسية', defVal: 1, unit: 'State', sym: 'RLY', rIcon: '🟦', rDesc: 'مرحّل كهرومغناطيسي للعزل والتحكم (5V Relay Module)' },
         { tool: 'BUZZER', icon: '🔔', label: 'جرس بيزو صوتي', defVal: 2000, unit: 'Hz', sym: 'BUZ', rIcon: '🔊', rDesc: 'طناّن بيزو يصدر رنيناً حقيقياً عند تغذيته (Active Buzzer)' },
         { tool: 'LAMP', icon: '💡', label: 'مصباح توهجي Lamp', defVal: 60, unit: 'Ω', sym: 'LAMP', glow: '#fde047', rIcon: '💡', rDesc: 'مصباح فتيل يتوهج بشدة حسب الاستطاعة (Incandescent Lamp)' },
-        { tool: 'DC_MOTOR', icon: '⚙️', label: 'محرك مستمر Motor', defVal: 40, unit: 'Ω', sym: 'MTR', rIcon: '⚙️', rDesc: 'محرك تيار مستمر مصغر ( hobby DC Brushed Motor)' }
+        { tool: 'DC_MOTOR', icon: '⚙️', label: 'محرك مستمر Motor', defVal: 40, unit: 'Ω', sym: 'MTR', rIcon: '⚙️', rDesc: 'محرك تيار مستمر مصغر (Hobby DC Brushed Motor)' }
       ],
       CAT_LOGIC: [
         { tool: 'LOGIC_HIGH', icon: '1️⃣', label: 'منطق عالي High (5V)', defVal: 5, unit: 'V', sym: 'HI_1', rIcon: '🟩', rDesc: 'مستوى منطقي رقمي 1 (TTL Logic High +5V)' },
@@ -1023,25 +1362,53 @@
       ]
     };
 
-    // فهرس موحد للوصول السريع لخصائص أي قطعة
     const ALL_COMPONENTS_META = {};
+    const FLAT_COMPONENTS_LIST = [];
     Object.values(COMPONENT_CATALOG).forEach(list => {
-      list.forEach(item => { ALL_COMPONENTS_META[item.tool] = item; });
+      list.forEach(item => {
+        ALL_COMPONENTS_META[item.tool] = item;
+        FLAT_COMPONENTS_LIST.push(item);
+      });
     });
 
+    // قائمة القطع المستخدمة مؤخراً (Student #6 Recently Used Dock)
+    let recentTools = ['SELECT', 'WIRE', 'RESISTOR', 'LED_RED', 'DC_SOURCE', 'GND'];
     let activeCategory = 'CAT_SOURCES';
 
     window.switchComponentCategory = function(catKey, tabEl) {
       playSFX('tap');
       activeCategory = catKey;
+      document.getElementById('compQuickSearch').value = '';
       document.querySelectorAll('.cat-tab').forEach(b => b.classList.remove('active'));
       if (tabEl) tabEl.classList.add('active');
       renderCategoryToolbar();
     };
 
+    window.filterComponentsBySearch = function(queryStr) {
+      const q = (queryStr || '').trim().toLowerCase();
+      if (!q) {
+        renderCategoryToolbar();
+        return;
+      }
+      const matched = FLAT_COMPONENTS_LIST.filter(item =>
+        item.label.toLowerCase().includes(q) ||
+        item.tool.toLowerCase().includes(q) ||
+        (item.sym && item.sym.toLowerCase().includes(q))
+      );
+      renderToolbarItemsList(matched);
+    };
+
     function renderCategoryToolbar() {
+      if (activeCategory === 'CAT_RECENT') {
+        const recentItems = recentTools.map(t => ALL_COMPONENTS_META[t]).filter(Boolean);
+        renderToolbarItemsList(recentItems);
+      } else {
+        renderToolbarItemsList(COMPONENT_CATALOG[activeCategory] || []);
+      }
+    }
+
+    function renderToolbarItemsList(items) {
       const container = document.getElementById('dynamicToolbar');
-      const items = COMPONENT_CATALOG[activeCategory] || [];
       container.innerHTML = items.map(item => {
         if (item.tool === 'CLEAR') {
           return `
@@ -1071,6 +1438,9 @@
         .replace(/'/g, '&#039;');
     }
 
+    // ============================================================================
+    // 4. إعدادات Firebase والمزامنة السحابية
+    // ============================================================================
     const firebaseConfig = {
       apiKey: "AIzaSyAg9os96KdhaHveSpi5GmHFCOM_oo2s8h0",
       authDomain: "university-of-aleppo-76524.firebaseapp.com",
@@ -1145,6 +1515,7 @@
         firebaseOpsCount++;
         if (snap.exists() && snap.data().text) {
           localStorage.setItem('aleppo_ee_announcement', snap.data().text);
+          localStorage.setItem('aleppo_ee_ann_sev', snap.data().severity || 'sev-info');
         } else {
           localStorage.removeItem('aleppo_ee_announcement');
         }
@@ -1205,6 +1576,21 @@
     function initUserSession() {
       updateConnectivityIndicator();
       loadGlobalAnnouncementBanner();
+
+      // فحص ما إذا كان الرابط يحتوي على دائرة مشاركة عبر QR Code (Student #14)
+      const urlParams = new URLSearchParams(window.location.search);
+      const sharedCircuitBase64 = urlParams.get('circuit');
+      if (sharedCircuitBase64) {
+        try {
+          const decoded = JSON.parse(decodeURIComponent(escape(atob(sharedCircuitBase64))));
+          if (decoded.components && decoded.wires) {
+            components = decoded.components;
+            components.forEach(updateComponentPins);
+            wires = decoded.wires;
+            showToast("📲 تم فتح الدائرة المشتركة عبر رمز QR بنجاح!");
+          }
+        } catch (e) {}
+      }
 
       if (!currentUser) {
         document.getElementById('onboardingModal').classList.add('active');
@@ -1288,7 +1674,7 @@
     }
 
     // ============================================================================
-    // 3. محرك المحاكاة الرياضي الموسع في الـ Web Worker (يدعم كافة القطع الـ 38+)
+    // 5. محرك المحاكاة الفيزيائي في الـ Web Worker
     // ============================================================================
     const workerCode = `
       let prevCapVoltages = {};
@@ -1392,7 +1778,7 @@
 
         const N = nodeCounter - 1;
         if (N === 0) {
-          self.postMessage({ success: true, pinVoltages: {}, maxV: 0, culpritIds: [], activeBuzzers: [] });
+          self.postMessage({ success: true, pinVoltages: {}, maxV: 0, sourceV: 0, culpritIds: [], activeBuzzers: [] });
           return;
         }
 
@@ -1420,6 +1806,7 @@
         const NONLINEAR_TYPES = ['DIODE', 'SCHOTTKY', 'ZENER', 'PHOTO_DIODE', 'LED_RED', 'LED_GREEN', 'LED_BLUE', 'LED_YELLOW', 'LED_WHITE', 'RGB_LED', 'SEVEN_SEG', 'NPN_BJT', 'PNP_BJT', 'NMOS', 'PMOS'];
         const hasNonlinear = components.some(c => NONLINEAR_TYPES.includes(c.type));
         const maxIter = hasNonlinear ? 12 : 1;
+        let primarySourceInstantV = 0;
 
         for (let iter = 0; iter < maxIter; iter++) {
           const G = Array.from({ length: N }, () => new Float64Array(N));
@@ -1446,44 +1833,31 @@
               if (n2 > 0) I[n2 - 1] -= iVal;
             };
 
-            // 1. العناصر الأومية والحساسات والمصابيح والمحركات وأجهزة القياس
             if (['RESISTOR', 'POT', 'LDR', 'THERMISTOR', 'LAMP', 'DC_MOTOR', 'TRANSFORMER', 'VOLTMETER', 'AMMETER'].includes(c.type)) {
               const R = Math.max(c.value || 100, 1e-3);
               addConductance(1 / R);
-            }
-            // 2. الجرس الصوتي Piezo Buzzer
-            else if (c.type === 'BUZZER') {
-              addConductance(1 / 150); // ممانعة الجرس الفعالة 150 أوم
-            }
-            // 3. الصمامة Fuse (مقاومة صغيرة جداً 0.05 أوم ما لم تنصهر)
-            else if (c.type === 'FUSE') {
+            } else if (c.type === 'BUZZER') {
+              addConductance(1 / 150);
+            } else if (c.type === 'FUSE') {
               const R = c.blown ? 1e9 : 0.05;
               addConductance(1 / R);
-            }
-            // 4. المفاتيح والريليهات
-            else if (['SWITCH', 'PUSH_BUTTON', 'RELAY'].includes(c.type)) {
+            } else if (['SWITCH', 'PUSH_BUTTON', 'RELAY'].includes(c.type)) {
               const isClosed = (c.value === 1);
               const R = isClosed ? 0.005 : 1e9;
               addConductance(1 / R);
-            }
-            // 5. المكثفات والكريستال
-            else if (['CAPACITOR', 'ELEC_CAP', 'CRYSTAL'].includes(c.type)) {
+            } else if (['CAPACITOR', 'ELEC_CAP', 'CRYSTAL'].includes(c.type)) {
               const C = c.type === 'CRYSTAL' ? 0.00005 : Math.max(c.value || 1e-5, 1e-12);
               const gEq = C / dt;
               const vPrev = prevCapVoltages[c.id] || 0;
               addConductance(gEq);
               addCurrentSource(gEq * vPrev);
-            }
-            // 6. الوشيعة Inductor
-            else if (c.type === 'INDUCTOR') {
+            } else if (c.type === 'INDUCTOR') {
               const L = Math.max(c.value || 0.1, 1e-6);
               const gEq = dt / L;
               const iPrev = prevIndCurrents[c.id] || 0;
               addConductance(gEq);
               addCurrentSource(-iPrev);
-            }
-            // 7. الديودات والليدات والترانزستورات (ثنائيات الوصلة والأثر)
-            else if (NONLINEAR_TYPES.includes(c.type)) {
+            } else if (NONLINEAR_TYPES.includes(c.type)) {
               const vAnode = n1 > 0 ? V[n1 - 1] : 0;
               const vCathode = n2 > 0 ? V[n2 - 1] : 0;
               const vDiff = vAnode - vCathode;
@@ -1518,9 +1892,7 @@
                   addConductance(1e-9);
                 }
               }
-            }
-            // 8. مضخم العمليات والبوابات المنطقية
-            else if (['OPAMP', 'NOT_GATE', 'AND_GATE', 'OR_GATE', 'XOR_GATE'].includes(c.type)) {
+            } else if (['OPAMP', 'NOT_GATE', 'AND_GATE', 'OR_GATE', 'XOR_GATE'].includes(c.type)) {
               const vIn = n1 > 0 ? V[n1 - 1] : 0;
               let vOutTarget = 0;
               if (c.type === 'OPAMP') {
@@ -1530,20 +1902,16 @@
               } else {
                 vOutTarget = vIn > 2.2 ? 5 : 0;
               }
-              addConductance(1e-6); // دخل عالي الممانعة
+              addConductance(1e-6);
               if (n2 > 0) {
                 const gOut = 1 / 10;
                 G[n2 - 1][n2 - 1] += gOut;
                 I[n2 - 1] += vOutTarget * gOut;
               }
-            }
-            // 9. منبع التيار المستقل
-            else if (c.type === 'CURRENT_SOURCE') {
+            } else if (c.type === 'CURRENT_SOURCE') {
               addConductance(1e-9);
               addCurrentSource(c.value || 0.02);
-            }
-            // 10. منابع الجهد المستمرة والمتناوبة والنبضية والمنطقية
-            else if (VOLTAGE_SOURCE_TYPES.includes(c.type)) {
+            } else if (VOLTAGE_SOURCE_TYPES.includes(c.type)) {
               let Vval = c.value || 5;
               if (c.type === 'BATTERY_9V') Vval = c.value || 9;
               else if (c.type === 'LOGIC_HIGH') Vval = 5;
@@ -1552,6 +1920,7 @@
               else if (c.type === 'SQUARE_SOURCE') Vval = (Math.sin(2 * Math.PI * 2 * time) >= 0) ? (c.value || 5) : -(c.value || 5);
               else if (c.type === 'PULSE_SOURCE') Vval = ((time * 2) % 1 < 0.3) ? (c.value || 5) : 0;
 
+              primarySourceInstantV = Vval;
               const rInternal = 0.001;
               const gSource = 1 / rInternal;
               addConductance(gSource);
@@ -1619,6 +1988,7 @@
           success: true,
           pinVoltages,
           maxV: maxAbsV,
+          sourceV: primarySourceInstantV,
           culpritIds: [],
           activeBuzzers
         });
@@ -1628,13 +1998,19 @@
     const workerBlob = new Blob([workerCode], { type: 'application/javascript' });
     const solverWorker = new Worker(URL.createObjectURL(workerBlob));
 
+    // ============================================================================
+    // 6. محرر الدوائر البصري المتقدم (رموز هندسية حقيقية، نقاط التيار، الخريطة المصغرة، والملصقات)
+    // ============================================================================
     const canvas = document.getElementById('circuitCanvas');
     const ctx = canvas.getContext('2d');
+    const miniMapCanvas = document.getElementById('miniMapCanvas');
+    const miniCtx = miniMapCanvas.getContext('2d');
     const GRID_SIZE = 24;
 
     let currentTool = 'SELECT';
     let components = [];
     let wires = [];
+    let stickyNotes = []; // ملصقات نصية لشرح الدائرة (Student #10)
     let selectedComponent = null;
     let draggingComponent = null;
     let wireStartPin = null;
@@ -1642,16 +2018,20 @@
     let pointerPos = { x: 0, y: 0 };
     let isSimulating = false;
     let simTime = 0;
+    let currentFlowOffset = 0; // لتحريك نقاط التيار المضيئة (Student #2)
+    let showCurrentDots = true;
+    let useVoltageHeatmap = false; // تلوين الأسلاك حسب الجهد (Student #9)
     let latestPinVoltages = {};
     let errorCulpritIds = [];
-    let scopeHistory = new Array(115).fill(0);
+    let scopeHistoryCH1 = new Array(115).fill(0); // موجة الدخل
+    let scopeHistoryCH2 = new Array(115).fill(0); // موجة الخرج
 
     let cameraZoom = 1.0;
     let cameraPan = { x: 0, y: 0 };
     let isPanning = false;
     let panStartOrigin = { x: 0, y: 0 };
     let showGrid = true;
-    let cachedGridColor = 'rgba(148, 163, 184, 0.12)';
+    let cachedGridColor = 'rgba(148, 163, 184, 0.11)';
 
     let dmmActive = false;
     let dmmPinKeyA = null;
@@ -1662,10 +2042,99 @@
     let redoStack = [];
 
     function pushHistorySnapshot() {
-      undoStack.push(JSON.stringify({ components, wires }));
+      undoStack.push(JSON.stringify({ components, wires, stickyNotes }));
       if (undoStack.length > 30) undoStack.shift();
       redoStack = [];
     }
+
+    window.toggleQuickRibbonMenu = function() {
+      playSFX('tap');
+      document.getElementById('quickRibbonMenu').classList.toggle('collapsed');
+    };
+
+    window.toggleZenMode = function() {
+      playSFX('switch');
+      document.body.classList.toggle('zen-mode');
+      const isZen = document.body.classList.contains('zen-mode');
+      document.getElementById('zenModeBtn').classList.toggle('active', isZen);
+      setTimeout(resizeCanvas, 310);
+      showToast(isZen ? "تم تفعيل وضع التركيز الكامل (100% لوحة رسم) ⛶" : "تمت استعادة الأشرطة القياسية");
+    };
+
+    window.toggleCurrentDots = function() {
+      playSFX('tap');
+      showCurrentDots = !showCurrentDots;
+      document.getElementById('currentDotsBtn').classList.toggle('active', showCurrentDots);
+      drawWorkspace();
+      showToast(showCurrentDots ? "تم تفعيل نقاط تدفق التيار المتحركة ✨" : "تم إيقاف نقاط التيار");
+    };
+
+    window.toggleVoltageHeatmap = function() {
+      playSFX('tap');
+      useVoltageHeatmap = !useVoltageHeatmap;
+      document.getElementById('heatmapWiresBtn').classList.toggle('active', useVoltageHeatmap);
+      drawWorkspace();
+      showToast(useVoltageHeatmap ? "تم تفعيل التلوين الحراري للأسلاك حسب الجهد 🌡️" : "تمت استعادة ألوان الأسلاك المخصصة");
+    };
+
+    // محاذاة وترتيب الدائرة تلقائياً (Student #12 Auto-Align & Tidy Up)
+    window.autoAlignCircuit = function() {
+      playSFX('wire');
+      pushHistorySnapshot();
+      components.forEach(c => {
+        const oldPins = c.pins.map(p => ({ ...p }));
+        c.x = snapToGrid(c.x);
+        c.y = snapToGrid(c.y);
+        updateComponentPins(c);
+        wires.forEach(w => {
+          oldPins.forEach((op, idx) => {
+            if (Math.hypot(w.x1 - op.x, w.y1 - op.y) < 12) {
+              w.x1 = c.pins[idx].x; w.y1 = c.pins[idx].y;
+            }
+            if (Math.hypot(w.x2 - op.x, w.y2 - op.y) < 12) {
+              w.x2 = c.pins[idx].x; w.y2 = c.pins[idx].y;
+            }
+          });
+        });
+      });
+      drawWorkspace();
+      showToast("📐 تمت محاذاة وترتيب عناصر الدائرة هندسياً!");
+    };
+
+    // إضافة ملصق ملاحظة نصية فوق الدائرة (Student #10 Sticky Text Notes)
+    window.addStickyNote = async function() {
+      playSFX('tap');
+      const res = await openCustomDialog({
+        title: '📝 إضافة ملاحظة توضيحية على الدائرة',
+        message: 'اكتب شرحاً مختصراً لهذه المرحلة من الدائرة (سيظهر فوق المخطط):',
+        fields: [{ label: 'نص الملاحظة:', placeholder: 'مثال: مرحلة التقويم والترشيح الأولي' }],
+        confirmText: 'إضافة الملصق'
+      });
+      if (!res || !res[0]) return;
+      pushHistorySnapshot();
+      const cx = snapToGrid((canvas.width / 2 - cameraPan.x) / cameraZoom);
+      const cy = snapToGrid((canvas.height / 3 - cameraPan.y) / cameraZoom);
+      stickyNotes.push({ id: 'note_' + Date.now(), text: res[0], x: cx, y: cy });
+      playSFX('drop');
+      drawWorkspace();
+    };
+
+    window.duplicateSelectedComponent = function() {
+      if (!selectedComponent) return;
+      playSFX('drop');
+      pushHistorySnapshot();
+      const copy = JSON.parse(JSON.stringify(selectedComponent));
+      copy.id = selectedComponent.type.slice(0, 2) + (components.length + 1) + '_' + Math.floor(Math.random() * 99);
+      copy.x += GRID_SIZE * 2;
+      copy.y += GRID_SIZE * 2;
+      updateComponentPins(copy);
+      components.push(copy);
+      selectedComponent = copy;
+      updateInspectorUI();
+      updateRadialMenuPosition();
+      drawWorkspace();
+      showToast("❐ تم تكرار العنصر بنجاح");
+    };
 
     window.undoAction = function() {
       if (undoStack.length === 0) {
@@ -1673,13 +2142,15 @@
         return;
       }
       playSFX('tap');
-      redoStack.push(JSON.stringify({ components, wires }));
+      redoStack.push(JSON.stringify({ components, wires, stickyNotes }));
       const prev = JSON.parse(undoStack.pop());
-      components = prev.components;
-      wires = prev.wires;
+      components = prev.components || [];
+      wires = prev.wires || [];
+      stickyNotes = prev.stickyNotes || [];
       selectedComponent = null;
       triggerHaptic(15);
       updateInspectorUI();
+      updateRadialMenuPosition();
       triggerSingleSolve(true);
       drawWorkspace();
     };
@@ -1690,13 +2161,15 @@
         return;
       }
       playSFX('tap');
-      undoStack.push(JSON.stringify({ components, wires }));
+      undoStack.push(JSON.stringify({ components, wires, stickyNotes }));
       const next = JSON.parse(redoStack.pop());
-      components = next.components;
-      wires = next.wires;
+      components = next.components || [];
+      wires = next.wires || [];
+      stickyNotes = next.stickyNotes || [];
       selectedComponent = null;
       triggerHaptic(15);
       updateInspectorUI();
+      updateRadialMenuPosition();
       triggerSingleSolve(true);
       drawWorkspace();
     };
@@ -1733,6 +2206,7 @@
     window.zoomWorkspace = function(delta) {
       playSFX('tap');
       cameraZoom = Math.min(2.2, Math.max(0.5, cameraZoom + delta));
+      updateRadialMenuPosition();
       drawWorkspace();
     };
 
@@ -1740,6 +2214,7 @@
       playSFX('tap');
       cameraZoom = 1.0;
       cameraPan = { x: 0, y: 0 };
+      updateRadialMenuPosition();
       drawWorkspace();
       showToast("تمت إعادة ضبط زاوية الرؤية (100%)");
     };
@@ -1755,8 +2230,8 @@
       playSFX('tap');
       document.body.classList.toggle('solarpunk-light');
       cachedGridColor = document.body.classList.contains('solarpunk-light')
-        ? 'rgba(5, 150, 105, 0.14)'
-        : 'rgba(148, 163, 184, 0.12)';
+        ? 'rgba(5, 150, 105, 0.13)'
+        : 'rgba(148, 163, 184, 0.11)';
       drawWorkspace();
       showToast(document.body.classList.contains('solarpunk-light') ? "تم تفعيل الوضع النهاري الساطع (Solarpunk Light) ☀️" : "تم تفعيل الوضع الليلي الداكن 🌙");
     };
@@ -1810,7 +2285,9 @@
       showToast("تم حفظ صورة الدائرة لإرفاقها في تقرير المختبر 📸");
     };
 
+    // تجاهل تغيير حجم الكانفاس عند ارتفاع لوحة مفاتيح الهاتف (PWA Fix)
     function resizeCanvas() {
+      if (document.activeElement && ['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
       const container = document.getElementById('workspace-container');
       canvas.width = container.clientWidth;
       canvas.height = container.clientHeight;
@@ -1829,9 +2306,30 @@
       };
     }
 
+    function worldToScreen(wx, wy) {
+      return {
+        x: wx * cameraZoom + cameraPan.x,
+        y: wy * cameraZoom + cameraPan.y
+      };
+    }
+
+    function updateRadialMenuPosition() {
+      const menu = document.getElementById('radialContextMenu');
+      if (!selectedComponent || selectedComponent.type === 'GND') {
+        menu.style.display = 'none';
+        return;
+      }
+      const rect = canvas.getBoundingClientRect();
+      const scr = worldToScreen(selectedComponent.x, selectedComponent.y);
+      menu.style.display = 'block';
+      menu.style.left = (rect.left + scr.x) + 'px';
+      menu.style.top = (rect.top + scr.y) + 'px';
+    }
+
     window.loadCircuitTemplate = function(type) {
       playSFX('drop');
       pushHistorySnapshot();
+      stickyNotes = [];
       const cx = snapToGrid(window.innerWidth / 2);
       const cy = snapToGrid((window.innerHeight - 160) / 2);
 
@@ -1857,6 +2355,28 @@
           { id: 'LED1', type: 'LED_RED', x: cx + 96, y: cy, value: 2.0, unit: 'V', rotation: 90, pins: [] },
           { id: 'GND1', type: 'GND', x: cx, y: cy + 72, value: 0, unit: '', rotation: 0, pins: [] }
         ];
+      } else if (type === 'CHALLENGE') {
+        // دارة التحدي الأسبوعي (تحتوي على ديود معكوس ومفتاح مفصول ومقاومة عالية جداً لإصلاحها)
+        const savedChallenge = localStorage.getItem('aleppo_ee_weekly_challenge');
+        if (savedChallenge) {
+          const parsed = JSON.parse(savedChallenge);
+          components = parsed.components || [];
+          wires = parsed.wires || [];
+          components.forEach(updateComponentPins);
+          closeModal('templatesModal');
+          triggerSingleSolve(true);
+          drawWorkspace();
+          showToast("🏆 تم تحميل تحدي المختبر الأسبوعي! اكتشف الخطأ وأصلح الدائرة.");
+          return;
+        }
+        components = [
+          { id: 'BAT1', type: 'BATTERY_9V', x: cx - 96, y: cy, value: 9, unit: 'V', rotation: 90, pins: [] },
+          { id: 'SW1', type: 'SWITCH', x: cx - 24, y: cy - 48, value: 0, unit: 'State', rotation: 0, pins: [] },
+          { id: 'R_ERR', type: 'RESISTOR', x: cx + 48, y: cy - 48, value: 50000, unit: 'Ω', rotation: 0, pins: [] },
+          { id: 'LED1', type: 'LED_GREEN', x: cx + 96, y: cy, value: 2.1, unit: 'V', rotation: 270, pins: [] },
+          { id: 'GND1', type: 'GND', x: cx, y: cy + 72, value: 0, unit: '', rotation: 0, pins: [] }
+        ];
+        stickyNotes = [{ id: 'n1', text: 'تحدي الأسبوع: أغلق المفتاح، خفّض المقاومة، وصحح قطبية الليد الأخضر!', x: cx, y: cy - 96 }];
       } else if (type === 'RLC_RESONANCE') {
         components = [
           { id: 'VAC', type: 'AC_SOURCE', x: cx - 96, y: cy, value: 10, unit: 'V', rotation: 90, pins: [] },
@@ -1869,7 +2389,7 @@
 
       components.forEach(updateComponentPins);
 
-      if (type === 'RLC_RESONANCE' || type === 'LED_BUZZER') {
+      if (['RLC_RESONANCE', 'LED_BUZZER', 'CHALLENGE'].includes(type)) {
         wires = [
           { x1: components[0].pins[0].x, y1: components[0].pins[0].y, x2: components[1].pins[0].x, y2: components[1].pins[0].y, color: '#ef4444' },
           { x1: components[1].pins[1].x, y1: components[1].pins[1].y, x2: components[2].pins[0].x, y2: components[2].pins[0].y, color: '#f59e0b' },
@@ -1925,6 +2445,10 @@
       playSFX('tap');
       currentTool = toolName;
       wireStartPin = null;
+      // حفظ الأداة في قائمة "المستخدمة مؤخراً" (Student #6)
+      if (!['SELECT', 'PAN', 'CLEAR'].includes(toolName)) {
+        recentTools = [toolName, ...recentTools.filter(t => t !== toolName)].slice(0, 8);
+      }
       document.querySelectorAll('.tool-item').forEach(item => item.classList.remove('active'));
       if (el) el.classList.add('active');
     };
@@ -2010,6 +2534,7 @@
           pushHistorySnapshot();
         }
         updateInspectorUI();
+        updateRadialMenuPosition();
         if (isDoubleTap && clickedComp && clickedComp.type !== 'GND') {
           document.getElementById('inspValueInput').focus();
           triggerHaptic(30);
@@ -2057,6 +2582,7 @@
         playSFX('drop');
         triggerHaptic(25);
         updateInspectorUI();
+        updateRadialMenuPosition();
         currentTool = 'SELECT';
         renderCategoryToolbar();
         triggerSingleSolve();
@@ -2069,6 +2595,7 @@
       if (isPanning) {
         cameraPan.x = pos.rawX - panStartOrigin.x;
         cameraPan.y = pos.rawY - panStartOrigin.y;
+        updateRadialMenuPosition();
         drawWorkspace();
         return;
       }
@@ -2092,6 +2619,7 @@
             }
           });
         });
+        updateRadialMenuPosition();
         drawWorkspace();
       } else if (wireStartPin) {
         drawWorkspace();
@@ -2107,6 +2635,7 @@
       }
     });
 
+    // تحديث شريط الفحص مع محدد الوحدات الهندسية الذكية SI Prefix (Student #3)
     function updateInspectorUI() {
       const bar = document.getElementById('inspectorBar');
       if (!selectedComponent || selectedComponent.type === 'GND') {
@@ -2116,6 +2645,8 @@
       bar.style.display = 'flex';
       const meta = ALL_COMPONENTS_META[selectedComponent.type] || {};
       document.getElementById('inspCompName').innerText = `${meta.label || selectedComponent.type} (${selectedComponent.id})`;
+      document.getElementById('inspSidePrefix')?.remove();
+      document.getElementById('inspSiPrefix').value = "1";
       document.getElementById('inspValueInput').value = selectedComponent.value;
       document.getElementById('inspUnitLabel').innerText = selectedComponent.unit;
 
@@ -2146,12 +2677,22 @@
       }
     }
 
-    window.updateSelectedComponentValue = function(val) {
+    window.updateSelectedComponentValueWithUnit = function() {
       if (!selectedComponent) return;
-      const parsed = parseFloat(val);
-      selectedComponent.value = isNaN(parsed) ? 0 : parsed;
-      document.getElementById('inspValueInput').value = selectedComponent.value;
+      const baseNum = parseFloat(document.getElementById('inspValueInput').value) || 0;
+      const mult = parseFloat(document.getElementById('inspSiPrefix').value) || 1;
+      selectedComponent.value = baseNum * mult;
       document.getElementById('inspRangeSlider').value = selectedComponent.value;
+      triggerSingleSolve();
+      drawWorkspace();
+    };
+
+    window.updateSelectedComponentFromSlider = function(val) {
+      if (!selectedComponent) return;
+      const parsed = parseFloat(val) || 0;
+      selectedComponent.value = parsed;
+      document.getElementById('inspSiPrefix').value = "1";
+      document.getElementById('inspValueInput').value = parsed;
       triggerSingleSolve();
       drawWorkspace();
     };
@@ -2169,24 +2710,97 @@
       components = components.filter(c => c.id !== selectedComponent.id);
       selectedComponent = null;
       updateInspectorUI();
+      updateRadialMenuPosition();
       triggerSingleSolve(true);
       drawWorkspace();
     };
 
-    window.clearCircuitWorkspace = function() {
-      if (!confirm("هل تريد مسح جميع العناصر والأسلاك من مساحة العمل؟")) return;
+    window.clearCircuitWorkspace = async function() {
+      const ok = await openCustomDialog({
+        title: '✖ مسح مساحة العمل بالكامل',
+        message: 'هل أنت متأكد من مسح جميع العناصر والأسلاك من لوحة التصميم؟',
+        confirmText: 'نعم، امسح الكل'
+      });
+      if (!ok) return;
       pushHistorySnapshot();
       components = [];
       wires = [];
+      stickyNotes = [];
       selectedComponent = null;
       latestPinVoltages = {};
       errorCulpritIds = [];
       document.getElementById('forkAttributionBadge').innerText = '';
       updateInspectorUI();
+      updateRadialMenuPosition();
       drawWorkspace();
     };
 
-    // الرسم مع وهج الليدات الحقيقي (Real-Time LED & Lamp Glow Effect)
+    // دالة رسم الرموز الهندسية المعيارية داخل العنصر (Student #1 Vector Schematic Symbols)
+    function drawSchematicVectorSymbol(ctx, c) {
+      ctx.save();
+      ctx.translate(c.x, c.y);
+      const rot = (c.rotation || 0) % 360;
+      ctx.rotate((rot * Math.PI) / 180);
+
+      ctx.beginPath();
+      if (['RESISTOR', 'POT', 'LDR', 'THERMISTOR'].includes(c.type)) {
+        // خط متعرج قياسي للمقاومة (Zig-Zag IEEE Symbol)
+        ctx.moveTo(-24, 0);
+        ctx.lineTo(-18, 0);
+        ctx.lineTo(-14, -8);
+        ctx.lineTo(-8, 8);
+        ctx.lineTo(-2, -8);
+        ctx.lineTo(4, 8);
+        ctx.lineTo(10, -8);
+        ctx.lineTo(14, 8);
+        ctx.lineTo(18, 0);
+        ctx.lineTo(24, 0);
+        if (c.type === 'POT') {
+          ctx.moveTo(-10, 12); ctx.lineTo(10, -12);
+        }
+      } else if (['CAPACITOR', 'ELEC_CAP'].includes(c.type)) {
+        // لوحين متوازيين للمكثف
+        ctx.moveTo(-24, 0); ctx.lineTo(-5, 0);
+        ctx.moveTo(-5, -12); ctx.lineTo(-5, 12);
+        ctx.moveTo(5, -12); ctx.lineTo(5, 12);
+        ctx.moveTo(5, 0); ctx.lineTo(24, 0);
+      } else if (c.type === 'INDUCTOR' || c.type === 'TRANSFORMER') {
+        // أقواس الملف اللولبي للوشيعة
+        ctx.moveTo(-24, 0); ctx.lineTo(-16, 0);
+        ctx.arc(-10, 0, 6, Math.PI, 0, false);
+        ctx.arc(0, 0, 6, Math.PI, 0, false);
+        ctx.arc(10, 0, 6, Math.PI, 0, false);
+        ctx.moveTo(16, 0); ctx.lineTo(24, 0);
+      } else if (['DIODE', 'SCHOTTKY', 'ZENER', 'PHOTO_DIODE'].includes(c.type) || c.type.startsWith('LED')) {
+        // مثلث الديود وخط المهبط
+        ctx.moveTo(-24, 0); ctx.lineTo(-8, 0);
+        ctx.moveTo(-8, -10); ctx.lineTo(-8, 10); ctx.lineTo(8, 0); ctx.closePath();
+        ctx.moveTo(8, -10); ctx.lineTo(8, 10);
+        if (c.type === 'ZENER') {
+          ctx.moveTo(8, -10); ctx.lineTo(4, -13);
+          ctx.moveTo(8, 10); ctx.lineTo(12, 13);
+        }
+        ctx.moveTo(8, 0); ctx.lineTo(24, 0);
+      } else if (['SWITCH', 'PUSH_BUTTON', 'RELAY'].includes(c.type)) {
+        // قاطع مفتوح أو مغلق
+        ctx.moveTo(-24, 0); ctx.lineTo(-10, 0);
+        if (c.value === 1) {
+          ctx.lineTo(10, 0);
+        } else {
+          ctx.lineTo(8, -11);
+        }
+        ctx.moveTo(10, 0); ctx.lineTo(24, 0);
+      } else {
+        // إطار دائري أو صندوقي للمنابع والبوابات والمحركات
+        ctx.moveTo(-24, 0); ctx.lineTo(-15, 0);
+        ctx.moveTo(15, 0); ctx.lineTo(24, 0);
+        ctx.arc(0, 0, 15, 0, Math.PI * 2);
+      }
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    // الرسم الرئيسي مع نقاط التيار المضيئة، التلوين الحراري، والرادار المصغر
     function drawWorkspace() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.save();
@@ -2209,14 +2823,45 @@
         }
       }
 
+      // رسم الأسلاك مع دعم التلوين الحراري ونقاط التيار المضيئة (Student #2 & #9)
       wires.forEach(w => {
-        ctx.strokeStyle = w.color || '#10b981';
+        let strokeCol = w.color || '#10b981';
+        if (useVoltageHeatmap && isSimulating) {
+          // البحث عن الفولتية عند بداية السلك
+          let wireV = 0;
+          components.forEach(c => {
+            c.pins.forEach((p, idx) => {
+              if (p.x === w.x1 && p.y === w.y1) wireV = latestPinVoltages[c.id + '_' + idx] || 0;
+            });
+          });
+          if (wireV > 1.0) strokeCol = '#10b981';
+          else if (wireV < -1.0) strokeCol = '#ef4444';
+          else strokeCol = '#94a3b8';
+        }
+
+        ctx.strokeStyle = strokeCol;
         ctx.lineWidth = 3;
         ctx.beginPath();
         ctx.moveTo(w.x1, w.y1);
         ctx.lineTo(w.x2, w.y1);
         ctx.lineTo(w.x2, w.y2);
         ctx.stroke();
+
+        // نقاط تدفق التيار المتحركة أثناء التشغيل (Animated Current Flow Dots)
+        if (isSimulating && showCurrentDots) {
+          ctx.save();
+          ctx.strokeStyle = '#fde047';
+          ctx.lineWidth = 3.5;
+          ctx.lineCap = 'round';
+          ctx.setLineDash([2, 16]);
+          ctx.lineDashOffset = -currentFlowOffset;
+          ctx.beginPath();
+          ctx.moveTo(w.x1, w.y1);
+          ctx.lineTo(w.x2, w.y1);
+          ctx.lineTo(w.x2, w.y2);
+          ctx.stroke();
+          ctx.restore();
+        }
       });
 
       if (wireStartPin) {
@@ -2231,13 +2876,29 @@
         ctx.setLineDash([]);
       }
 
+      // رسم الملصقات النصية التوضيحية (Student #10 Sticky Notes)
+      stickyNotes.forEach(n => {
+        ctx.save();
+        ctx.fillStyle = 'rgba(245, 158, 11, 0.16)';
+        ctx.strokeStyle = '#f59e0b';
+        ctx.lineWidth = 1;
+        ctx.font = 'bold 11px sans-serif';
+        const tw = Math.max(120, ctx.measureText(n.text).width + 18);
+        ctx.fillRect(n.x - tw / 2, n.y - 14, tw, 26);
+        ctx.strokeRect(n.x - tw / 2, n.y - 14, tw, 26);
+        ctx.fillStyle = '#fbbf24';
+        ctx.textAlign = 'center';
+        ctx.fillText(n.text, n.x, n.y + 3);
+        ctx.restore();
+      });
+
+      // رسم العناصر الإلكترونية بالرموز الهندسية المعيارية والتوهج
       components.forEach(c => {
         ctx.save();
         const isSel = selectedComponent && selectedComponent.id === c.id;
         const isErrorCulprit = errorCulpritIds.includes(c.id);
         const meta = ALL_COMPONENTS_META[c.type] || {};
 
-        // حساب فرق الجهد لتفعيل إضاءة الليدات والمصباح
         const v0 = latestPinVoltages[c.id + '_0'] || 0;
         const v1 = latestPinVoltages[c.id + '_1'] || 0;
         const vDiff = v0 - v1;
@@ -2250,55 +2911,54 @@
           ctx.strokeStyle = '#ef4444';
           ctx.shadowColor = '#ef4444';
           ctx.shadowBlur = 16;
-          ctx.lineWidth = 3.5;
+          ctx.lineWidth = 3;
         } else if (isGlowing) {
           ctx.strokeStyle = meta.glow;
           ctx.shadowColor = meta.glow;
-          ctx.shadowBlur = 22;
+          ctx.shadowBlur = 24;
           ctx.lineWidth = 3;
         } else {
           ctx.strokeStyle = isSel ? '#f59e0b' : (document.body.classList.contains('solarpunk-light') ? '#064e3b' : '#f8fafc');
-          ctx.lineWidth = isSel ? 3 : 2;
+          ctx.lineWidth = isSel ? 2.8 : 2;
         }
 
-        ctx.fillStyle = isGlowing ? meta.glow : (document.body.classList.contains('solarpunk-light') ? '#ffffff' : '#1e293b');
-
         if (c.type !== 'GND') {
-          ctx.beginPath();
-          ctx.moveTo(c.pins[0].x, c.pins[0].y);
-          ctx.lineTo(c.pins[1].x, c.pins[1].y);
-          ctx.stroke();
-
           const rot = (c.rotation || 0) % 360;
           const isVertical = (rot === 90 || rot === 270);
-          const bw = isVertical ? 30 : 52;
-          const bh = isVertical ? 52 : 30;
+          const bw = isVertical ? 32 : 50;
+          const bh = isVertical ? 50 : 32;
+
+          // خلفية خفيفة تحت الرمز الهندسي لسهولة اللمس والتمييز
+          ctx.fillStyle = isGlowing ? meta.glow : (document.body.classList.contains('solarpunk-light') ? 'rgba(255,255,255,0.88)' : 'rgba(30, 41, 59, 0.85)');
           ctx.fillRect(c.x - bw / 2, c.y - bh / 2, bw, bh);
           ctx.strokeRect(c.x - bw / 2, c.y - bh / 2, bw, bh);
 
+          // رسم الرمز الهندسي المعياري داخل الإطار
+          drawSchematicVectorSymbol(ctx, c);
+
           ctx.shadowBlur = 0;
-          ctx.fillStyle = isGlowing ? '#020617' : (isErrorCulprit ? '#ef4444' : '#38bdf8');
-          ctx.font = 'bold 10px sans-serif';
+          ctx.fillStyle = isErrorCulprit ? '#ef4444' : '#38bdf8';
+          ctx.font = 'bold 9.5px sans-serif';
           ctx.textAlign = 'center';
 
           let labelTxt = `${meta.sym || c.type}`;
           if (['SWITCH', 'PUSH_BUTTON', 'RELAY'].includes(c.type)) {
             labelTxt = `${meta.sym}:${c.value === 1 ? 'ON' : 'OFF'}`;
           } else if (['CAPACITOR', 'ELEC_CAP'].includes(c.type)) {
-            labelTxt = `${meta.sym}:${(c.value * 1e6).toFixed(0)}µF`;
+            labelTxt = `${meta.sym}:${(c.value * 1e6).toFixed(1)}µF`;
           } else if (c.unit) {
             labelTxt = `${meta.sym}:${c.value}${c.unit}`;
           }
-          ctx.fillText(labelTxt, c.x, c.y + 4);
+          ctx.fillText(labelTxt, c.x, c.y + (isVertical ? 34 : -20));
 
           ctx.fillStyle = '#f59e0b';
-          ctx.font = 'bold 11px sans-serif';
+          ctx.font = 'bold 10px sans-serif';
           if (['DC_SOURCE', 'BATTERY_9V', 'AC_SOURCE', 'SQUARE_SOURCE', 'PULSE_SOURCE', 'ELEC_CAP'].includes(c.type)) {
-            ctx.fillText('+', c.pins[0].x + (isVertical ? 0 : 10), c.pins[0].y + (isVertical ? -10 : 4));
-            ctx.fillText('-', c.pins[1].x + (isVertical ? 0 : 10), c.pins[1].y + (isVertical ? 14 : 4));
+            ctx.fillText('+', c.pins[0].x + (isVertical ? 8 : 8), c.pins[0].y + (isVertical ? 10 : -6));
+            ctx.fillText('-', c.pins[1].x + (isVertical ? 8 : -8), c.pins[1].y + (isVertical ? -6 : -6));
           } else if (['DIODE', 'SCHOTTKY', 'ZENER', 'PHOTO_DIODE'].includes(c.type) || c.type.startsWith('LED')) {
-            ctx.fillText('A', c.pins[0].x + (isVertical ? 0 : 10), c.pins[0].y + (isVertical ? -8 : 4));
-            ctx.fillText('K', c.pins[1].x + (isVertical ? 0 : 10), c.pins[1].y + (isVertical ? 14 : 4));
+            ctx.fillText('A', c.pins[0].x + (isVertical ? 8 : 8), c.pins[0].y + (isVertical ? 10 : -6));
+            ctx.fillText('K', c.pins[1].x + (isVertical ? 8 : -8), c.pins[1].y + (isVertical ? -6 : -6));
           }
         } else {
           ctx.beginPath();
@@ -2314,13 +2974,13 @@
           const pinKey = c.id + '_' + idx;
           ctx.fillStyle = (pinKey === dmmPinKeyA || pinKey === dmmPinKeyB) ? '#f59e0b' : '#06b6d4';
           ctx.beginPath();
-          ctx.arc(p.x, p.y, 5, 0, Math.PI * 2);
+          ctx.arc(p.x, p.y, 4.5, 0, Math.PI * 2);
           ctx.fill();
 
           const v = latestPinVoltages[pinKey];
           if (v !== undefined && isSimulating) {
             ctx.fillStyle = '#10b981';
-            ctx.font = 'bold 10px sans-serif';
+            ctx.font = 'bold 9.5px sans-serif';
             ctx.fillText(v.toFixed(1) + 'V', p.x - 10, p.y - 8);
           }
         });
@@ -2329,6 +2989,38 @@
       });
 
       ctx.restore();
+      drawMiniMapRadar();
+    }
+
+    // رسم الخريطة المصغرة في الزاوية (Student #8 Mini-Map Radar)
+    function drawMiniMapRadar() {
+      miniCtx.clearRect(0, 0, miniMapCanvas.width, miniMapCanvas.height);
+      const scale = 0.08;
+      const ox = miniMapCanvas.width / 2;
+      const oy = miniMapCanvas.height / 2;
+
+      miniCtx.strokeStyle = '#10b981';
+      miniCtx.lineWidth = 1;
+      wires.forEach(w => {
+        miniCtx.beginPath();
+        miniCtx.moveTo(ox + (w.x1 - 200) * scale, oy + (w.y1 - 200) * scale);
+        miniCtx.lineTo(ox + (w.x2 - 200) * scale, oy + (w.y2 - 200) * scale);
+        miniCtx.stroke();
+      });
+
+      miniCtx.fillStyle = '#38bdf8';
+      components.forEach(c => {
+        miniCtx.fillRect(ox + (c.x - 200) * scale - 2, oy + (c.y - 200) * scale - 2, 4, 4);
+      });
+
+      // مستطيل الكاميرا الحالي
+      miniCtx.strokeStyle = '#f59e0b';
+      miniCtx.strokeRect(
+        ox + (-cameraPan.x / cameraZoom - 200) * scale,
+        oy + (-cameraPan.y / cameraZoom - 200) * scale,
+        (canvas.width / cameraZoom) * scale,
+        (canvas.height / cameraZoom) * scale
+      );
     }
 
     let lastBuzzerBeepTime = 0;
@@ -2350,11 +3042,9 @@
       }
 
       statusEl.style.color = '#10b981';
-      statusEl.innerText = 'مستقر (True MNA v7)';
+      statusEl.innerText = 'مستقر (MNA v8)';
       latestPinVoltages = res.pinVoltages;
-      document.getElementById('maxVoltReadout').innerText = `أعلى جهد: ${res.maxV.toFixed(2)}V`;
 
-      // إذا كان هناك جرس Buzzer يمر فيه تيار والداراة قيد التشغيل، أصدر رنين الجرس
       if (isSimulating && res.activeBuzzers && res.activeBuzzers.length > 0) {
         const now = Date.now();
         if (now - lastBuzzerBeepTime > 180) {
@@ -2372,9 +3062,16 @@
         probeKey = Object.keys(res.pinVoltages).find(k => res.pinVoltages[k] !== 0);
       }
 
-      const sampleV = (probeKey && res.pinVoltages[probeKey] !== undefined) ? res.pinVoltages[probeKey] : 0;
-      scopeHistory.push(sampleV);
-      if (scopeHistory.length > 115) scopeHistory.shift();
+      const sampleCH2 = (probeKey && res.pinVoltages[probeKey] !== undefined) ? res.pinVoltages[probeKey] : 0;
+      const sampleCH1 = res.sourceV !== undefined ? res.sourceV : res.maxV;
+
+      document.getElementById('maxVoltReadout').innerText = `CH2: ${sampleCH2.toFixed(2)}V`;
+
+      scopeHistoryCH1.push(sampleCH1);
+      if (scopeHistoryCH1.length > 115) scopeHistoryCH1.shift();
+
+      scopeHistoryCH2.push(sampleCH2);
+      if (scopeHistoryCH2.length > 115) scopeHistoryCH2.shift();
 
       updateLiveMultimeterReadout();
       drawOscilloscope();
@@ -2403,27 +3100,43 @@
     function simulationLoop() {
       if (!isSimulating) return;
       simTime += 0.02;
+      currentFlowOffset = (currentFlowOffset + 1.8) % 18;
       solverWorker.postMessage({ components, wires, time: simTime, resetState: false });
       setTimeout(() => requestAnimationFrame(simulationLoop), 60);
     }
 
+    // راسم إشارة ثنائي القنوات (Student #11 Dual-Channel Oscilloscope)
     function drawOscilloscope() {
       const sCanvas = document.getElementById('scopeCanvas');
       const sCtx = sCanvas.getContext('2d');
       sCtx.clearRect(0, 0, sCanvas.width, sCanvas.height);
 
-      sCtx.strokeStyle = 'rgba(255,255,255,0.15)';
+      sCtx.strokeStyle = 'rgba(255,255,255,0.12)';
       sCtx.beginPath();
       sCtx.moveTo(0, sCanvas.height / 2);
       sCtx.lineTo(sCanvas.width, sCanvas.height / 2);
       sCtx.stroke();
 
-      sCtx.strokeStyle = '#00ff88';
-      sCtx.lineWidth = 2;
+      // القناة الأولى CH1 (المنبع - أزرق سماوي متقطع خفيف)
+      sCtx.strokeStyle = 'rgba(56, 189, 248, 0.55)';
+      sCtx.lineWidth = 1.5;
       sCtx.beginPath();
-      scopeHistory.forEach((v, i) => {
+      scopeHistoryCH1.forEach((v, i) => {
         const x = (i / 115) * sCanvas.width;
-        const y = (sCanvas.height / 2) - (v * 2.8);
+        const y = (sCanvas.height / 2) - (v * 2.6);
+        const clampedY = Math.max(4, Math.min(sCanvas.height - 4, y));
+        if (i === 0) sCtx.moveTo(x, clampedY);
+        else sCtx.lineTo(x, clampedY);
+      });
+      sCtx.stroke();
+
+      // القناة الثانية CH2 (الخرج المفحوص - أخضر فسفوري ساطع)
+      sCtx.strokeStyle = '#00ff88';
+      sCtx.lineWidth = 2.2;
+      sCtx.beginPath();
+      scopeHistoryCH2.forEach((v, i) => {
+        const x = (i / 115) * sCanvas.width;
+        const y = (sCanvas.height / 2) - (v * 2.6);
         const clampedY = Math.max(4, Math.min(sCanvas.height - 4, y));
         if (i === 0) sCtx.moveTo(x, clampedY);
         else sCtx.lineTo(x, clampedY);
@@ -2431,6 +3144,109 @@
       sCtx.stroke();
     }
 
+    // ============================================================================
+    // 7. مشاركة الدائرة بـ QR Code والملف الشخصي للطالب (Student #13 & #14)
+    // ============================================================================
+    window.openQRShareModal = function() {
+      const payload = btoa(unescape(encodeURIComponent(JSON.stringify({ components, wires }))));
+      const shareUrl = `${window.location.origin}${window.location.pathname}?circuit=${encodeURIComponent(payload)}`;
+      document.getElementById('shareableLinkInput').value = shareUrl;
+
+      // رسم مصفوفة QR بصرية أنيقة تحمل شعار الجامعة في المنتصف
+      const qCanvas = document.getElementById('qrCodeCanvas');
+      const qCtx = qCanvas.getContext('2d');
+      qCtx.fillStyle = '#ffffff';
+      qCtx.fillRect(0, 0, 200, 200);
+      qCtx.fillStyle = '#0f172a';
+
+      // مربعات الزوايا القياسية لرمز QR
+      const drawFinder = (fx, fy) => {
+        qCtx.fillRect(fx, fy, 42, 42);
+        qCtx.fillStyle = '#ffffff';
+        qCtx.fillRect(fx + 6, fy + 6, 30, 30);
+        qCtx.fillStyle = '#10b981';
+        qCtx.fillRect(fx + 12, fy + 12, 18, 18);
+        qCtx.fillStyle = '#0f172a';
+      };
+      drawFinder(14, 14);
+      drawFinder(144, 14);
+      drawFinder(14, 144);
+
+      // توليد النقاط الرقمية الحتمية بناءً على محتوى الدائرة
+      let hash = 2166136261;
+      for (let i = 0; i < payload.length; i++) {
+        hash ^= payload.charCodeAt(i);
+        hash = Math.imul(hash, 16777619);
+      }
+      for (let r = 0; r < 21; r++) {
+        for (let c = 0; c < 21; c++) {
+          if ((r < 6 && c < 6) || (r < 6 && c > 14) || (r > 14 && c < 6)) continue;
+          if (r >= 8 && r <= 12 && c >= 8 && c <= 12) continue;
+          const bit = ((hash ^ (r * 31 + c * 17 + payload.charCodeAt((r * c) % payload.length))) & 1);
+          if (bit) qCtx.fillRect(14 + c * 8.2, 14 + r * 8.2, 6.5, 6.5);
+        }
+      }
+      qCtx.fillStyle = '#0284c7';
+      qCtx.font = 'bold 11px sans-serif';
+      qCtx.textAlign = 'center';
+      qCtx.fillText('ALEPPO EE', 100, 104);
+
+      openModal('qrShareModal');
+    };
+
+    window.copyShareableCircuitLink = function() {
+      const inp = document.getElementById('shareableLinkInput');
+      inp.select();
+      navigator.clipboard?.writeText(inp.value).catch(() => {});
+      playSFX('wire');
+      showToast("📋 تم نسخ الرابط المباشر للدائرة بنجاح!");
+    };
+
+    window.openStudentProfileModal = function() {
+      if (!currentUser) {
+        openModal('onboardingModal');
+        return;
+      }
+      const myProjs = getLocalProjects().filter(p => p.ownerId === currentUser.uid || p.universityId === currentUser.universityId);
+      const totalStars = myProjs.reduce((acc, p) => acc + (p.ratings?.reduce((s, r) => s + r.score, 0) || 0), 0);
+      const initials = currentUser.fullName.split(' ').slice(0, 2).map(w => w[0]).join(' ');
+
+      let badgeTitle = '🌱 باحث إلكتروني صاعد';
+      if (myProjs.length >= 3 || totalStars >= 10) badgeTitle = '⚡ مهندس تصميم متقدم';
+      if (currentUser.role === 'admin') badgeTitle = '👑 المشرف العام للمنصة الهندسية';
+
+      document.getElementById('studentProfileBody').innerHTML = `
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:14px; background:var(--bg-dark); padding:12px; border-radius:12px;">
+          <div class="avatar-circle" style="width:50px; height:50px; font-size:16px;">${escapeHTML(initials)}</div>
+          <div>
+            <strong style="font-size:15px; color:var(--accent-green);">${escapeHTML(currentUser.fullName)}</strong>
+            <div style="font-size:12px; color:var(--text-muted);">الرقم الجامعي: ${escapeHTML(currentUser.universityId)} | دفعة 20${escapeHTML(currentUser.universityId.slice(0, 2))}</div>
+            <span class="badge badge-featured" style="display:inline-block; margin-top:4px;">${badgeTitle}</span>
+          </div>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-box"><div class="num">${myProjs.length}</div><div class="lbl">مشاريعي المحفوظة</div></div>
+          <div class="stat-box"><div class="num" style="color:var(--accent-amber);">★ ${totalStars}</div><div class="lbl">مجموع نقاط التقييم</div></div>
+        </div>
+        <h4 style="font-size:12px; margin-bottom:6px; color:var(--text-muted);">مشاريعي الخاصة والعامة:</h4>
+        <div style="max-height:220px; overflow-y:auto;">
+          ${myProjs.map(p => `
+            <div class="project-card" style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <strong>${escapeHTML(p.title)}</strong>
+                <span class="badge ${p.isPublic ? 'badge-public' : 'badge-private'}">${p.isPublic ? 'عام' : 'خاص'}</span>
+              </div>
+              <button class="btn btn-cyan" onclick="closeModal('studentProfileModal'); forkAndLoadProject('${p.id}')">فتح في المحاكي</button>
+            </div>
+          `).join('') || '<p style="font-size:12px; color:var(--text-muted); text-align:center; padding:12px;">لم تقم بحفظ أي مشروع بعد.</p>'}
+        </div>
+      `;
+      openModal('studentProfileModal');
+    };
+
+    // ============================================================================
+    // 8. مستودع المشاريع والغرفة السرية المطورة بالكامل (Admin UX #1 -> #15)
+    // ============================================================================
     function getLocalProjects() {
       return JSON.parse(localStorage.getItem('aleppo_ee_projects') || '[]');
     }
@@ -2470,6 +3286,7 @@
           universityId: '220411',
           forkedFrom: null,
           isPublic: true,
+          isFeatured: true,
           ratings: [{ uid: 'usr_1', score: 5 }],
           comments: [
             { id: 'c_101', sender: 'سارة المحمد', text: 'شرح واضح جداً لاستجابة التردد', time: Date.now() - 60000 }
@@ -2482,7 +3299,8 @@
 
       const demoUsers = [
         { uid: 'usr_220411', fullName: 'عمر خالد الحسن', universityId: '220411', role: 'student', isBanned: false, lastLoginAt: Date.now() - 1800000 },
-        { uid: 'usr_230819', fullName: 'مازن عبد القادر', universityId: '230819', role: 'student', isBanned: false, lastLoginAt: Date.now() - 86400000 }
+        { uid: 'usr_230819', fullName: 'مازن عبد القادر', universityId: '230819', role: 'student', isBanned: false, lastLoginAt: Date.now() - 86400000 },
+        { uid: 'usr_240115', fullName: 'نور الهدى خطيب', universityId: '240115', role: 'student', isBanned: false, lastLoginAt: Date.now() - 300000 }
       ];
       if (currentUser) demoUsers.push(currentUser);
       setLocalUsers(demoUsers);
@@ -2515,9 +3333,10 @@
         universityId: escapeHTML(currentUser.universityId),
         forkedFrom: currentForkedFromAuthor ? escapeHTML(currentForkedFromAuthor) : null,
         isPublic,
+        isFeatured: false,
         ratings: [],
         comments: [],
-        schema: JSON.parse(JSON.stringify({ components, wires })),
+        schema: JSON.parse(JSON.stringify({ components, wires, stickyNotes })),
         updatedAt: Date.now()
       };
 
@@ -2548,6 +3367,7 @@
       const queryText = (document.getElementById('smartSearchInput').value || '').trim().toLowerCase();
       const allProjects = getLocalProjects();
 
+      // ترتيب بحيث تظهر المشاريع المعتمدة الذهبية (Featured) في المقدمة دائماً (Admin #6)
       const visible = allProjects.filter(p => {
         const canSee = p.isPublic || (currentUser && (p.ownerId === currentUser.uid || p.universityId === currentUser.universityId));
         if (!canSee) return false;
@@ -2555,7 +3375,7 @@
         return p.title.toLowerCase().includes(queryText) ||
                p.ownerName.toLowerCase().includes(queryText) ||
                (p.universityId && p.universityId.includes(queryText));
-      });
+      }).sort((a, b) => (b.isFeatured ? 1 : 0) - (a.isFeatured ? 1 : 0));
 
       if (visible.length === 0) {
         container.innerHTML = `<p style="text-align:center; color:var(--text-muted); padding:20px;">لا توجد مشاريع مطابقة للبحث.</p>`;
@@ -2571,6 +3391,7 @@
         const safeOwner = escapeHTML(p.ownerName);
         const safeUniId = escapeHTML(p.universityId);
         const forkBadge = p.forkedFrom ? `<div style="font-size:10px; color:var(--accent-amber);">🔄 مقتبس من: ${escapeHTML(p.forkedFrom)}</div>` : '';
+        const featuredBadge = p.isFeatured ? `<span class="badge badge-featured">★ مشروع معتمد من الكلية</span>` : '';
 
         const commentsHtml = (p.comments || []).map(c => `
           <div style="background:rgba(255,255,255,0.03); padding:4px 8px; border-radius:6px; margin-bottom:4px; display:flex; justify-content:space-between; font-size:11px;">
@@ -2579,10 +3400,11 @@
         `).join('');
 
         return `
-          <div class="project-card">
-            <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+          <div class="project-card ${p.isFeatured ? 'featured-gold' : ''}">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:6px;">
               <div>
                 <strong style="font-size:14px; color:var(--accent-green);">${safeTitle}</strong>
+                ${featuredBadge}
                 <div style="font-size:11px; color:var(--text-muted);">الطالب: ${safeOwner} (${safeUniId}) | التقييم: ★ ${avgRating}</div>
                 ${forkBadge}
               </div>
@@ -2618,10 +3440,12 @@
       components = deepClone.components || [];
       components.forEach(updateComponentPins);
       wires = deepClone.wires || [];
+      stickyNotes = deepClone.stickyNotes || [];
       selectedComponent = null;
       currentForkedFromAuthor = `${proj.ownerName} (${proj.universityId})`;
       document.getElementById('forkAttributionBadge').innerText = `| مقتبس من: ${proj.ownerName}`;
       updateInspectorUI();
+      updateRadialMenuPosition();
       closeModal('repoModal');
       triggerSingleSolve(true);
       drawWorkspace();
@@ -2629,8 +3453,14 @@
     };
 
     window.reportProjectToAdmin = async function(projId) {
-      const reason = escapeHTML(prompt("يرجى كتابة سبب التبليغ (مثال: مشروع مسروق أو تعليق غير لائق):"));
-      if (!reason) return;
+      const res = await openCustomDialog({
+        title: '🚩 إرسال بلاغ إداري للغرفة السرية',
+        message: 'يرجى توضيح سبب الإبلاغ عن هذا المشروع أو التعليق:',
+        fields: [{ label: 'سبب البلاغ:', placeholder: 'مثال: مشروع منسوخ بدون ذكر المصدر' }],
+        confirmText: 'إرسال البلاغ'
+      });
+      if (!res || !res[0]) return;
+      const reason = escapeHTML(res[0]);
       const proj = getLocalProjects().find(p => p.id === projId);
       if (!proj) return;
 
@@ -2719,12 +3549,64 @@
       }
     };
 
+    // قفل الغرفة السرية برمز PIN رباعي سريع (Admin #15)
+    window.requestOpenSecretRoom = async function() {
+      const savedPin = localStorage.getItem('aleppo_ee_admin_pin');
+      if (savedPin) {
+        const res = await openCustomDialog({
+          title: '🔐 رمز الدخول السريع للغرفة السرية (PIN)',
+          message: 'أدخل رمز الـ PIN الرباعي الخاص بالمهندس معاذ:',
+          fields: [{ label: 'رمز PIN:', type: 'password', placeholder: '****' }],
+          confirmText: 'فتح الغرفة السرية'
+        });
+        if (!res || res[0] !== savedPin) {
+          playSFX('error');
+          showToast("⛔ رمز PIN غير صحيح!");
+          return;
+        }
+      }
+      openModal('secretRoomModal');
+    };
+
+    window.setAdminQuickPIN = async function() {
+      const res = await openCustomDialog({
+        title: '🔐 إعداد رمز PIN سريع للغرفة السرية',
+        message: 'اترك الحقل فارغاً لإلغاء القفل السريع أو اكتب 4 أرقام:',
+        fields: [{ label: 'رمز PIN الجديد:', placeholder: 'مثال: 1997' }],
+        confirmText: 'حفظ الرمز'
+      });
+      if (!res) return;
+      if (!res[0]) {
+        localStorage.removeItem('aleppo_ee_admin_pin');
+        showToast("تم إلغاء قفل الـ PIN السريع.");
+      } else {
+        localStorage.setItem('aleppo_ee_admin_pin', res[0]);
+        showToast("🔐 تم تفعيل رمز PIN السريع للغرفة السرية!");
+      }
+    };
+
     let currentAdminTab = 'USERS';
+    window.adminPage = 1;
+    const ADMIN_PAGE_SIZE = 10;
 
     window.switchAdminTab = function(tabName) {
       playSFX('tap');
       currentAdminTab = tabName;
+      window.adminPage = 1;
+      document.getElementById('adminSelectAllToggle').checked = false;
       renderSecretRoomDashboard();
+    };
+
+    window.changeAdminPage = function(delta) {
+      playSFX('tap');
+      window.adminPage = Math.max(1, window.adminPage + delta);
+      renderSecretRoomDashboard();
+    };
+
+    window.toggleSelectAllAdminItems = function(checked) {
+      document.querySelectorAll('.admin-bulk-user, .admin-bulk-proj').forEach(cb => {
+        cb.checked = checked;
+      });
     };
 
     window.renderSecretRoomDashboard = function() {
@@ -2733,6 +3615,7 @@
       const reports = getLocalReports();
       const bannedUsers = users.filter(u => u.isBanned);
       const searchQ = (document.getElementById('adminSearchInput').value || '').trim().toLowerCase();
+      const batchFilter = document.getElementById('adminBatchFilter').value;
       const sortMode = document.getElementById('adminSortSelect').value;
 
       document.getElementById('statTotalUsers').innerText = users.length;
@@ -2742,31 +3625,50 @@
       document.getElementById('tabReportBadge').innerText = reports.length;
       document.getElementById('statQuotaReads').innerText = ((firebaseOpsCount / 50000) * 100).toFixed(2) + '%';
 
+      // حساب المتصلين خلال آخر 15 دقيقة (Admin #10 Real-Time Active Now Pulse)
+      const activeNowCount = Math.max(1, users.filter(u => (Date.now() - (u.lastLoginAt || 0)) < 900000).length);
+      document.getElementById('activeNowPulse').innerText = `🟢 متصل الآن: ${activeNowCount}`;
+
+      const pubCount = projects.filter(p => p.isPublic).length;
+      const pubRatio = projects.length ? Math.round((pubCount / projects.length) * 100) : 100;
+      document.getElementById('pubRatioBar').style.width = pubRatio + '%';
+
       const viewport = document.getElementById('adminDynamicViewport');
 
       if (currentAdminTab === 'USERS' || currentAdminTab === 'BANNED') {
         const targetList = (currentAdminTab === 'BANNED' ? bannedUsers : users).filter(u => {
+          if (batchFilter !== 'ALL' && !String(u.universityId).startsWith(batchFilter)) return false;
           if (!searchQ) return true;
           return u.fullName.toLowerCase().includes(searchQ) || u.universityId.includes(searchQ);
         });
 
-        viewport.innerHTML = targetList.map(u => {
+        const totalPages = Math.max(1, Math.ceil(targetList.length / ADMIN_PAGE_SIZE));
+        window.adminPage = Math.min(window.adminPage, totalPages);
+        const pagedUsers = targetList.slice((window.adminPage - 1) * ADMIN_PAGE_SIZE, window.adminPage * ADMIN_PAGE_SIZE);
+        document.getElementById('adminPaginationInfo').innerText = `صفحة ${window.adminPage} من ${totalPages} (إجمالي: ${targetList.length})`;
+
+        viewport.innerHTML = pagedUsers.map(u => {
           const lastSeen = u.lastLoginAt ? new Date(u.lastLoginAt).toLocaleString('ar-SY') : 'غير معروف';
           const safeName = escapeHTML(u.fullName);
           const safeUni = escapeHTML(u.universityId);
+          const initials = u.fullName.split(' ').slice(0, 2).map(w => w[0]).join(' ');
+          const isOnline = (Date.now() - (u.lastLoginAt || 0)) < 900000;
+
           return `
             <div class="project-card" style="display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap;">
               <div style="display:flex; align-items:center; gap:8px;">
                 <input type="checkbox" class="admin-bulk-user" value="${u.uid}" style="width:16px; height:16px;">
+                <div class="avatar-circle" style="border-color:${isOnline ? '#34d399' : '#64748b'};">${escapeHTML(initials)}</div>
                 <div>
-                  <strong style="font-size:13px;">${safeName}</strong>
-                  <span style="font-size:11px; color:var(--text-muted);">(${safeUni})</span>
+                  <strong style="font-size:13px; cursor:pointer; color:var(--accent-cyan);" onclick="inspectStudent360('${u.uid}')" title="انقر لعرض ملف الطالب الشامل 360°">${safeName} 🔍</strong>
+                  <span style="font-size:11px; color:var(--text-muted);">(${safeUni} - دفعة 20${safeUni.slice(0,2)})</span>
                   ${u.isBanned ? '<span class="badge" style="background:rgba(239,68,68,0.2); color:#ef4444;">محظور</span>' : ''}
-                  <div style="font-size:10px; color:var(--text-muted);">آخر نشاط (Audit Log): ${lastSeen}</div>
+                  <div style="font-size:10px; color:var(--text-muted);">آخر نشاط: ${lastSeen}</div>
                 </div>
               </div>
               <div style="display:flex; gap:5px; flex-wrap:wrap;">
-                <button class="btn" onclick="adminEditUserData('${u.uid}')">✏️ تعديل البيانات</button>
+                <button class="btn" onclick="inspectStudent360('${u.uid}')">📂 مشاريعه</button>
+                <button class="btn" onclick="adminEditUserData('${u.uid}')">✏️ تعديل</button>
                 <button class="btn" onclick="adminToggleBan('${u.uid}')">${u.isBanned ? 'فك الحظر' : 'حظر'}</button>
                 <button class="btn btn-danger" onclick="adminCascadingDeleteUser('${u.uid}')">حذف نهائي</button>
               </div>
@@ -2776,11 +3678,14 @@
 
       } else if (currentAdminTab === 'PROJECTS') {
         let filteredProjs = projects.filter(p => {
+          if (batchFilter !== 'ALL' && !String(p.universityId).startsWith(batchFilter)) return false;
           if (!searchQ) return true;
           return p.title.toLowerCase().includes(searchQ) || p.ownerName.toLowerCase().includes(searchQ);
         });
 
-        if (sortMode === 'RATING') {
+        if (sortMode === 'FEATURED') {
+          filteredProjs.sort((a, b) => (b.isFeatured ? 1 : 0) - (a.isFeatured ? 1 : 0));
+        } else if (sortMode === 'RATING') {
           filteredProjs.sort((a, b) => (b.ratings?.length || 0) - (a.ratings?.length || 0));
         } else if (sortMode === 'COMMENTS') {
           filteredProjs.sort((a, b) => (b.comments?.length || 0) - (a.comments?.length || 0));
@@ -2788,7 +3693,12 @@
           filteredProjs.sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
         }
 
-        viewport.innerHTML = filteredProjs.map(p => {
+        const totalPages = Math.max(1, Math.ceil(filteredProjs.length / ADMIN_PAGE_SIZE));
+        window.adminPage = Math.min(window.adminPage, totalPages);
+        const pagedProjs = filteredProjs.slice((window.adminPage - 1) * ADMIN_PAGE_SIZE, window.adminPage * ADMIN_PAGE_SIZE);
+        document.getElementById('adminPaginationInfo').innerText = `صفحة ${window.adminPage} من ${totalPages} (إجمالي: ${filteredProjs.length})`;
+
+        viewport.innerHTML = pagedProjs.map(p => {
           const safeTitle = escapeHTML(p.title);
           const safeOwner = escapeHTML(p.ownerName);
           const safeUni = escapeHTML(p.universityId);
@@ -2801,18 +3711,20 @@
           `).join('');
 
           return `
-            <div class="project-card">
+            <div class="project-card ${p.isFeatured ? 'featured-gold' : ''}">
               <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
                 <div style="display:flex; align-items:center; gap:8px;">
                   <input type="checkbox" class="admin-bulk-proj" value="${p.id}" style="width:16px; height:16px;">
                   <div>
                     <strong style="font-size:13px; color:var(--accent-green);">${safeTitle}</strong>
+                    ${p.isFeatured ? '<span class="badge badge-featured">★ معتمد</span>' : ''}
                     <div style="font-size:11px; color:var(--text-muted);">الطالب: ${safeOwner} (${safeUni}) | الحالة: ${p.isPublic ? 'عام' : 'خاص'}</div>
                   </div>
                 </div>
-                <div style="display:flex; gap:5px;">
-                  <button class="btn btn-cyan" onclick="adminPreviewProject('${p.id}')">👁️ معاينة الدائرة</button>
-                  <button class="btn btn-danger" onclick="adminDeleteProject('${p.id}')">حذف المشروع</button>
+                <div style="display:flex; gap:5px; flex-wrap:wrap;">
+                  <button class="btn btn-amber" onclick="adminToggleFeatured('${p.id}')">${p.isFeatured ? 'إلغاء الاعتماد' : '★ اعتماد ذهبي'}</button>
+                  <button class="btn btn-cyan" onclick="adminPreviewProject('${p.id}')">👁️ معاينة المخطط</button>
+                  <button class="btn btn-danger" onclick="adminDeleteProject('${p.id}')">حذف</button>
                 </div>
               </div>
               ${commentsModerationHtml ? `<div style="margin-top:6px; padding-top:6px; border-top:1px dashed var(--border-soft);">${commentsModerationHtml}</div>` : ''}
@@ -2821,6 +3733,7 @@
         }).join('') || '<p style="text-align:center; color:var(--text-muted); padding:16px;">لا توجد مشاريع.</p>';
 
       } else if (currentAdminTab === 'REPORTS') {
+        document.getElementById('adminPaginationInfo').innerText = `إجمالي البلاغات: ${reports.length}`;
         viewport.innerHTML = reports.map(r => `
           <div class="project-card" style="border-color:var(--accent-amber); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
             <div>
@@ -2838,25 +3751,44 @@
       }
     };
 
-    window.adminEditUserData = async function(uid) {
-      const users = getLocalUsers();
-      const u = users.find(item => item.uid === uid);
-      if (!u) return;
-      const newName = escapeHTML(prompt("تعديل الاسم الثلاثي للطالب:", u.fullName));
-      if (!newName) return;
-      const newUniId = escapeHTML(prompt("تعديل الرقم الجامعي (6 خانات):", u.universityId));
-      if (!newUniId) return;
-
-      u.fullName = newName.trim();
-      u.universityId = newUniId.trim();
-      setLocalUsers(users);
+    // منح وسام المشروع المعتمد من الكلية (Admin #6 Featured Project)
+    window.adminToggleFeatured = async function(projId) {
+      const list = getLocalProjects();
+      const p = list.find(item => item.id === projId);
+      if (!p) return;
+      playSFX('wire');
+      p.isFeatured = !p.isFeatured;
+      setLocalProjects(list);
       renderSecretRoomDashboard();
       if (isFirebaseReady) {
-        try { await setDoc(doc(db, "users", u.uid), u, { merge: true }); } catch (e) {}
+        try { await setDoc(doc(db, "projects", p.id), { isFeatured: p.isFeatured }, { merge: true }); } catch (e) {}
       }
-      showToast("تم تحديث بيانات الطالب سحابياً.");
+      showToast(p.isFeatured ? "★ تم منح المشروع وسام الاعتماد الذهبي من الكلية!" : "تم إلغاء وسام الاعتماد.");
     };
 
+    // بطاقة الفحص الكامل للطالب 360 درجة (Admin #9 Student 360 Inspector)
+    window.inspectStudent360 = function(uid) {
+      const u = getLocalUsers().find(item => item.uid === uid);
+      if (!u) return;
+      const sProjs = getLocalProjects().filter(p => p.ownerId === uid || p.universityId === u.universityId);
+      document.getElementById('adminLivePreviewCanvas').style.display = 'none';
+      document.getElementById('previewModalTitle').innerText = `🔍 الملف الشامل للطالب: ${u.fullName}`;
+      document.getElementById('previewModalBody').innerHTML = `
+        <p><strong>الرقم الجامعي:</strong> ${escapeHTML(u.universityId)} | <strong>الدفعة:</strong> 20${escapeHTML(u.universityId.slice(0,2))}</p>
+        <p><strong>إجمالي المشاريع:</strong> ${sProjs.length} مشروع</p>
+        <div style="max-height:220px; overflow-y:auto; margin-top:8px;">
+          ${sProjs.map(p => `
+            <div class="project-card" style="display:flex; justify-content:space-between; align-items:center;">
+              <span><strong>${escapeHTML(p.title)}</strong> (${p.isPublic ? 'عام' : 'خاص'})</span>
+              <button class="btn btn-cyan" onclick="adminPreviewProject('${p.id}')">معاينة المخطط</button>
+            </div>
+          `).join('') || '<p style="color:var(--text-muted);">لا توجد مشاريع مسجلة لهذا الطالب.</p>'}
+        </div>
+      `;
+      openModal('adminPreviewModal');
+    };
+
+    // معاينة بصرية حية للدائرة داخل كانفاس مصغر في الغرفة السرية (Admin #2 Live Mini-Canvas Preview)
     window.adminPreviewProject = function(projId) {
       const p = getLocalProjects().find(item => item.id === projId);
       if (!p) {
@@ -2865,7 +3797,39 @@
       }
       const comps = p.schema?.components || [];
       const ws = p.schema?.wires || [];
-      document.getElementById('previewModalTitle').innerText = `معاينة: ${p.title}`;
+
+      const pCanvas = document.getElementById('adminLivePreviewCanvas');
+      pCanvas.style.display = 'block';
+      const pCtx = pCanvas.getContext('2d');
+      pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
+
+      // رسم مصغر للمخطط داخل نافذة المدير
+      pCtx.save();
+      pCtx.translate(60, -40);
+      pCtx.scale(0.65, 0.65);
+      pCtx.strokeStyle = '#10b981';
+      pCtx.lineWidth = 3;
+      ws.forEach(w => {
+        pCtx.beginPath();
+        pCtx.moveTo(w.x1, w.y1);
+        pCtx.lineTo(w.x2, w.y1);
+        pCtx.lineTo(w.x2, w.y2);
+        pCtx.stroke();
+      });
+      comps.forEach(c => {
+        pCtx.fillStyle = '#1e293b';
+        pCtx.strokeStyle = '#38bdf8';
+        pCtx.lineWidth = 2;
+        pCtx.fillRect(c.x - 20, c.y - 12, 40, 24);
+        pCtx.strokeRect(c.x - 20, c.y - 12, 40, 24);
+        pCtx.fillStyle = '#f8fafc';
+        pCtx.font = '10px sans-serif';
+        pCtx.textAlign = 'center';
+        pCtx.fillText(c.type.slice(0, 6), c.x, c.y + 4);
+      });
+      pCtx.restore();
+
+      document.getElementById('previewModalTitle').innerText = `👁️ معاينة حية: ${p.title}`;
       document.getElementById('previewModalBody').innerHTML = `
         <p><strong>المالك:</strong> ${escapeHTML(p.ownerName)} (${escapeHTML(p.universityId)})</p>
         <p><strong>عدد العناصر الإلكترونية:</strong> ${comps.length} عنصر | <strong>عدد الأسلاك:</strong> ${ws.length} سلك</p>
@@ -2873,10 +3837,35 @@
           ${comps.map(c => `<span class="badge badge-public" style="margin:2px; display:inline-block;">${c.type} (${c.value}${c.unit})</span>`).join('')}
         </div>
         <button class="btn btn-primary" style="width:100%; justify-content:center; margin-top:8px;" onclick="closeModal('adminPreviewModal'); closeModal('secretRoomModal'); forkAndLoadProject('${p.id}')">
-          فتح الدائرة في المحاكي لفحصها عملياً
+          فتح الدائرة في المحاكي الرئيسي لفحصها عملياً
         </button>
       `;
       openModal('adminPreviewModal');
+    };
+
+    window.adminEditUserData = async function(uid) {
+      const users = getLocalUsers();
+      const u = users.find(item => item.uid === uid);
+      if (!u) return;
+      const res = await openCustomDialog({
+        title: '✏️ تعديل بيانات الطالب الجامعية',
+        message: 'قم بتصحيح الاسم الثلاثي أو الرقم الجامعي للطالب:',
+        fields: [
+          { label: 'الاسم الثلاثي:', value: u.fullName },
+          { label: 'الرقم الجامعي (6 خانات):', value: u.universityId }
+        ],
+        confirmText: 'حفظ التعديلات'
+      });
+      if (!res || !res[0] || !res[1]) return;
+
+      u.fullName = escapeHTML(res[0]);
+      u.universityId = escapeHTML(res[1]);
+      setLocalUsers(users);
+      renderSecretRoomDashboard();
+      if (isFirebaseReady) {
+        try { await setDoc(doc(db, "users", u.uid), u, { merge: true }); } catch (e) {}
+      }
+      showToast("تم تحديث بيانات الطالب سحابياً.");
     };
 
     window.adminDeleteSingleComment = async function(projId, commentIdx) {
@@ -2930,43 +3919,53 @@
         showToast("يرجى تحديد عناصر للحذف أولاً.");
         return;
       }
-      if (!confirm("تأكيد الحذف الجماعي النهائي للعناصر المحددة؟")) return;
+      const ok = await openCustomDialog({
+        title: '🗑️ تأكيد الحذف الجماعي',
+        message: 'سيتم حذف العناصر المحددة من السجلات. هل أنت متأكد؟',
+        confirmText: 'حذف المحددين'
+      });
+      if (!ok) return;
+
+      const backupUsers = getLocalUsers();
+      const backupProjs = getLocalProjects();
 
       if (checkedUsers.length > 0) {
-        const users = getLocalUsers().filter(u => !checkedUsers.includes(u.uid) || u.universityId === "1461997");
-        setLocalUsers(users);
-        const projs = getLocalProjects().filter(p => !checkedUsers.includes(p.ownerId));
-        setLocalProjects(projs);
-        if (isFirebaseReady) {
-          for (const uid of checkedUsers) {
-            try { await deleteDoc(doc(db, "users", uid)); } catch (e) {}
-          }
-        }
+        setLocalUsers(backupUsers.filter(u => !checkedUsers.includes(u.uid) || u.universityId === "1461997"));
+        setLocalProjects(backupProjs.filter(p => !checkedUsers.includes(p.ownerId)));
       }
       if (checkedProjs.length > 0) {
-        const projs = getLocalProjects().filter(p => !checkedProjs.includes(p.id));
-        setLocalProjects(projs);
-        if (isFirebaseReady) {
-          for (const pid of checkedProjs) {
-            try { await deleteDoc(doc(db, "projects", pid)); } catch (e) {}
-          }
-        }
+        setLocalProjects(getLocalProjects().filter(p => !checkedProjs.includes(p.id)));
       }
       playSFX('delete');
       renderSecretRoomDashboard();
-      showToast("تم تنفيذ الحذف الجماعي السحابي بنجاح.");
+
+      // إتاحة التراجع الإداري لمدة 5 ثوانٍ (Admin #11 Undo Toast)
+      showToast("تم تنفيذ الحذف الجماعي.", () => {
+        setLocalUsers(backupUsers);
+        setLocalProjects(backupProjs);
+        renderSecretRoomDashboard();
+        showToast("↶ تم التراجع واسترجاع البيانات المحذوفة بنجاح!");
+      });
     };
 
     window.publishGlobalAnnouncement = async function() {
       const txt = escapeHTML(document.getElementById('adminAnnouncementInput').value.trim());
+      const sev = document.getElementById('adminAnnSeverity').value;
       if (!txt) return;
       localStorage.setItem('aleppo_ee_announcement', txt);
+      localStorage.setItem('aleppo_ee_ann_sev', sev);
       loadGlobalAnnouncementBanner();
       if (isFirebaseReady) {
-        try { await setDoc(doc(db, "announcements", "global"), { text: txt, updatedAt: Date.now() }); } catch (e) {}
+        try { await setDoc(doc(db, "announcements", "global"), { text: txt, severity: sev, updatedAt: Date.now() }); } catch (e) {}
       }
       playSFX('wire');
       showToast("تم بث الإعلان العام سحابياً لجميع طلاب الكلية 📢");
+    };
+
+    window.publishCurrentCircuitAsChallenge = function() {
+      localStorage.setItem('aleppo_ee_weekly_challenge', JSON.stringify({ components, wires }));
+      playSFX('wire');
+      showToast("🏆 تم نشر الدائرة المرسومة حالياً كتحدي أسبوعي لجميع الطلاب!");
     };
 
     window.clearGlobalAnnouncement = async function() {
@@ -2980,8 +3979,10 @@
 
     function loadGlobalAnnouncementBanner() {
       const txt = localStorage.getItem('aleppo_ee_announcement');
+      const sev = localStorage.getItem('aleppo_ee_ann_sev') || 'sev-info';
       const banner = document.getElementById('globalAnnouncementBanner');
       const topBar = document.getElementById('topBar');
+      banner.className = sev;
       if (txt) {
         banner.innerText = `📢 إعلان عمادة الهندسة الإلكترونية: ${txt}`;
         banner.style.display = 'flex';
@@ -2991,6 +3992,50 @@
         topBar.style.top = '0px';
       }
     }
+
+    // طباعة تقرير رسمي بشعار جامعة حلب (Admin #14 Official PDF Report)
+    window.printOfficialUniversityReport = function() {
+      const users = getLocalUsers();
+      const projects = getLocalProjects();
+      const win = window.open('', '_blank');
+      if (!win) return;
+      win.document.write(`
+        <html lang="ar" dir="rtl">
+        <head>
+          <title>تقرير منصة محاكاة الدوائر - جامعة حلب</title>
+          <style>
+            body { font-family: 'Segoe UI', Tahoma, sans-serif; padding: 30px; color: #0f172a; }
+            .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #059669; padding-bottom: 12px; margin-bottom: 20px; }
+            table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 13px; }
+            th, td { border: 1px solid #cbd5e1; padding: 8px 10px; text-align: right; }
+            th { background: #e2f2ea; color: #064e3b; }
+          </style>
+        </head>
+        <body>
+          <div class="header">
+            <div>
+              <h2>الجمهورية العربية السورية - جامعة حلب</h2>
+              <h3>كلية الهندسة الكهربائية والإلكترونية | تقرير إحصائيات مختبر المحاكاة</h3>
+            </div>
+            <div>
+              <p><strong>التاريخ:</strong> ${new Date().toLocaleDateString('ar-SY')}</p>
+              <p><strong>المشرف:</strong> م. معاذ حسين العلي (1461997)</p>
+            </div>
+          </div>
+          <p><strong>إجمالي الطلاب المسجلين:</strong> ${users.length} طالب | <strong>إجمالي المشاريع المنجزة:</strong> ${projects.length} دائرة</p>
+          <h4>سجل الطلاب المسجلين في المنصة:</h4>
+          <table>
+            <thead><tr><th>#</th><th>الاسم الثلاثي</th><th>الرقم الجامعي</th><th>الحالة</th></tr></thead>
+            <tbody>
+              ${users.map((u, idx) => `<tr><td>${idx + 1}</td><td>${escapeHTML(u.fullName)}</td><td>${escapeHTML(u.universityId)}</td><td>${u.isBanned ? 'محظور' : 'نشط'}</td></tr>`).join('')}
+            </tbody>
+          </table>
+          <script>window.onload = () => { window.print(); };<\/script>
+        </body>
+        </html>
+      `);
+      win.document.close();
+    };
 
     window.exportStudentsToCSV = function() {
       const users = getLocalUsers();
@@ -3024,7 +4069,12 @@
     };
 
     window.lockAllProjectsForExams = async function() {
-      if (!confirm("طوارئ الامتحانات: سيتم تحويل جميع مشاريع الطلاب العامة إلى (خاصة) فوراً لمنع الغش. هل أنت متأكد؟")) return;
+      const ok = await openCustomDialog({
+        title: '🔒 تفعيل طوارئ الامتحانات',
+        message: 'سيتم تحويل جميع مشاريع الطلاب العامة إلى (خاصة) فوراً لمنع الغش أثناء الامتحان. هل أنت متأكد؟',
+        confirmText: 'إغلاق كافة المشاريع'
+      });
+      if (!ok) return;
       const list = getLocalProjects();
       for (const p of list) {
         p.isPublic = false;
@@ -3061,31 +4111,39 @@
         showToast("لا يمكنك حذف حساب المسؤول.");
         return;
       }
-      if (!confirm("تحذير: سيتم حذف الطالب وجميع مشاريعه نهائياً. هل أنت متأكد؟")) return;
+      const ok = await openCustomDialog({
+        title: '🗑️ حذف طالب نهائياً',
+        message: `سيتم مسح الطالب (${target ? target.fullName : ''}) ومشاريعه. يمكنك التراجع خلال 5 ثوانٍ.`,
+        confirmText: 'حذف الطالب'
+      });
+      if (!ok) return;
 
-      const userProjs = getLocalProjects().filter(p => p.ownerId === targetUid);
+      const backupUsers = getLocalUsers();
+      const backupProjs = getLocalProjects();
+
       setLocalUsers(users.filter(u => u.uid !== targetUid));
-      setLocalProjects(getLocalProjects().filter(p => p.ownerId !== targetUid));
+      setLocalProjects(backupProjs.filter(p => p.ownerId !== targetUid));
       renderSecretRoomDashboard();
 
-      if (isFirebaseReady) {
-        try {
-          await deleteDoc(doc(db, "users", targetUid));
-          for (const up of userProjs) {
-            await deleteDoc(doc(db, "projects", up.id));
-          }
-        } catch (e) {}
-      }
-      showToast("تم مسح الطالب ومشاريعه من السحابة وسجلات الكلية.");
+      showToast("تم مسح الطالب ومشاريعه.", () => {
+        setLocalUsers(backupUsers);
+        setLocalProjects(backupProjs);
+        renderSecretRoomDashboard();
+        showToast("↶ تم استرجاع حساب الطالب ومشاريعه!");
+      });
     };
 
     window.adminDeleteProject = async function(projId) {
-      setLocalProjects(getLocalProjects().filter(p => p.id !== projId));
+      const backupProjs = getLocalProjects();
+      setLocalProjects(backupProjs.filter(p => p.id !== projId));
       renderSecretRoomDashboard();
-      if (isFirebaseReady) {
-        try { await deleteDoc(doc(db, "projects", projId)); } catch (e) {}
-      }
-      showToast("تم حذف المشروع سحابياً بنجاح.");
+      playSFX('delete');
+
+      showToast("تم حذف المشروع.", () => {
+        setLocalProjects(backupProjs);
+        renderSecretRoomDashboard();
+        showToast("↶ تم استرجاع المشروع المحذوف!");
+      });
     };
 
     window.openModal = function(id) {
@@ -3098,12 +4156,24 @@
       document.getElementById(id).classList.remove('active');
     };
 
-    window.showToast = function(msg) {
+    // نظام التنبيهات مع دعم زر التراجع الإداري (Admin #11 Undo Toast)
+    window.showToast = function(msg, undoCallback = null) {
       const box = document.getElementById('toastBox');
-      box.innerText = msg;
-      box.style.display = 'block';
+      const txt = document.getElementById('toastText');
+      const undoBtn = document.getElementById('toastUndoBtn');
+      txt.innerText = msg;
+      if (undoCallback) {
+        undoBtn.style.display = 'inline-flex';
+        undoBtn.onclick = () => {
+          undoCallback();
+          box.style.display = 'none';
+        };
+      } else {
+        undoBtn.style.display = 'none';
+      }
+      box.style.display = 'flex';
       clearTimeout(window._toastTimer);
-      window._toastTimer = setTimeout(() => { box.style.display = 'none'; }, 3600);
+      window._toastTimer = setTimeout(() => { box.style.display = 'none'; }, 4800);
     };
 
     if ('serviceWorker' in navigator) {
