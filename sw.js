@@ -1,9 +1,12 @@
-const CACHE_NAME = 'aleppo-ee-sim-v1';
+const CACHE_NAME = 'aleppo-ee-sim-v3';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
   './manifest.json',
-  './1000233248.jpg'
+  './1000233248.jpg',
+  'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js',
+  'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js',
+  'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js'
 ];
 
 self.addEventListener('install', (event) => {
@@ -29,11 +32,12 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
 
-  // استثناء طلبات Firebase المباشرة ليتم التعامل معها عبر Firestore Persistence
+  // استثناء اتصالات البيانات الحية الخاصة بـ Firestore API و IdentityToolkit
   if (event.request.url.includes('firestore.googleapis.com') || event.request.url.includes('identitytoolkit')) {
     return;
   }
 
+  // تخزين واسترجاع ملفات المشروع ومكتبات gstatic Firebase CDN للعمل بدون إنترنت بنسبة 100%
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       if (cachedResponse) {
