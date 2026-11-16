@@ -641,12 +641,12 @@
     // 1. إعدادات Firebase (ضع مفاتيح مشروعك في Firebase Console هنا)
     // ============================================================================
     const firebaseConfig = {
-      apiKey: "REPLACE_WITH_YOUR_FIREBASE_API_KEY",
-      authDomain: "aleppo-ee-sim.firebaseapp.com",
-      projectId: "aleppo-ee-sim",
-      storageBucket: "aleppo-ee-sim.appspot.com",
-      messagingSenderId: "000000000000",
-      appId: "1:000000000000:web:000000000000"
+      apiKey: "AIzaSyAg9os96KdhaHveSpi5GmHFCOM_oo2s8h0",
+      authDomain: "university-of-aleppo-76524.firebaseapp.com",
+      projectId: "university-of-aleppo-76524",
+      storageBucket: "university-of-aleppo-76524.firebasestorage.app",
+      messagingSenderId: "408206107153",
+      appId: "1:408206107153:web:1a32d51991137ac32e47b0"
     };
 
     let db = null;
@@ -658,6 +658,7 @@
         const app = initializeApp(firebaseConfig);
         db = getFirestore(app);
         auth = getAuth(app);
+        signInAnonymously(auth).catch((err) => console.warn("Auth warning:", err));
         enableIndexedDbPersistence(db).catch(() => {});
         isFirebaseReady = true;
       }
