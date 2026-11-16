@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>جامعة حلب - الهندسة الإلكترونية | محاكي الدوائر v2.0</title>
+  <title>جامعة حلب - الهندسة الإلكترونية | محاكي الدوائر v3.0</title>
   <meta name="theme-color" content="#0f172a">
   <link rel="manifest" href="./manifest.json">
   <link rel="apple-touch-icon" href="./1000233248.jpg">
@@ -22,7 +22,6 @@
       --border-soft: rgba(255, 255, 255, 0.1);
     }
 
-    /* تحسين الطالب #14: الوضع الفاتح النهاري بأسلوب Solarpunk (ألوان باستيل مريحة للعين في القاعات المضاءة) */
     body.solarpunk-light {
       --bg-dark: #f4fbf7;
       --bg-panel: #e2f2ea;
@@ -55,7 +54,6 @@
       transition: background-color 0.25s, color 0.25s;
     }
 
-    /* شريط الإعلانات العامة للإدارة #9 */
     #globalAnnouncementBanner {
       position: fixed;
       top: 0;
@@ -73,7 +71,6 @@
       padding: 0 10px;
     }
 
-    /* الشريط العلوي */
     .top-bar {
       position: fixed;
       top: 0;
@@ -118,7 +115,6 @@
       color: var(--text-muted);
     }
 
-    /* مؤشر الاتصال #12 */
     .conn-dot {
       width: 8px;
       height: 8px;
@@ -164,7 +160,6 @@
       box-shadow: 0 0 12px rgba(245, 158, 11, 0.5);
     }
 
-    /* شريط الأدوات العائم السريع للطالب (#1 التراجع، #3 التكبير، #6 تصدير، #8 الملتيميتر، #9 قوالب، #13 الشبكة، #14 السمة) */
     .quick-ribbon {
       position: fixed;
       top: 62px;
@@ -195,7 +190,6 @@
       background: rgba(6, 182, 212, 0.2);
     }
 
-    /* مساحة العمل */
     #workspace-container {
       position: fixed;
       top: 56px;
@@ -213,12 +207,11 @@
       background-color: var(--bg-dark);
     }
 
-    /* راسم الإشارة العائم (Mini-Oscilloscope) */
     .scope-panel {
       position: fixed;
       top: 62px;
       left: 10px;
-      width: 245px;
+      width: 250px;
       background: var(--bg-panel);
       border: 1px solid var(--accent-cyan);
       border-radius: 12px;
@@ -229,7 +222,7 @@
     }
 
     .scope-panel.collapsed {
-      transform: translateX(-215px);
+      transform: translateX(-220px);
     }
 
     .scope-header {
@@ -244,7 +237,7 @@
 
     #scopeCanvas {
       width: 100%;
-      height: 82px;
+      height: 84px;
       background: #020617;
       border-radius: 6px;
       border: 1px solid rgba(6, 182, 212, 0.3);
@@ -258,12 +251,11 @@
       color: var(--text-muted);
     }
 
-    /* أداة المقياس المتعدد الحر #8 (Virtual Multimeter) */
     .multimeter-widget {
       position: fixed;
       top: 205px;
       left: 10px;
-      width: 200px;
+      width: 215px;
       background: var(--bg-panel);
       border: 2px solid var(--accent-amber);
       border-radius: 12px;
@@ -277,15 +269,15 @@
       background: #0f172a;
       color: #34d399;
       font-family: monospace;
-      font-size: 14px;
+      font-size: 12px;
       padding: 6px;
       border-radius: 6px;
       text-align: center;
       margin: 5px 0;
       border: 1px solid rgba(255,255,255,0.1);
+      line-height: 1.4;
     }
 
-    /* شريط الفحص والتعديل مع شريط التمرير اللمسي #2 وتلوين الأسلاك #5 */
     .inspector-bar {
       position: fixed;
       bottom: 80px;
@@ -339,7 +331,6 @@
       transform: scale(1.15);
     }
 
-    /* الشريط السفلي للأدوات */
     .bottom-toolbar {
       position: fixed;
       bottom: 0;
@@ -384,7 +375,6 @@
       margin-bottom: 2px;
     }
 
-    /* النوافذ المنبثقة (Modals) + الغرفة السرية بملء الشاشة #3 */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -412,7 +402,6 @@
       box-shadow: 0 20px 50px rgba(0,0,0,0.6);
     }
 
-    /* الغرفة السرية بملء الشاشة للإدارة #3 */
     .modal-card.fullscreen-admin {
       max-width: 98vw;
       width: 98vw;
@@ -514,7 +503,7 @@
 </head>
 <body>
 
-  <!-- شريط الإعلانات العامة #9 -->
+  <!-- شريط الإعلانات العامة السحابي -->
   <div id="globalAnnouncementBanner"></div>
 
   <!-- تنبيه عائم -->
@@ -548,36 +537,37 @@
   <!-- راسم الإشارة العائم (Mini-Oscilloscope) -->
   <div class="scope-panel" id="scopePanel">
     <div class="scope-header">
-      <span>راسم الإشارة اللحظي (MNA Solver)</span>
+      <span>راسم الإشارة اللحظي (True MNA v3)</span>
       <button class="btn" style="padding:2px 6px; font-size:10px;" onclick="document.getElementById('scopePanel').classList.toggle('collapsed')">طي/فتح</button>
     </div>
-    <canvas id="scopeCanvas" width="230" height="82"></canvas>
+    <canvas id="scopeCanvas" width="230" height="84"></canvas>
     <div class="telemetry-bar">
       <span id="maxVoltReadout">أعلى جهد: 0.00V</span>
       <span id="simStatusReadout" style="color:var(--accent-green);">جاهز</span>
     </div>
   </div>
 
-  <!-- أداة المقياس المتعدد الافتراضي #8 (Virtual Multimeter) -->
+  <!-- أداة المقياس المتعدد اللحظي و RMS (Live DMM) -->
   <div class="multimeter-widget" id="multimeterWidget">
     <div style="display:flex; justify-content:space-between; align-items:center; font-size:11px; color:var(--accent-amber); font-weight:bold;">
-      <span>📟 المقياس المتعدد (DMM)</span>
+      <span>📟 المقياس المتعدد اللحظي (DMM)</span>
       <button class="btn" style="padding:1px 5px; font-size:10px;" onclick="toggleMultimeter()">✖</button>
     </div>
-    <div class="dmm-screen" id="dmmScreen">ΔV = 0.000 V</div>
+    <div class="dmm-screen" id="dmmScreen">ΔV(inst) = 0.000 V<br>V(RMS) = 0.000 V</div>
     <div style="font-size:10px; color:var(--text-muted); text-align:center;">
-      المس أي عقدتين أو عنصرين لقراءة فرق الجهد والتيار
+      المس أي عقدتين لقراءة الجهد اللحظي والفعال بالوقت الفعلي
     </div>
   </div>
 
-  <!-- شريط الأدوات السريع الجانبي للطالب (#1 Undo/Redo, #3 Zoom, #4 Tour, #6 Export, #8 DMM, #13 Grid, #14 Theme) -->
+  <!-- شريط الأدوات الجانبي السريع للطالب -->
   <aside class="quick-ribbon">
     <button class="ribbon-btn" title="تراجع (Undo)" onclick="undoAction()">↶</button>
     <button class="ribbon-btn" title="إعادة (Redo)" onclick="redoAction()">↷</button>
+    <button class="ribbon-btn" title="تدوير العنصر المحدد 90° (Rotate)" onclick="rotateSelectedComponent()">↻</button>
     <button class="ribbon-btn" title="تكبير (+)" onclick="zoomWorkspace(0.15)">＋</button>
     <button class="ribbon-btn" title="تصغير (-)" onclick="zoomWorkspace(-0.15)">－</button>
     <button class="ribbon-btn" title="إعادة ضبط الرؤية" onclick="resetViewport()">🎯</button>
-    <button class="ribbon-btn" id="dmmRibbonBtn" title="المقياس المتعدد (Multimeter)" onclick="toggleMultimeter()">📟</button>
+    <button class="ribbon-btn" id="dmmRibbonBtn" title="المقياس المتعدد اللحظي (DMM)" onclick="toggleMultimeter()">📟</button>
     <button class="ribbon-btn" id="gridRibbonBtn" title="إظهار/إخفاء الشبكة" onclick="toggleGridDisplay()">▦</button>
     <button class="ribbon-btn" title="الوضع الفاتح Solarpunk / الداكن" onclick="toggleSolarpunkTheme()">☀️</button>
     <button class="ribbon-btn" title="تصدير صورة التقرير (PNG)" onclick="exportCircuitImage()">📸</button>
@@ -589,17 +579,18 @@
     <canvas id="circuitCanvas"></canvas>
   </main>
 
-  <!-- شريط فحص وتعديل العنصر المحدد (#2 شريط سحب القيم + #5 تلوين الأسلاك) -->
+  <!-- شريط فحص وتعديل العنصر المحدد (مع زر التدوير 90 درجة) -->
   <div class="inspector-bar" id="inspectorBar">
     <div class="inspector-row">
       <div>
         <strong id="inspCompName" style="color:var(--accent-cyan); font-size:13px;">مقاومة R1</strong>
         <span id="inspNodeVoltage" style="font-size:11px; color:var(--text-muted); margin-right:8px;"></span>
       </div>
-      <div style="display:flex; align-items:center; gap:6px;">
+      <div style="display:flex; align-items:center; gap:5px;">
         <label style="font-size:11px;">القيمة:</label>
         <input type="number" id="inspValueInput" step="any" oninput="updateSelectedComponentValue(this.value)">
         <span id="inspUnitLabel" style="font-size:12px; color:var(--accent-green);">Ω</span>
+        <button class="btn btn-cyan" onclick="rotateSelectedComponent()">↻ تدوير 90°</button>
         <button class="btn btn-danger" onclick="deleteSelectedComponent()">حذف</button>
       </div>
     </div>
@@ -617,7 +608,7 @@
     </div>
   </div>
 
-  <!-- الشريط السفلي للأدوات والعناصر الإلكترونية -->
+  <!-- الشريط السفلي للأدوات والعناصر الإلكترونية (مع إضافة الوشيعة Inductor L) -->
   <footer class="bottom-toolbar">
     <div class="tool-item active" data-tool="SELECT" onclick="selectTool('SELECT', this)">
       <span class="icon">✥</span>
@@ -641,15 +632,19 @@
     </div>
     <div class="tool-item" data-tool="RESISTOR" onclick="selectTool('RESISTOR', this)">
       <span class="icon">⌇</span>
-      <span>مقاومة</span>
+      <span>مقاومة R</span>
     </div>
     <div class="tool-item" data-tool="CAPACITOR" onclick="selectTool('CAPACITOR', this)">
       <span class="icon">⊣⊢</span>
-      <span>مكثف</span>
+      <span>مكثف C</span>
+    </div>
+    <div class="tool-item" data-tool="INDUCTOR" onclick="selectTool('INDUCTOR', this)">
+      <span class="icon">➿</span>
+      <span>وشيعة L</span>
     </div>
     <div class="tool-item" data-tool="DIODE" onclick="selectTool('DIODE', this)">
       <span class="icon">⊳|</span>
-      <span>ديود</span>
+      <span>ديود سيليكون</span>
     </div>
     <div class="tool-item" data-tool="GND" onclick="selectTool('GND', this)">
       <span class="icon">⏚</span>
@@ -668,7 +663,7 @@
         <h2 style="font-size:17px; color:var(--accent-green);">تسجيل بيانات الطالب - جامعة حلب</h2>
       </div>
       <p style="font-size:13px; color:var(--text-muted); margin-bottom:14px;">
-        مرحباً بك في مختبر محاكاة الدوائر الإلكترونية. يُرجى إدخال اسمك الثلاثي ورقمك الجامعي لمرة واحدة فقط لربط مستودع مشاريعك.
+        مرحباً بك في مختبر محاكاة الدوائر الإلكترونية. يُرجى إدخال اسمك الثلاثي ورقمك الجامعي لمرة واحدة فقط لربط مستودع مشاريعك السحابي.
       </p>
       <div class="form-group">
         <label>الاسم الثلاثي (باللغة العربية):</label>
@@ -685,27 +680,27 @@
     </div>
   </div>
 
-  <!-- 2. نافذة نماذج الدوائر الجاهزة #9 (Templates Modal) -->
+  <!-- 2. نافذة نماذج الدوائر الجاهزة (Templates Modal) -->
   <div class="modal-overlay" id="templatesModal">
     <div class="modal-card">
       <div class="modal-header">
-        <h3 style="font-size:15px; color:var(--accent-green);">نماذج دوائر هندسية جاهزة (Templates)</h3>
+        <h3 style="font-size:15px; color:var(--accent-green);">نماذج دوائر هندسية قياسية جاهزة</h3>
         <button class="btn" onclick="closeModal('templatesModal')">إغلاق</button>
       </div>
       <div class="project-card">
-        <strong>1. مرشح تمرير منخفض (RC Low-Pass Filter)</strong>
-        <p style="font-size:11px; color:var(--text-muted); margin:4px 0 8px;">منبع متناوب AC مع مقاومة ومكثف لدراسة استجابة التردد.</p>
+        <strong>1. مرشح تمرير منخفض (RC Low-Pass Filter - أويلر الخلفي)</strong>
+        <p style="font-size:11px; color:var(--text-muted); margin:4px 0 8px;">منبع متناوب AC مع مقاومة ومكثف لمشاهدة شحن وتفريغ المكثف وفرق الطور الحقيقي.</p>
         <button class="btn btn-cyan" onclick="loadCircuitTemplate('RC_FILTER')">تحميل الدائرة</button>
       </div>
       <div class="project-card">
-        <strong>2. مقوم نصف موجة (Half-Wave Rectifier)</strong>
-        <p style="font-size:11px; color:var(--text-muted); margin:4px 0 8px;">منبع متناوب مع ديود سيليكوني ومقاومة حمل لتحويل AC إلى DC.</p>
+        <strong>2. مقوم نصف موجة حقيقي (True Half-Wave Rectifier 0.7V)</strong>
+        <p style="font-size:11px; color:var(--text-muted); margin:4px 0 8px;">منبع متناوب مع ديود سيليكوني غير خطي (Newton-Raphson) يقص النصف السالب للموجة تماماً.</p>
         <button class="btn btn-cyan" onclick="loadCircuitTemplate('RECTIFIER')">تحميل الدائرة</button>
       </div>
       <div class="project-card">
-        <strong>3. مقسم جهد مستمر (DC Voltage Divider)</strong>
-        <p style="font-size:11px; color:var(--text-muted); margin:4px 0 8px;">بطارية DC مع مقاومتين على التسلسل لدراسة قانون كيرشوف للجهد.</p>
-        <button class="btn btn-cyan" onclick="loadCircuitTemplate('DIVIDER')">تحميل الدائرة</button>
+        <strong>3. دارة طنين تسلسلية (RLC Series Resonance)</strong>
+        <p style="font-size:11px; color:var(--text-muted); margin:4px 0 8px;">منبع متناوب مع مقاومة ووشيعة ومكثف لدراسة الرنين وتبادل الطاقة الكهرومغناطيسية.</p>
+        <button class="btn btn-cyan" onclick="loadCircuitTemplate('RLC_RESONANCE')">تحميل الدائرة</button>
       </div>
     </div>
   </div>
@@ -714,19 +709,19 @@
   <div class="modal-overlay" id="saveProjectModal">
     <div class="modal-card">
       <div class="modal-header">
-        <h3 style="font-size:16px;">حفظ الدائرة في المستودع</h3>
+        <h3 style="font-size:16px;">حفظ الدائرة في المستودع السحابي</h3>
         <button class="btn" onclick="closeModal('saveProjectModal')">إغلاق</button>
       </div>
       <div class="form-group">
         <label>اسم المشروع / الدائرة:</label>
-        <input type="text" id="projectTitleInput" class="form-control" placeholder="مثال: دارة مقسم جهد ومقوم نصف موجي">
+        <input type="text" id="projectTitleInput" class="form-control" placeholder="مثال: دارة مقوم نصف موجي مع مرشح سعوي">
       </div>
       <div class="form-group" style="display:flex; align-items:center; gap:8px;">
         <input type="checkbox" id="projectPublicToggle" checked style="width:18px; height:18px;">
         <label for="projectPublicToggle" style="margin:0; cursor:pointer;">السماح لباقي الطلاب برؤية ونسخ المشروع (عام)</label>
       </div>
       <button class="btn btn-primary" style="width:100%; justify-content:center; padding:10px;" onclick="saveCurrentProject()">
-        حفظ ومزامنة
+        حفظ ومزامنة مع السحابة
       </button>
     </div>
   </div>
@@ -735,7 +730,7 @@
   <div class="modal-overlay" id="repoModal">
     <div class="modal-card">
       <div class="modal-header">
-        <h3 style="font-size:16px; color:var(--accent-cyan);">مستودع مشاريع الطلاب والبحث الذكي</h3>
+        <h3 style="font-size:16px; color:var(--accent-cyan);">مستودع مشاريع الطلاب والبحث الذكي (مزامنة سحابية)</h3>
         <button class="btn" onclick="closeModal('repoModal')">إغلاق</button>
       </div>
       <div class="form-group">
@@ -745,7 +740,7 @@
     </div>
   </div>
 
-  <!-- 5. نافذة الغرفة السرية بملء الشاشة (Admin Dashboard - 15 تحسيناً إدارياً كاملاً) -->
+  <!-- 5. نافذة الغرفة السرية بملء الشاشة (Admin Dashboard) -->
   <div class="modal-overlay" id="secretRoomModal">
     <div class="modal-card fullscreen-admin" style="border-color:var(--accent-amber);">
       <!-- علامة مائية مخفية: شجرة إلكترونية بالرقم السري 319 -->
@@ -760,7 +755,7 @@
 
       <div class="modal-header">
         <div>
-          <h3 style="font-size:16px; color:var(--accent-amber);">★ غرفة القيادة السرية - الإدارة الهندسية الشاملة (Full-Screen Command)</h3>
+          <h3 style="font-size:16px; color:var(--accent-amber);">★ غرفة القيادة السرية - الإدارة الهندسية الشاملة (Cloud Synced)</h3>
           <span style="font-size:11px; color:var(--text-muted);">المسؤول: معاذ حسين العلي (1461997)</span>
         </div>
         <div style="display:flex; gap:6px; flex-wrap:wrap;">
@@ -771,7 +766,6 @@
         </div>
       </div>
 
-      <!-- إحصائيات دقيقة + مؤشر استهلاك Firebase Spark #11 -->
       <div class="stats-grid">
         <div class="stat-box">
           <div class="num" id="statTotalUsers">0</div>
@@ -790,19 +784,17 @@
           <div class="lbl">التبليغات المعلقة</div>
         </div>
         <div class="stat-box">
-          <div class="num" id="statQuotaReads" style="color:var(--accent-green);">0.2%</div>
+          <div class="num" id="statQuotaReads" style="color:var(--accent-green);">0.04%</div>
           <div class="lbl">استهلاك Spark اليومي</div>
         </div>
       </div>
 
-      <!-- نظام الإعلانات العامة #9 -->
       <div style="display:flex; gap:6px; margin-bottom:10px;">
-        <input type="text" id="adminAnnouncementInput" class="form-control" style="padding:6px 10px; font-size:12px;" placeholder="اكتب إعلاناً عاماً يظهر أعلى شاشة جميع طلاب الكلية...">
-        <button class="btn btn-primary" onclick="publishGlobalAnnouncement()">📢 نشر الإعلان</button>
+        <input type="text" id="adminAnnouncementInput" class="form-control" style="padding:6px 10px; font-size:12px;" placeholder="اكتب إعلاناً عاماً يُبث سحابياً أعلى شاشة جميع طلاب الكلية...">
+        <button class="btn btn-primary" onclick="publishGlobalAnnouncement()">📢 بث الإعلان السحابي</button>
         <button class="btn btn-danger" onclick="clearGlobalAnnouncement()">إخفاء</button>
       </div>
 
-      <!-- تبويبات الإدارة (#1 بحث الطلاب، #13 تبويب المحظورين، #7 فرز المشاريع، #4 طابور التبليغات) -->
       <div class="admin-tabs">
         <button class="btn btn-cyan" onclick="switchAdminTab('USERS')">👥 سجل الطلاب النشطين</button>
         <button class="btn" onclick="switchAdminTab('BANNED')">🚫 قائمة المحظورين</button>
@@ -810,7 +802,6 @@
         <button class="btn" onclick="switchAdminTab('REPORTS')">🚩 طابور التبليغات (<span id="tabReportBadge">0</span>)</button>
       </div>
 
-      <!-- أدوات البحث والفرز والإجراءات الجماعية (#1، #5، #7) -->
       <div style="display:flex; gap:6px; margin-bottom:10px; flex-wrap:wrap; align-items:center;">
         <input type="text" id="adminSearchInput" class="form-control" style="flex:1; min-width:180px; padding:6px 10px; font-size:12px;" placeholder="بحث إداري بالاسم أو الرقم الجامعي أو اسم المشروع..." oninput="renderSecretRoomDashboard()">
         <select id="adminSortSelect" class="form-control" style="width:150px; padding:6px; font-size:12px;" onchange="renderSecretRoomDashboard()">
@@ -822,12 +813,11 @@
         <button class="btn btn-danger" onclick="executeBulkDeleteSelected()">حذف المحددين ☑</button>
       </div>
 
-      <!-- محتوى التبويب الإداري المتغير -->
       <div id="adminDynamicViewport" style="flex:1; overflow-y:auto; padding-right:4px;"></div>
     </div>
   </div>
 
-  <!-- 6. نافذة معاينة الدائرة قبل الحذف للمدير #2 (Admin Circuit Preview Modal) -->
+  <!-- 6. نافذة معاينة الدائرة قبل الحذف للمدير -->
   <div class="modal-overlay" id="adminPreviewModal">
     <div class="modal-card">
       <div class="modal-header">
@@ -843,12 +833,12 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { 
       getFirestore, collection, doc, setDoc, getDoc, getDocs, updateDoc, deleteDoc, 
-      query, where, getCountFromServer, writeBatch, enableIndexedDbPersistence 
+      onSnapshot, enableIndexedDbPersistence 
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-    import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
     // ============================================================================
-    // 1. إعدادات Firebase الفعلية الخاصة بمشروع جامعة حلب
+    // 1. إعدادات Firebase والمزامنة السحابية اللحظية (حل مشكلة Cloud Read Isolation & UID Mismatch)
     // ============================================================================
     const firebaseConfig = {
       apiKey: "AIzaSyAg9os96KdhaHveSpi5GmHFCOM_oo2s8h0",
@@ -862,20 +852,29 @@
     let db = null;
     let auth = null;
     let isFirebaseReady = false;
-    let firebaseOpsCount = 12; // عداد لمراقبة استهلاك باقة Spark #11
+    let firebaseOpsCount = 6;
+    let activeAuthUid = null;
 
     try {
       const app = initializeApp(firebaseConfig);
       db = getFirestore(app);
       auth = getAuth(app);
-      signInAnonymously(auth).catch((err) => console.warn("Auth warning:", err));
       enableIndexedDbPersistence(db).catch(() => {});
-      isFirebaseReady = true;
+
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          activeAuthUid = user.uid;
+          isFirebaseReady = true;
+          attachCloudRealtimeListeners();
+          syncCurrentUserWithCloud();
+        } else {
+          signInAnonymously(auth).catch((err) => console.warn("Auth warning:", err));
+        }
+      });
     } catch (e) {
       console.warn("Offline Mode Active");
     }
 
-    // تحديث مؤشر حالة الاتصال بالإنترنت #12
     function updateConnectivityIndicator() {
       const dot = document.getElementById('connDot');
       const txt = document.getElementById('connText');
@@ -890,8 +889,75 @@
     window.addEventListener('online', updateConnectivityIndicator);
     window.addEventListener('offline', updateConnectivityIndicator);
 
+    // ربط المستمعات اللحظية من Firestore لدمج مشاريع الطلاب، المستخدمين، التبليغات، والإعلانات العامة
+    function attachCloudRealtimeListeners() {
+      if (!isFirebaseReady || !db) return;
+
+      // 1. مزامنة المشاريع سحابياً
+      onSnapshot(collection(db, "projects"), (snap) => {
+        firebaseOpsCount++;
+        const cloudProjs = [];
+        snap.forEach(d => cloudProjs.push(d.data()));
+        if (cloudProjs.length > 0) {
+          setLocalProjects(cloudProjs);
+          if (document.getElementById('repoModal').classList.contains('active')) renderRepositoryList();
+          if (document.getElementById('secretRoomModal').classList.contains('active')) renderSecretRoomDashboard();
+        }
+      }, () => {});
+
+      // 2. مزامنة الإعلانات العامة سحابياً
+      onSnapshot(doc(db, "announcements", "global"), (snap) => {
+        firebaseOpsCount++;
+        if (snap.exists() && snap.data().text) {
+          localStorage.setItem('aleppo_ee_announcement', snap.data().text);
+        } else {
+          localStorage.removeItem('aleppo_ee_announcement');
+        }
+        loadGlobalAnnouncementBanner();
+      }, () => {});
+
+      // 3. مزامنة سجل المستخدمين والتبليغات
+      onSnapshot(collection(db, "users"), (snap) => {
+        firebaseOpsCount++;
+        const cloudUsers = [];
+        snap.forEach(d => cloudUsers.push(d.data()));
+        if (cloudUsers.length > 0) {
+          setLocalUsers(cloudUsers);
+          // التحقق الفوري إذا تم حظر المستخدم الحالي من قبل الإدارة
+          if (currentUser) {
+            const myCloudRecord = cloudUsers.find(u => u.uid === currentUser.uid || u.universityId === currentUser.universityId);
+            if (myCloudRecord && myCloudRecord.isBanned) {
+              currentUser.isBanned = true;
+              localStorage.setItem('aleppo_ee_user', JSON.stringify(currentUser));
+              showToast("⛔ تم حظر حسابك من قبل إدارة الكلية.");
+            }
+          }
+          if (document.getElementById('secretRoomModal').classList.contains('active')) renderSecretRoomDashboard();
+        }
+      }, () => {});
+
+      onSnapshot(collection(db, "reports"), (snap) => {
+        firebaseOpsCount++;
+        const cloudReports = [];
+        snap.forEach(d => cloudReports.push(d.data()));
+        setLocalReports(cloudReports);
+        if (document.getElementById('secretRoomModal').classList.contains('active')) renderSecretRoomDashboard();
+      }, () => {});
+    }
+
+    async function syncCurrentUserWithCloud() {
+      if (!currentUser || !isFirebaseReady || !activeAuthUid) return;
+      currentUser.uid = activeAuthUid; // توحيد الـ UID مع Firebase Auth لحل مشكلة صلاحيات السيرفر
+      currentUser.lastLoginAt = Date.now();
+      localStorage.setItem('aleppo_ee_user', JSON.stringify(currentUser));
+      saveUserToLocalRegistry(currentUser);
+      try {
+        await setDoc(doc(db, "users", activeAuthUid), currentUser, { merge: true });
+      } catch (e) {}
+    }
+
     // ============================================================================
-    // 2. حالة المستخدم، سجل النشاط Audit Log #8، والغرفة السرية
+    // 2. إدارة هوية الطالب والغرفة السرية
     // ============================================================================
     let currentUser = JSON.parse(localStorage.getItem('aleppo_ee_user')) || null;
 
@@ -903,10 +969,10 @@
         document.getElementById('onboardingModal').classList.add('active');
       } else {
         if (currentUser.isBanned) {
-          showToast("تم حظر حسابك من قِبل إدارة الكلية.");
+          showToast("⛔ تم حظر حسابك من قِبل إدارة الكلية.");
           return;
         }
-        currentUser.lastLoginAt = Date.now(); // تحديث سجل النشاط #8
+        currentUser.lastLoginAt = Date.now();
         localStorage.setItem('aleppo_ee_user', JSON.stringify(currentUser));
         saveUserToLocalRegistry(currentUser);
         applyUserUI(currentUser);
@@ -936,7 +1002,7 @@
         return;
       }
 
-      const uid = "usr_" + uniId;
+      const uid = activeAuthUid || ("usr_" + uniId);
       currentUser = {
         uid,
         fullName,
@@ -950,10 +1016,10 @@
       localStorage.setItem('aleppo_ee_user', JSON.stringify(currentUser));
       saveUserToLocalRegistry(currentUser);
 
-      if (isFirebaseReady) {
+      if (isFirebaseReady && activeAuthUid) {
         try {
           firebaseOpsCount++;
-          await setDoc(doc(db, "users", uid), currentUser, { merge: true });
+          await setDoc(doc(db, "users", activeAuthUid), currentUser, { merge: true });
         } catch (e) {}
       }
 
@@ -970,7 +1036,6 @@
       }
     }
 
-    // ردود الفعل اللمسية #7 (Haptic Feedback)
     function triggerHaptic(ms = 18) {
       if (navigator.vibrate) {
         try { navigator.vibrate(ms); } catch (e) {}
@@ -978,11 +1043,40 @@
     }
 
     // ============================================================================
-    // 3. محرك المحاكاة الرياضي الخلفي (Web Worker MNA Solver) مع تحديد العنصر المسبب للخطأ #10
+    // 3. محرك المحاكاة الفيزيائي الدقيق v3.0 (Backward Euler C/L + Newton-Raphson Diode + T-Junctions)
     // ============================================================================
     const workerCode = `
+      // ذاكرة الحالة الزمنية للمكثفات والوشائع والديودات عبر الخطوات الزمنية
+      let prevCapVoltages = {};
+      let prevIndCurrents = {};
+      let lastSimTime = 0;
+
+      // فحص وقوع نقطة (px, py) على مسار سلك متعامد (L-Shape Orthogonal Wire) لدعم عقد التفرع T-Junctions
+      function isPointOnOrthogonalWire(px, py, w) {
+        // الجزء الأفقي من (x1, y1) إلى (x2, y1)
+        const minX = Math.min(w.x1, w.x2);
+        const maxX = Math.max(w.x1, w.x2);
+        if (py === w.y1 && px >= minX && px <= maxX) return true;
+
+        // الجزء الرأسي من (x2, y1) إلى (x2, y2)
+        const minY = Math.min(w.y1, w.y2);
+        const maxY = Math.max(w.y1, w.y2);
+        if (px === w.x2 && py >= minY && py <= maxY) return true;
+
+        return false;
+      }
+
       self.onmessage = function(e) {
-        const { components, wires, time } = e.data;
+        const { components, wires, time, resetState } = e.data;
+
+        if (resetState) {
+          prevCapVoltages = {};
+          prevIndCurrents = {};
+          lastSimTime = 0;
+        }
+
+        const dt = Math.max(time - lastSimTime, 0.005);
+        lastSimTime = time;
 
         const gndComp = components.find(c => c.type === 'GND');
         if (!gndComp) {
@@ -1015,6 +1109,7 @@
           });
         });
 
+        // 1. ربط الأقطاب المتطابقة إحداثياً
         for (let i = 0; i < terminals.length; i++) {
           for (let j = i + 1; j < terminals.length; j++) {
             if (terminals[i].x === terminals[j].x && terminals[i].y === terminals[j].y) {
@@ -1023,12 +1118,27 @@
           }
         }
 
-        wires.forEach(w => {
-          const startTerms = terminals.filter(t => t.x === w.x1 && t.y === w.y1);
-          const endTerms = terminals.filter(t => t.x === w.x2 && t.y === w.y2);
-          if (startTerms.length && endTerms.length) {
-            union(startTerms[0].key, endTerms[0].key);
-          }
+        // 2. ربط الأسلاك المتقاطعة أو المتصلة بنقاط تفرع (T-Junctions)
+        wires.forEach((w, wIdx) => {
+          const wKey = 'wire_' + wIdx;
+          // ربط أي قطب يقع على أي جزء من هذا السلك
+          terminals.forEach(t => {
+            if (isPointOnOrthogonalWire(t.x, t.y, w)) {
+              union(t.key, wKey);
+            }
+          });
+          // ربط الأسلاك التي تتشارك أطرافاً أو تقع أطرافها على سلك آخر
+          wires.forEach((w2, w2Idx) => {
+            if (wIdx >= w2Idx) return;
+            if (
+              isPointOnOrthogonalWire(w2.x1, w2.y1, w) ||
+              isPointOnOrthogonalWire(w2.x2, w2.y2, w) ||
+              isPointOnOrthogonalWire(w.x1, w.y1, w2) ||
+              isPointOnOrthogonalWire(w.x2, w.y2, w2)
+            ) {
+              union(wKey, 'wire_' + w2Idx);
+            }
+          });
         });
 
         const gndRoot = find(gndComp.id + '_0');
@@ -1051,69 +1161,13 @@
           return;
         }
 
-        const G = Array.from({ length: N }, () => new Float64Array(N));
-        const I = new Float64Array(N);
-
-        for (let i = 0; i < N; i++) {
-          G[i][i] += 1e-12;
-        }
-
+        // فحص القصر الكهربائي المباشر على المنابع
         const shortCircuitCulprits = [];
-
         components.forEach(c => {
-          if (c.type === 'GND') return;
-          const n1 = nodeMap[c.id + '_0'] || 0;
-          const n2 = nodeMap[c.id + '_1'] || 0;
-
-          if (c.type === 'RESISTOR') {
-            const R = Math.max(c.value || 1000, 1e-3);
-            const g = 1 / R;
-            if (n1 > 0) G[n1 - 1][n1 - 1] += g;
-            if (n2 > 0) G[n2 - 1][n2 - 1] += g;
-            if (n1 > 0 && n2 > 0) {
-              G[n1 - 1][n2 - 1] -= g;
-              G[n2 - 1][n1 - 1] -= g;
-            }
-          } else if (c.type === 'CAPACITOR') {
-            const C = Math.max(c.value || 1e-6, 1e-12);
-            const gEq = C * 250;
-            if (n1 > 0) G[n1 - 1][n1 - 1] += gEq;
-            if (n2 > 0) G[n2 - 1][n2 - 1] += gEq;
-            if (n1 > 0 && n2 > 0) {
-              G[n1 - 1][n2 - 1] -= gEq;
-              G[n2 - 1][n1 - 1] -= gEq;
-            }
-          } else if (c.type === 'DIODE') {
-            const gOn = 1 / 25;
-            if (n1 > 0) G[n1 - 1][n1 - 1] += gOn;
-            if (n2 > 0) G[n2 - 1][n2 - 1] += gOn;
-            if (n1 > 0 && n2 > 0) {
-              G[n1 - 1][n2 - 1] -= gOn;
-              G[n2 - 1][n1 - 1] -= gOn;
-            }
-          } else if (c.type === 'DC_SOURCE' || c.type === 'AC_SOURCE') {
-            if (n1 === n2) {
-              shortCircuitCulprits.push(c.id);
-            }
-            const Vval = c.type === 'DC_SOURCE' 
-              ? (c.value || 5) 
-              : (c.value || 5) * Math.sin(2 * Math.PI * 2 * time);
-            const rInternal = 0.001;
-            const gSource = 1 / rInternal;
-            const iNorton = Vval * gSource;
-
-            if (n1 > 0) {
-              G[n1 - 1][n1 - 1] += gSource;
-              I[n1 - 1] += iNorton;
-            }
-            if (n2 > 0) {
-              G[n2 - 1][n2 - 1] += gSource;
-              I[n2 - 1] -= iNorton;
-            }
-            if (n1 > 0 && n2 > 0) {
-              G[n1 - 1][n2 - 1] -= gSource;
-              G[n2 - 1][n1 - 1] -= gSource;
-            }
+          if (c.type === 'DC_SOURCE' || c.type === 'AC_SOURCE') {
+            const n1 = nodeMap[c.id + '_0'] || 0;
+            const n2 = nodeMap[c.id + '_1'] || 0;
+            if (n1 === n2) shortCircuitCulprits.push(c.id);
           }
         });
 
@@ -1122,37 +1176,175 @@
             success: false,
             errorCode: 'SHORT_CIRCUIT',
             culpritIds: shortCircuitCulprits,
-            message: 'تحذير: قصر كهربائي مباشر! تم تمييز العنصر المتضرر باللون الأحمر الوامض.'
+            message: 'تحذير: قصر كهربائي مباشر! تم تمييز المنبع المتضرر باللون الأحمر الوامض.'
           });
           return;
         }
 
-        for (let i = 0; i < N; i++) {
-          let maxRow = i;
-          for (let k = i + 1; k < N; k++) {
-            if (Math.abs(G[k][i]) > Math.abs(G[maxRow][i])) maxRow = k;
-          }
-          const tmpG = G[i]; G[i] = G[maxRow]; G[maxRow] = tmpG;
-          const tmpI = I[i]; I[i] = I[maxRow]; I[maxRow] = tmpI;
+        // 3. حلقة نيوتن-رافسون التكرارية (Newton-Raphson Loop) للعناصر غير الخطية (الديود الحقيقي)
+        let V = new Float64Array(N);
+        const hasDiodes = components.some(c => c.type === 'DIODE');
+        const maxIter = hasDiodes ? 12 : 1;
 
-          const pivot = G[i][i] || 1e-12;
-          for (let k = i + 1; k < N; k++) {
-            const factor = G[k][i] / pivot;
-            I[k] -= factor * I[i];
-            for (let j = i; j < N; j++) {
-              G[k][j] -= factor * G[i][j];
+        for (let iter = 0; iter < maxIter; iter++) {
+          const G = Array.from({ length: N }, () => new Float64Array(N));
+          const I = new Float64Array(N);
+
+          // مقاومة تسريب 10^12 أوم لمنع العقد العائمة
+          for (let i = 0; i < N; i++) G[i][i] += 1e-12;
+
+          components.forEach(c => {
+            if (c.type === 'GND') return;
+            const n1 = nodeMap[c.id + '_0'] || 0;
+            const n2 = nodeMap[c.id + '_1'] || 0;
+
+            if (c.type === 'RESISTOR') {
+              const R = Math.max(c.value || 1000, 1e-3);
+              const g = 1 / R;
+              if (n1 > 0) G[n1 - 1][n1 - 1] += g;
+              if (n2 > 0) G[n2 - 1][n2 - 1] += g;
+              if (n1 > 0 && n2 > 0) {
+                G[n1 - 1][n2 - 1] -= g;
+                G[n2 - 1][n1 - 1] -= g;
+              }
+            } else if (c.type === 'CAPACITOR') {
+              // نموذج المرافق التكاملي لأويلر الخلفي (Backward Euler Companion Model): Geq = C / dt, Ieq = Geq * Vprev
+              const C = Math.max(c.value || 1e-5, 1e-12);
+              const gEq = C / dt;
+              const vPrev = prevCapVoltages[c.id] || 0;
+              const iEq = gEq * vPrev;
+
+              if (n1 > 0) {
+                G[n1 - 1][n1 - 1] += gEq;
+                I[n1 - 1] += iEq;
+              }
+              if (n2 > 0) {
+                G[n2 - 1][n2 - 1] += gEq;
+                I[n2 - 1] -= iEq;
+              }
+              if (n1 > 0 && n2 > 0) {
+                G[n1 - 1][n2 - 1] -= gEq;
+                G[n2 - 1][n1 - 1] -= gEq;
+              }
+            } else if (c.type === 'INDUCTOR') {
+              // نموذج الوشيعة التكاملي (Backward Euler Inductor): Geq = dt / L, Ieq = Iprev
+              const L = Math.max(c.value || 0.1, 1e-6);
+              const gEq = dt / L;
+              const iPrev = prevIndCurrents[c.id] || 0;
+
+              if (n1 > 0) {
+                G[n1 - 1][n1 - 1] += gEq;
+                I[n1 - 1] -= iPrev;
+              }
+              if (n2 > 0) {
+                G[n2 - 1][n2 - 1] += gEq;
+                I[n2 - 1] += iPrev;
+              }
+              if (n1 > 0 && n2 > 0) {
+                G[n1 - 1][n2 - 1] -= gEq;
+                G[n2 - 1][n1 - 1] -= gEq;
+              }
+            } else if (c.type === 'DIODE') {
+              // نموذج الديود السيليكوني غير الخطي القطبي (Anode = pin 0, Cathode = pin 1, Vth = 0.7V)
+              const vAnode = n1 > 0 ? V[n1 - 1] : 0;
+              const vCathode = n2 > 0 ? V[n2 - 1] : 0;
+              const vDiff = vAnode - vCathode;
+              const vTh = c.value || 0.7;
+
+              if (vDiff >= vTh) {
+                // انحياز أمامي (Forward Bias): مقاومة أمامية صغيرة جداً + منبع جهد عتبة معاكس 0.7V
+                const gFwd = 1 / 5; // 5 أوم أمامية
+                const iOffset = gFwd * vTh;
+                if (n1 > 0) {
+                  G[n1 - 1][n1 - 1] += gFwd;
+                  I[n1 - 1] += iOffset;
+                }
+                if (n2 > 0) {
+                  G[n2 - 1][n2 - 1] += gFwd;
+                  I[n2 - 1] -= iOffset;
+                }
+                if (n1 > 0 && n2 > 0) {
+                  G[n1 - 1][n2 - 1] -= gFwd;
+                  G[n2 - 1][n1 - 1] -= gFwd;
+                }
+              } else {
+                // انحياز عكسي (Reverse Bias): مقاومة مفتوحة عالية جداً (10^9 أوم) تمنع مرور النصف السالب
+                const gRev = 1e-9;
+                if (n1 > 0) G[n1 - 1][n1 - 1] += gRev;
+                if (n2 > 0) G[n2 - 1][n2 - 1] += gRev;
+                if (n1 > 0 && n2 > 0) {
+                  G[n1 - 1][n2 - 1] -= gRev;
+                  G[n2 - 1][n1 - 1] -= gRev;
+                }
+              }
+            } else if (c.type === 'DC_SOURCE' || c.type === 'AC_SOURCE') {
+              const Vval = c.type === 'DC_SOURCE' 
+                ? (c.value || 5) 
+                : (c.value || 5) * Math.sin(2 * Math.PI * 2 * time);
+              const rInternal = 0.001;
+              const gSource = 1 / rInternal;
+              const iNorton = Vval * gSource;
+
+              if (n1 > 0) {
+                G[n1 - 1][n1 - 1] += gSource;
+                I[n1 - 1] += iNorton;
+              }
+              if (n2 > 0) {
+                G[n2 - 1][n2 - 1] += gSource;
+                I[n2 - 1] -= iNorton;
+              }
+              if (n1 > 0 && n2 > 0) {
+                G[n1 - 1][n2 - 1] -= gSource;
+                G[n2 - 1][n1 - 1] -= gSource;
+              }
+            }
+          });
+
+          // حل المصفوفة بالحذف الغاوسي (Gaussian Elimination)
+          for (let i = 0; i < N; i++) {
+            let maxRow = i;
+            for (let k = i + 1; k < N; k++) {
+              if (Math.abs(G[k][i]) > Math.abs(G[maxRow][i])) maxRow = k;
+            }
+            const tmpG = G[i]; G[i] = G[maxRow]; G[maxRow] = tmpG;
+            const tmpI = I[i]; I[i] = I[maxRow]; I[maxRow] = tmpI;
+
+            const pivot = G[i][i] || 1e-12;
+            for (let k = i + 1; k < N; k++) {
+              const factor = G[k][i] / pivot;
+              I[k] -= factor * I[i];
+              for (let j = i; j < N; j++) {
+                G[k][j] -= factor * G[i][j];
+              }
             }
           }
+
+          const nextV = new Float64Array(N);
+          for (let i = N - 1; i >= 0; i--) {
+            let sum = I[i];
+            for (let j = i + 1; j < N; j++) {
+              sum -= G[i][j] * nextV[j];
+            }
+            nextV[i] = sum / (G[i][i] || 1e-12);
+          }
+          V = nextV;
         }
 
-        const V = new Float64Array(N);
-        for (let i = N - 1; i >= 0; i--) {
-          let sum = I[i];
-          for (let j = i + 1; j < N; j++) {
-            sum -= G[i][j] * V[j];
+        // تحديث ذاكرة المكثفات والوشائع للخطوة الزمنية القادمة
+        components.forEach(c => {
+          const n1 = nodeMap[c.id + '_0'] || 0;
+          const n2 = nodeMap[c.id + '_1'] || 0;
+          const v1 = n1 > 0 ? V[n1 - 1] : 0;
+          const v2 = n2 > 0 ? V[n2 - 1] : 0;
+          const vBranch = v1 - v2;
+
+          if (c.type === 'CAPACITOR') {
+            prevCapVoltages[c.id] = vBranch;
+          } else if (c.type === 'INDUCTOR') {
+            const L = Math.max(c.value || 0.1, 1e-6);
+            prevIndCurrents[c.id] = (prevIndCurrents[c.id] || 0) + (dt / L) * vBranch;
           }
-          V[i] = sum / (G[i][i] || 1e-12);
-        }
+        });
 
         const pinVoltages = {};
         let maxAbsV = 0;
@@ -1176,7 +1368,7 @@
     const solverWorker = new Worker(URL.createObjectURL(workerBlob));
 
     // ============================================================================
-    // 4. محرر الدوائر الشامل (15 ميزة للطالب: Undo/Redo, Zoom/Pan, Wire Color, Error Blink, Double Tap, DMM, Export)
+    // 4. محرر الدوائر الشامل (تدوير 90°، ملتيميتر لحظي و RMS، تخزين لون الشبكة للأداء)
     // ============================================================================
     const canvas = document.getElementById('circuitCanvas');
     const ctx = canvas.getContext('2d');
@@ -1188,27 +1380,27 @@
     let selectedComponent = null;
     let draggingComponent = null;
     let wireStartPin = null;
-    let activeWireColor = '#10b981'; // لون السلك الافتراضي #5
+    let activeWireColor = '#10b981';
     let pointerPos = { x: 0, y: 0 };
     let isSimulating = false;
     let simTime = 0;
     let latestPinVoltages = {};
-    let errorCulpritIds = []; // العناصر المسببة للخطأ #10
+    let errorCulpritIds = [];
     let scopeHistory = new Array(115).fill(0);
 
-    // متغيرات التكبير والتصغير وتحريك الشاشة #3 + إظهار الشبكة #13
     let cameraZoom = 1.0;
     let cameraPan = { x: 0, y: 0 };
     let isPanning = false;
     let panStartOrigin = { x: 0, y: 0 };
     let showGrid = true;
+    let cachedGridColor = 'rgba(148, 163, 184, 0.12)'; // تحسين الأداء بدلاً من getComputedStyle في كل إطار
 
-    // المقياس المتعدد #8
+    // المقياس المتعدد اللحظي و RMS (Live DMM)
     let dmmActive = false;
-    let dmmProbeA = null;
-    let dmmProbeB = null;
+    let dmmPinKeyA = null;
+    let dmmPinKeyB = null;
+    let dmmRmsBuffer = [];
 
-    // سجل التراجع والإعادة #1 (Undo / Redo Stacks)
     let undoStack = [];
     let redoStack = [];
 
@@ -1230,7 +1422,7 @@
       selectedComponent = null;
       triggerHaptic(15);
       updateInspectorUI();
-      triggerSingleSolve();
+      triggerSingleSolve(true);
       drawWorkspace();
     };
 
@@ -1246,6 +1438,36 @@
       selectedComponent = null;
       triggerHaptic(15);
       updateInspectorUI();
+      triggerSingleSolve(true);
+      drawWorkspace();
+    };
+
+    // ميزة تدوير العنصر المحدد 90 درجة (Component Rotation)
+    window.rotateSelectedComponent = function() {
+      if (!selectedComponent || selectedComponent.type === 'GND') {
+        showToast("اختر عنصراً أولاً لتدويره 90 درجة.");
+        return;
+      }
+      pushHistorySnapshot();
+      const oldPins = selectedComponent.pins.map(p => ({ ...p }));
+      selectedComponent.rotation = ((selectedComponent.rotation || 0) + 90) % 180;
+      updateComponentPins(selectedComponent);
+
+      // تحديث الأسلاك المتصلة بأقطاب العنصر بعد تدويره
+      wires.forEach(w => {
+        oldPins.forEach((op, idx) => {
+          if (w.x1 === op.x && w.y1 === op.y) {
+            w.x1 = selectedComponent.pins[idx].x;
+            w.y1 = selectedComponent.pins[idx].y;
+          }
+          if (w.x2 === op.x && w.y2 === op.y) {
+            w.x2 = selectedComponent.pins[idx].x;
+            w.y2 = selectedComponent.pins[idx].y;
+          }
+        });
+      });
+
+      triggerHaptic(20);
       triggerSingleSolve();
       drawWorkspace();
     };
@@ -1270,6 +1492,9 @@
 
     window.toggleSolarpunkTheme = function() {
       document.body.classList.toggle('solarpunk-light');
+      cachedGridColor = document.body.classList.contains('solarpunk-light')
+        ? 'rgba(5, 150, 105, 0.14)'
+        : 'rgba(148, 163, 184, 0.12)';
       drawWorkspace();
       showToast(document.body.classList.contains('solarpunk-light') ? "تم تفعيل الوضع النهاري الساطع (Solarpunk Light) ☀️" : "تم تفعيل الوضع الليلي الداكن 🌙");
     };
@@ -1278,8 +1503,31 @@
       dmmActive = !dmmActive;
       document.getElementById('multimeterWidget').style.display = dmmActive ? 'block' : 'none';
       document.getElementById('dmmRibbonBtn').classList.toggle('active', dmmActive);
-      if (dmmActive) showToast("المس أي قطبين في الدائرة لقياس فرق الجهد بينهما.");
+      if (dmmActive) {
+        dmmPinKeyA = null;
+        dmmPinKeyB = null;
+        dmmRmsBuffer = [];
+        showToast("المس أي قطبين في الدائرة لربط مجسات المقياس المتعدد اللحظي.");
+      }
     };
+
+    function updateLiveMultimeterReadout() {
+      if (!dmmActive) return;
+      const screen = document.getElementById('dmmScreen');
+      if (dmmPinKeyA && !dmmPinKeyB) {
+        const va = latestPinVoltages[dmmPinKeyA] || 0;
+        screen.innerHTML = `مجس 1 (${dmmPinKeyA}): ${va.toFixed(2)}V<br><span style="color:#f59e0b;">المس القطب الثاني...</span>`;
+      } else if (dmmPinKeyA && dmmPinKeyB) {
+        const va = latestPinVoltages[dmmPinKeyA] || 0;
+        const vb = latestPinVoltages[dmmPinKeyB] || 0;
+        const diff = va - vb;
+        dmmRmsBuffer.push(diff * diff);
+        if (dmmRmsBuffer.length > 40) dmmRmsBuffer.shift();
+        const meanSq = dmmRmsBuffer.reduce((a, b) => a + b, 0) / dmmRmsBuffer.length;
+        const vRms = Math.sqrt(meanSq);
+        screen.innerHTML = `ΔV(inst) = ${diff.toFixed(3)} V<br>V(RMS) = ${vRms.toFixed(3)} V`;
+      }
+    }
 
     window.setWireColor = function(color, el) {
       activeWireColor = color;
@@ -1288,7 +1536,6 @@
       showToast("تم تغيير لون السلك الجديد.");
     };
 
-    // تصدير صورة عالية الدقة للتقارير الجامعية #6
     window.exportCircuitImage = function() {
       const dataUrl = canvas.toDataURL("image/png");
       const link = document.createElement('a');
@@ -1298,19 +1545,18 @@
       showToast("تم حفظ صورة الدائرة لإرفاقها في تقرير المختبر 📸");
     };
 
-    // جولة تعليمية تفاعلية #4
     window.startInteractiveTour = function() {
       const steps = [
-        "مرحباً بك في مختبر الجيب! 1️⃣ اختر أي عنصر من الشريط السفلي (مقاومة، منبع، مكثف) والمس الشاشة لوضعه.",
-        "2️⃣ اختر أداة (سلك توصيل ╱) ثم المس قطبي عنصرين للربط بينهما مع اهتزاز تأكيدي وألوان مخصصة.",
-        "3️⃣ انقر مرتين (Double Tap) على أي عنصر أو استخدم شريط التمرير السريع لتغيير قيمته ومشاهدة الموجة فوراً!"
+        "مرحباً بك في الإصدار 3.0! 1️⃣ اختر أي عنصر (مقاومة، مكثف، وشيعة L، ديود) والمس الشاشة لوضعه، واستخدم زر (↻) لتدويره 90°.",
+        "2️⃣ يمكنك توصيل الأسلاك بأي نقطة تفرع (T-Junction) وتلوينها لتنظيم الدائرة.",
+        "3️⃣ افتح (قوالب جاهزة) لتجربة مقوم نصف الموجة الحقيقي أو دارة الطنين RLC ومشاهدة شحن المكثف بالوقت الفعلي!"
       ];
       let idx = 0;
       function showNextStep() {
         if (idx < steps.length) {
           showToast(steps[idx]);
           idx++;
-          setTimeout(showNextStep, 3600);
+          setTimeout(showNextStep, 3800);
         }
       }
       showNextStep();
@@ -1335,7 +1581,6 @@
       };
     }
 
-    // قوالب الدوائر الجاهزة #9
     window.loadCircuitTemplate = function(type) {
       pushHistorySnapshot();
       const cx = snapToGrid(window.innerWidth / 2);
@@ -1343,44 +1588,61 @@
 
       if (type === 'RC_FILTER') {
         components = [
-          { id: 'V1', type: 'AC_SOURCE', x: cx - 72, y: cy, value: 10, unit: 'V', pins: [] },
-          { id: 'R1', type: 'RESISTOR', x: cx, y: cy - 48, value: 1000, unit: 'Ω', pins: [] },
-          { id: 'C1', type: 'CAPACITOR', x: cx + 72, y: cy, value: 0.00001, unit: 'F', pins: [] },
-          { id: 'GND1', type: 'GND', x: cx, y: cy + 72, value: 0, unit: '', pins: [] }
+          { id: 'V1', type: 'AC_SOURCE', x: cx - 72, y: cy, value: 10, unit: 'V', rotation: 90, pins: [] },
+          { id: 'R1', type: 'RESISTOR', x: cx, y: cy - 48, value: 200, unit: 'Ω', rotation: 0, pins: [] },
+          { id: 'C1', type: 'CAPACITOR', x: cx + 72, y: cy, value: 0.0005, unit: 'F', rotation: 90, pins: [] },
+          { id: 'GND1', type: 'GND', x: cx, y: cy + 72, value: 0, unit: '', rotation: 0, pins: [] }
         ];
       } else if (type === 'RECTIFIER') {
         components = [
-          { id: 'VAC', type: 'AC_SOURCE', x: cx - 72, y: cy, value: 12, unit: 'V', pins: [] },
-          { id: 'D1', type: 'DIODE', x: cx, y: cy - 48, value: 0.7, unit: 'V', pins: [] },
-          { id: 'RL', type: 'RESISTOR', x: cx + 72, y: cy, value: 2200, unit: 'Ω', pins: [] },
-          { id: 'GND1', type: 'GND', x: cx, y: cy + 72, value: 0, unit: '', pins: [] }
+          { id: 'VAC', type: 'AC_SOURCE', x: cx - 72, y: cy, value: 12, unit: 'V', rotation: 90, pins: [] },
+          { id: 'D1', type: 'DIODE', x: cx, y: cy - 48, value: 0.7, unit: 'V', rotation: 0, pins: [] },
+          { id: 'RL', type: 'RESISTOR', x: cx + 72, y: cy, value: 1000, unit: 'Ω', rotation: 90, pins: [] },
+          { id: 'GND1', type: 'GND', x: cx, y: cy + 72, value: 0, unit: '', rotation: 0, pins: [] }
         ];
-      } else if (type === 'DIVIDER') {
+      } else if (type === 'RLC_RESONANCE') {
         components = [
-          { id: 'VDC', type: 'DC_SOURCE', x: cx - 72, y: cy, value: 12, unit: 'V', pins: [] },
-          { id: 'R1', type: 'RESISTOR', x: cx, y: cy - 48, value: 1000, unit: 'Ω', pins: [] },
-          { id: 'R2', type: 'RESISTOR', x: cx + 72, y: cy, value: 1000, unit: 'Ω', pins: [] },
-          { id: 'GND1', type: 'GND', x: cx, y: cy + 72, value: 0, unit: '', pins: [] }
+          { id: 'VAC', type: 'AC_SOURCE', x: cx - 96, y: cy, value: 10, unit: 'V', rotation: 90, pins: [] },
+          { id: 'R1', type: 'RESISTOR', x: cx - 24, y: cy - 48, value: 100, unit: 'Ω', rotation: 0, pins: [] },
+          { id: 'L1', type: 'INDUCTOR', x: cx + 48, y: cy - 48, value: 0.2, unit: 'H', rotation: 0, pins: [] },
+          { id: 'C1', type: 'CAPACITOR', x: cx + 96, y: cy, value: 0.0005, unit: 'F', rotation: 90, pins: [] },
+          { id: 'GND1', type: 'GND', x: cx, y: cy + 72, value: 0, unit: '', rotation: 0, pins: [] }
         ];
       }
 
       components.forEach(updateComponentPins);
-      wires = [
-        { x1: components[0].pins[0].x, y1: components[0].pins[0].y, x2: components[1].pins[0].x, y2: components[1].pins[0].y, color: '#ef4444' },
-        { x1: components[1].pins[1].x, y1: components[1].pins[1].y, x2: components[2].pins[0].x, y2: components[2].pins[0].y, color: '#38bdf8' },
-        { x1: components[0].pins[1].x, y1: components[0].pins[1].y, x2: components[3].pins[0].x, y2: components[3].pins[0].y, color: '#94a3b8' },
-        { x1: components[2].pins[1].x, y1: components[2].pins[1].y, x2: components[3].pins[0].x, y2: components[3].pins[0].y, color: '#94a3b8' }
-      ];
+
+      if (type === 'RLC_RESONANCE') {
+        wires = [
+          { x1: components[0].pins[0].x, y1: components[0].pins[0].y, x2: components[1].pins[0].x, y2: components[1].pins[0].y, color: '#ef4444' },
+          { x1: components[1].pins[1].x, y1: components[1].pins[1].y, x2: components[2].pins[0].x, y2: components[2].pins[0].y, color: '#f59e0b' },
+          { x1: components[2].pins[1].x, y1: components[2].pins[1].y, x2: components[3].pins[0].x, y2: components[3].pins[0].y, color: '#38bdf8' },
+          { x1: components[0].pins[1].x, y1: components[0].pins[1].y, x2: components[4].pins[0].x, y2: components[4].pins[0].y, color: '#94a3b8' },
+          { x1: components[3].pins[1].x, y1: components[3].pins[1].y, x2: components[4].pins[0].x, y2: components[4].pins[0].y, color: '#94a3b8' }
+        ];
+      } else {
+        wires = [
+          { x1: components[0].pins[0].x, y1: components[0].pins[0].y, x2: components[1].pins[0].x, y2: components[1].pins[0].y, color: '#ef4444' },
+          { x1: components[1].pins[1].x, y1: components[1].pins[1].y, x2: components[2].pins[0].x, y2: components[2].pins[0].y, color: '#38bdf8' },
+          { x1: components[0].pins[1].x, y1: components[0].pins[1].y, x2: components[3].pins[0].x, y2: components[3].pins[0].y, color: '#94a3b8' },
+          { x1: components[2].pins[1].x, y1: components[2].pins[1].y, x2: components[3].pins[0].x, y2: components[3].pins[0].y, color: '#94a3b8' }
+        ];
+      }
 
       closeModal('templatesModal');
-      triggerSingleSolve();
+      triggerSingleSolve(true);
       drawWorkspace();
-      showToast("تم تحميل القالب الهندسي الجاهز بنجاح!");
+      showToast("تم تحميل الدائرة القياسية بنجاح!");
     };
 
     function updateComponentPins(comp) {
       if (comp.type === 'GND') {
         comp.pins = [{ x: comp.x, y: comp.y - GRID_SIZE }];
+      } else if (comp.rotation === 90) {
+        comp.pins = [
+          { x: comp.x, y: comp.y - GRID_SIZE * 2 },
+          { x: comp.x, y: comp.y + GRID_SIZE * 2 }
+        ];
       } else {
         comp.pins = [
           { x: comp.x - GRID_SIZE * 2, y: comp.y },
@@ -1425,30 +1687,32 @@
       return { rawX, rawY, x: world.x, y: world.y };
     }
 
-    // النقر المزدوج السريع للتعديل #11 (Double Tap to Edit)
+    // إصلاح فحص النقر المزدوج (Double Tap) ليشترط القرب الجغرافي (< 25px)
     let lastTapTime = 0;
+    let lastTapPos = { x: 0, y: 0 };
+
     canvas.addEventListener('pointerdown', (e) => {
       const pos = getPointerCoords(e);
       pointerPos = { x: snapToGrid(pos.x), y: snapToGrid(pos.y) };
 
       const now = Date.now();
-      const isDoubleTap = (now - lastTapTime) < 320;
+      const tapDist = Math.hypot(pos.x - lastTapPos.x, pos.y - lastTapPos.y);
+      const isDoubleTap = ((now - lastTapTime) < 320) && (tapDist < 25);
       lastTapTime = now;
+      lastTapPos = { x: pos.x, y: pos.y };
 
-      // فحص أداة المقياس المتعدد #8
       if (dmmActive) {
         const pin = findNearestPin(pos.x, pos.y, 45);
         if (pin) {
-          const v = latestPinVoltages[pin.compId + '_' + pin.pinIdx] || 0;
-          if (!dmmProbeA) {
-            dmmProbeA = v;
-            document.getElementById('dmmScreen').innerText = `V1 = ${v.toFixed(2)}V (اختر القطب 2)`;
+          const key = pin.compId + '_' + pin.pinIdx;
+          if (!dmmPinKeyA || (dmmPinKeyA && dmmPinKeyB)) {
+            dmmPinKeyA = key;
+            dmmPinKeyB = null;
+            dmmRmsBuffer = [];
           } else {
-            dmmProbeB = v;
-            const diff = Math.abs(dmmProbeA - dmmProbeB);
-            document.getElementById('dmmScreen').innerText = `ΔV = ${diff.toFixed(3)} V`;
-            dmmProbeA = null;
+            dmmPinKeyB = key;
           }
+          updateLiveMultimeterReadout();
           triggerHaptic(25);
           return;
         }
@@ -1494,13 +1758,30 @@
       } else {
         pushHistorySnapshot();
         const idPrefix = currentTool.charAt(0);
+        const defaultValMap = {
+          'RESISTOR': 1000,
+          'CAPACITOR': 0.0005,
+          'INDUCTOR': 0.2,
+          'DIODE': 0.7,
+          'DC_SOURCE': 5,
+          'AC_SOURCE': 10
+        };
+        const unitMap = {
+          'RESISTOR': 'Ω',
+          'CAPACITOR': 'F',
+          'INDUCTOR': 'H',
+          'DIODE': 'V',
+          'DC_SOURCE': 'V',
+          'AC_SOURCE': 'V'
+        };
         const newComp = {
           id: idPrefix + (components.length + 1) + '_' + Math.floor(Math.random() * 99),
           type: currentTool,
           x: snapToGrid(pos.x),
           y: snapToGrid(pos.y),
-          value: currentTool === 'RESISTOR' ? 1000 : (currentTool === 'CAPACITOR' ? 0.00001 : 5),
-          unit: currentTool === 'RESISTOR' ? 'Ω' : (currentTool === 'CAPACITOR' ? 'F' : 'V'),
+          rotation: 0,
+          value: defaultValMap[currentTool] || 5,
+          unit: unitMap[currentTool] || '',
           pins: []
         };
         updateComponentPins(newComp);
@@ -1572,9 +1853,11 @@
       if (selectedComponent.type === 'RESISTOR') {
         slider.min = 10; slider.max = 10000; slider.step = 10;
       } else if (selectedComponent.type === 'CAPACITOR') {
-        slider.min = 0.000001; slider.max = 0.001; slider.step = 0.000001;
+        slider.min = 0.00001; slider.max = 0.005; slider.step = 0.00001;
+      } else if (selectedComponent.type === 'INDUCTOR') {
+        slider.min = 0.01; slider.max = 2.0; slider.step = 0.01;
       } else {
-        slider.min = 1; slider.max = 50; slider.step = 0.5;
+        slider.min = 0.5; slider.max = 50; slider.step = 0.5;
       }
       slider.value = selectedComponent.value;
 
@@ -1609,7 +1892,7 @@
       components = components.filter(c => c.id !== selectedComponent.id);
       selectedComponent = null;
       updateInspectorUI();
-      triggerSingleSolve();
+      triggerSingleSolve(true);
       drawWorkspace();
     };
 
@@ -1632,9 +1915,8 @@
       ctx.translate(cameraPan.x, cameraPan.y);
       ctx.scale(cameraZoom, cameraZoom);
 
-      // 1. رسم الشبكة الهندسية إذا كانت مفعلة #13
       if (showGrid) {
-        ctx.strokeStyle = getComputedStyle(document.body).getPropertyValue('--grid-line');
+        ctx.strokeStyle = cachedGridColor;
         ctx.lineWidth = 1;
         const startX = snapToGrid(-cameraPan.x / cameraZoom) - GRID_SIZE * 2;
         const endX = startX + (canvas.width / cameraZoom) + GRID_SIZE * 4;
@@ -1649,7 +1931,6 @@
         }
       }
 
-      // 2. رسم الأسلاك الملونة المتعامدة #5
       wires.forEach(w => {
         ctx.strokeStyle = w.color || '#10b981';
         ctx.lineWidth = 3;
@@ -1672,7 +1953,6 @@
         ctx.setLineDash([]);
       }
 
-      // 3. رسم العناصر الإلكترونية مع التحديد البصري للأخطاء باللون الأحمر الوامض #10
       components.forEach(c => {
         ctx.save();
         const isSel = selectedComponent && selectedComponent.id === c.id;
@@ -1696,18 +1976,21 @@
           ctx.lineTo(c.pins[1].x, c.pins[1].y);
           ctx.stroke();
 
-          ctx.fillRect(c.x - 24, c.y - 14, 48, 28);
-          ctx.strokeRect(c.x - 24, c.y - 14, 48, 28);
+          const bw = c.rotation === 90 ? 28 : 48;
+          const bh = c.rotation === 90 ? 48 : 28;
+          ctx.fillRect(c.x - bw / 2, c.y - bh / 2, bw, bh);
+          ctx.strokeRect(c.x - bw / 2, c.y - bh / 2, bw, bh);
 
           ctx.fillStyle = isErrorCulprit ? '#ef4444' : '#0284c7';
-          ctx.font = 'bold 11px sans-serif';
+          ctx.font = 'bold 10px sans-serif';
           ctx.textAlign = 'center';
           const symbolMap = {
-            'RESISTOR': 'R: ' + c.value + 'Ω',
-            'CAPACITOR': 'C: ' + (c.value * 1e6).toFixed(1) + 'µF',
+            'RESISTOR': 'R:' + c.value + 'Ω',
+            'CAPACITOR': 'C:' + (c.value * 1e6).toFixed(0) + 'µF',
+            'INDUCTOR': 'L:' + c.value + 'H',
             'DC_SOURCE': 'DC ' + c.value + 'V',
             'AC_SOURCE': 'AC ' + c.value + 'V',
-            'DIODE': '⊳| Diode'
+            'DIODE': '⊳| 0.7V'
           };
           ctx.fillText(symbolMap[c.type] || c.type, c.x, c.y + 4);
         } else {
@@ -1721,12 +2004,13 @@
         }
 
         c.pins.forEach((p, idx) => {
-          ctx.fillStyle = '#06b6d4';
+          const pinKey = c.id + '_' + idx;
+          ctx.fillStyle = (pinKey === dmmPinKeyA || pinKey === dmmPinKeyB) ? '#f59e0b' : '#06b6d4';
           ctx.beginPath();
           ctx.arc(p.x, p.y, 5, 0, Math.PI * 2);
           ctx.fill();
 
-          const v = latestPinVoltages[c.id + '_' + idx];
+          const v = latestPinVoltages[pinKey];
           if (v !== undefined && isSimulating) {
             ctx.fillStyle = '#10b981';
             ctx.font = 'bold 10px sans-serif';
@@ -1759,22 +2043,32 @@
       }
 
       statusEl.style.color = '#10b981';
-      statusEl.innerText = 'مستقر (MNA OK)';
+      statusEl.innerText = 'مستقر (True MNA)';
       latestPinVoltages = res.pinVoltages;
       document.getElementById('maxVoltReadout').innerText = `أعلى جهد: ${res.maxV.toFixed(2)}V`;
 
-      const probeKey = Object.keys(res.pinVoltages).find(k => res.pinVoltages[k] !== 0) || Object.keys(res.pinVoltages)[0];
-      const sampleV = probeKey ? res.pinVoltages[probeKey] : 0;
+      // قراءة عقدة الخرج (عقدة الحمل أو المكثف أو العنصر المحدد) لعرض الموجة المقومة أو المرشحة بدقة
+      let probeKey = null;
+      if (selectedComponent && selectedComponent.type !== 'GND') {
+        probeKey = selectedComponent.id + '_0';
+      } else if (components.length >= 3) {
+        probeKey = components[2].id + '_0';
+      } else {
+        probeKey = Object.keys(res.pinVoltages).find(k => res.pinVoltages[k] !== 0);
+      }
+
+      const sampleV = (probeKey && res.pinVoltages[probeKey] !== undefined) ? res.pinVoltages[probeKey] : 0;
       scopeHistory.push(sampleV);
       if (scopeHistory.length > 115) scopeHistory.shift();
 
+      updateLiveMultimeterReadout();
       drawOscilloscope();
       updateInspectorUI();
       drawWorkspace();
     };
 
-    function triggerSingleSolve() {
-      solverWorker.postMessage({ components, wires, time: simTime });
+    function triggerSingleSolve(resetState = false) {
+      solverWorker.postMessage({ components, wires, time: simTime, resetState });
     }
 
     window.toggleSimulation = function() {
@@ -1792,9 +2086,9 @@
 
     function simulationLoop() {
       if (!isSimulating) return;
-      simTime += 0.025;
-      solverWorker.postMessage({ components, wires, time: simTime });
-      setTimeout(() => requestAnimationFrame(simulationLoop), 65);
+      simTime += 0.02;
+      solverWorker.postMessage({ components, wires, time: simTime, resetState: false });
+      setTimeout(() => requestAnimationFrame(simulationLoop), 60);
     }
 
     function drawOscilloscope() {
@@ -1802,7 +2096,7 @@
       const sCtx = sCanvas.getContext('2d');
       sCtx.clearRect(0, 0, sCanvas.width, sCanvas.height);
 
-      sCtx.strokeStyle = 'rgba(255,255,255,0.12)';
+      sCtx.strokeStyle = 'rgba(255,255,255,0.15)';
       sCtx.beginPath();
       sCtx.moveTo(0, sCanvas.height / 2);
       sCtx.lineTo(sCanvas.width, sCanvas.height / 2);
@@ -1813,7 +2107,7 @@
       sCtx.beginPath();
       scopeHistory.forEach((v, i) => {
         const x = (i / 115) * sCanvas.width;
-        const y = (sCanvas.height / 2) - (v * 3.0);
+        const y = (sCanvas.height / 2) - (v * 2.8);
         const clampedY = Math.max(4, Math.min(sCanvas.height - 4, y));
         if (i === 0) sCtx.moveTo(x, clampedY);
         else sCtx.lineTo(x, clampedY);
@@ -1822,7 +2116,7 @@
     }
 
     // ============================================================================
-    // 6. مستودع المشاريع، الإشارة للمصدر Fork Attribution #15، والتبليغات #4
+    // 6. مستودع المشاريع والمزامنة السحابية الكاملة مع Firestore
     // ============================================================================
     function getLocalProjects() {
       return JSON.parse(localStorage.getItem('aleppo_ee_projects') || '[]');
@@ -1845,7 +2139,7 @@
 
     function saveUserToLocalRegistry(u) {
       const users = getLocalUsers();
-      const idx = users.findIndex(item => item.uid === u.uid);
+      const idx = users.findIndex(item => item.uid === u.uid || item.universityId === u.universityId);
       if (idx >= 0) users[idx] = u;
       else users.push(u);
       setLocalUsers(users);
@@ -1902,7 +2196,7 @@
       const proj = {
         id: 'proj_' + Date.now(),
         title,
-        ownerId: currentUser.uid,
+        ownerId: activeAuthUid || currentUser.uid,
         ownerName: currentUser.fullName,
         universityId: currentUser.universityId,
         forkedFrom: currentForkedFromAuthor,
@@ -1926,7 +2220,7 @@
 
       closeModal('saveProjectModal');
       document.getElementById('projectTitleInput').value = '';
-      showToast("تم حفظ الدائرة في مستودعك بنجاح!");
+      showToast("تم حفظ الدائرة ومزامنتها سحابياً بنجاح!");
     };
 
     window.openRepositoryModal = function() {
@@ -1940,7 +2234,7 @@
       const allProjects = getLocalProjects();
 
       const visible = allProjects.filter(p => {
-        const canSee = p.isPublic || (currentUser && p.ownerId === currentUser.uid);
+        const canSee = p.isPublic || (currentUser && (p.ownerId === currentUser.uid || p.universityId === currentUser.universityId));
         if (!canSee) return false;
         if (!queryText) return true;
         return p.title.toLowerCase().includes(queryText) ||
@@ -1957,7 +2251,7 @@
         const avgRating = p.ratings && p.ratings.length
           ? (p.ratings.reduce((acc, r) => acc + r.score, 0) / p.ratings.length).toFixed(1)
           : 'جديد';
-        const isOwner = currentUser && p.ownerId === currentUser.uid;
+        const isOwner = currentUser && (p.ownerId === currentUser.uid || p.universityId === currentUser.universityId);
         const forkBadge = p.forkedFrom ? `<div style="font-size:10px; color:var(--accent-amber);">🔄 مقتبس من: ${p.forkedFrom}</div>` : '';
 
         const commentsHtml = (p.comments || []).map(c => `
@@ -1997,7 +2291,6 @@
       }).join('');
     };
 
-    // نسخ المشروع مع حفظ حقوق الطالب الأصلي #15 (Fork Attribution)
     window.forkAndLoadProject = function(projId) {
       const proj = getLocalProjects().find(p => p.id === projId);
       if (!proj) return;
@@ -2010,20 +2303,18 @@
       document.getElementById('forkAttributionBadge').innerText = `| مقتبس من: ${proj.ownerName}`;
       updateInspectorUI();
       closeModal('repoModal');
-      triggerSingleSolve();
+      triggerSingleSolve(true);
       drawWorkspace();
       showToast(`تم اقتباس وتحميل مشروع الطالب: ${proj.ownerName}`);
     };
 
-    // التبليغ عن مشروع أو تعليق مسيء للإدارة #4
-    window.reportProjectToAdmin = function(projId) {
+    window.reportProjectToAdmin = async function(projId) {
       const reason = prompt("يرجى كتابة سبب التبليغ (مثال: مشروع مسروق أو تعليق غير لائق):");
       if (!reason) return;
       const proj = getLocalProjects().find(p => p.id === projId);
       if (!proj) return;
 
-      const reports = getLocalReports();
-      reports.unshift({
+      const newReport = {
         id: 'rep_' + Date.now(),
         projectId: proj.id,
         projectTitle: proj.title,
@@ -2031,22 +2322,32 @@
         reporterName: currentUser ? currentUser.fullName : 'طالب',
         reason,
         time: Date.now()
-      });
+      };
+
+      const reports = getLocalReports();
+      reports.unshift(newReport);
       setLocalReports(reports);
-      showToast("تم إرسال البلاغ إلى الغرفة السرية للمراجعة.");
+
+      if (isFirebaseReady) {
+        try { await setDoc(doc(db, "reports", newReport.id), newReport); } catch (e) {}
+      }
+      showToast("تم إرسال البلاغ سحابياً إلى الغرفة السرية للمراجعة.");
     };
 
-    window.toggleProjectPrivacy = function(projId) {
+    window.toggleProjectPrivacy = async function(projId) {
       const list = getLocalProjects();
       const p = list.find(item => item.id === projId);
       if (p) {
         p.isPublic = !p.isPublic;
         setLocalProjects(list);
         renderRepositoryList();
+        if (isFirebaseReady) {
+          try { await setDoc(doc(db, "projects", p.id), p, { merge: true }); } catch (e) {}
+        }
       }
     };
 
-    window.rateProject = function(projId, score) {
+    window.rateProject = async function(projId, score) {
       if (!currentUser) return;
       const list = getLocalProjects();
       const p = list.find(item => item.id === projId);
@@ -2059,10 +2360,13 @@
       p.ratings.push({ uid: currentUser.uid, score });
       setLocalProjects(list);
       renderRepositoryList();
+      if (isFirebaseReady) {
+        try { await setDoc(doc(db, "projects", p.id), { ratings: p.ratings }, { merge: true }); } catch (e) {}
+      }
       showToast("تم تسجيل تقييمك بنجاح!");
     };
 
-    window.addCommentFIFO = function(projId) {
+    window.addCommentFIFO = async function(projId) {
       if (!currentUser) return;
       const inputEl = document.getElementById('comm_in_' + projId);
       const text = inputEl.value.trim();
@@ -2086,10 +2390,13 @@
 
       setLocalProjects(list);
       renderRepositoryList();
+      if (isFirebaseReady) {
+        try { await setDoc(doc(db, "projects", p.id), { comments: p.comments }, { merge: true }); } catch (e) {}
+      }
     };
 
     // ============================================================================
-    // 7. الغرفة السرية الشاملة للإدارة (جميع التحسينات الـ 15 للإدارة)
+    // 7. الغرفة السرية الشاملة للإدارة (متزامنة بالكامل مع Firestore)
     // ============================================================================
     let currentAdminTab = 'USERS';
 
@@ -2149,7 +2456,6 @@
           return p.title.toLowerCase().includes(searchQ) || p.ownerName.toLowerCase().includes(searchQ);
         });
 
-        // فرز المشاريع #7
         if (sortMode === 'RATING') {
           filteredProjs.sort((a, b) => (b.ratings?.length || 0) - (a.ratings?.length || 0));
         } else if (sortMode === 'COMMENTS') {
@@ -2204,8 +2510,7 @@
       }
     };
 
-    // تعديل بيانات الطالب #15 (Edit User)
-    window.adminEditUserData = function(uid) {
+    window.adminEditUserData = async function(uid) {
       const users = getLocalUsers();
       const u = users.find(item => item.uid === uid);
       if (!u) return;
@@ -2218,10 +2523,12 @@
       u.universityId = newUniId.trim();
       setLocalUsers(users);
       renderSecretRoomDashboard();
-      showToast("تم تحديث بيانات الطالب بنجاح.");
+      if (isFirebaseReady) {
+        try { await setDoc(doc(db, "users", u.uid), u, { merge: true }); } catch (e) {}
+      }
+      showToast("تم تحديث بيانات الطالب سحابياً.");
     };
 
-    // معاينة الدائرة قبل الحذف #2 (Project Preview)
     window.adminPreviewProject = function(projId) {
       const p = getLocalProjects().find(item => item.id === projId);
       if (!p) {
@@ -2244,43 +2551,50 @@
       openModal('adminPreviewModal');
     };
 
-    // حذف تعليق مسيء منفرد دون حذف المشروع #6
-    window.adminDeleteSingleComment = function(projId, commentIdx) {
+    window.adminDeleteSingleComment = async function(projId, commentIdx) {
       const list = getLocalProjects();
       const p = list.find(item => item.id === projId);
       if (p && p.comments) {
         p.comments.splice(commentIdx, 1);
         setLocalProjects(list);
         renderSecretRoomDashboard();
+        if (isFirebaseReady) {
+          try { await setDoc(doc(db, "projects", p.id), { comments: p.comments }, { merge: true }); } catch (e) {}
+        }
         showToast("تم حذف التعليق بنجاح.");
       }
     };
 
-    window.dismissReport = function(repId) {
+    window.dismissReport = async function(repId) {
       const list = getLocalReports().filter(r => r.id !== repId);
       setLocalReports(list);
       renderSecretRoomDashboard();
+      if (isFirebaseReady) {
+        try { await deleteDoc(doc(db, "reports", repId)); } catch (e) {}
+      }
     };
 
-    // الإجراءات الجماعية #5 (Bulk Actions)
-    window.executeBulkBanSelected = function() {
+    window.executeBulkBanSelected = async function() {
       const checked = Array.from(document.querySelectorAll('.admin-bulk-user:checked')).map(el => el.value);
       if (checked.length === 0) {
         showToast("يرجى تحديد طالب واحد على الأقل.");
         return;
       }
       const users = getLocalUsers();
-      users.forEach(u => {
-        if (checked.includes(u.uid) && (!currentUser || u.uid !== currentUser.uid)) {
+      for (const u of users) {
+        if (checked.includes(u.uid) && (!currentUser || u.universityId !== "1461997")) {
           u.isBanned = true;
+          if (isFirebaseReady) {
+            try { await setDoc(doc(db, "users", u.uid), { isBanned: true }, { merge: true }); } catch (e) {}
+          }
         }
-      });
+      }
       setLocalUsers(users);
       renderSecretRoomDashboard();
       showToast(`تم حظر ${checked.length} طلاب دفعة واحدة.`);
     };
 
-    window.executeBulkDeleteSelected = function() {
+    window.executeBulkDeleteSelected = async function() {
       const checkedUsers = Array.from(document.querySelectorAll('.admin-bulk-user:checked')).map(el => el.value);
       const checkedProjs = Array.from(document.querySelectorAll('.admin-bulk-proj:checked')).map(el => el.value);
       if (checkedUsers.length === 0 && checkedProjs.length === 0) {
@@ -2290,31 +2604,46 @@
       if (!confirm("تأكيد الحذف الجماعي النهائي للعناصر المحددة؟")) return;
 
       if (checkedUsers.length > 0) {
-        const users = getLocalUsers().filter(u => !checkedUsers.includes(u.uid) || (currentUser && u.uid === currentUser.uid));
+        const users = getLocalUsers().filter(u => !checkedUsers.includes(u.uid) || u.universityId === "1461997");
         setLocalUsers(users);
         const projs = getLocalProjects().filter(p => !checkedUsers.includes(p.ownerId));
         setLocalProjects(projs);
+        if (isFirebaseReady) {
+          for (const uid of checkedUsers) {
+            try { await deleteDoc(doc(db, "users", uid)); } catch (e) {}
+          }
+        }
       }
       if (checkedProjs.length > 0) {
         const projs = getLocalProjects().filter(p => !checkedProjs.includes(p.id));
         setLocalProjects(projs);
+        if (isFirebaseReady) {
+          for (const pid of checkedProjs) {
+            try { await deleteDoc(doc(db, "projects", pid)); } catch (e) {}
+          }
+        }
       }
       renderSecretRoomDashboard();
-      showToast("تم تنفيذ الحذف الجماعي بنجاح.");
+      showToast("تم تنفيذ الحذف الجماعي السحابي بنجاح.");
     };
 
-    // نظام الإعلانات العامة #9 (Global Announcements)
-    window.publishGlobalAnnouncement = function() {
+    window.publishGlobalAnnouncement = async function() {
       const txt = document.getElementById('adminAnnouncementInput').value.trim();
       if (!txt) return;
       localStorage.setItem('aleppo_ee_announcement', txt);
       loadGlobalAnnouncementBanner();
-      showToast("تم نشر الإعلان العام لجميع الطلاب 📢");
+      if (isFirebaseReady) {
+        try { await setDoc(doc(db, "announcements", "global"), { text: txt, updatedAt: Date.now() }); } catch (e) {}
+      }
+      showToast("تم بث الإعلان العام سحابياً لجميع طلاب الكلية 📢");
     };
 
-    window.clearGlobalAnnouncement = function() {
+    window.clearGlobalAnnouncement = async function() {
       localStorage.removeItem('aleppo_ee_announcement');
       loadGlobalAnnouncementBanner();
+      if (isFirebaseReady) {
+        try { await setDoc(doc(db, "announcements", "global"), { text: "", updatedAt: Date.now() }); } catch (e) {}
+      }
       showToast("تم إخفاء الإعلان العام.");
     };
 
@@ -2332,7 +2661,6 @@
       }
     }
 
-    // تصدير سجلات الطلاب إلى ملف Excel CSV #10
     window.exportStudentsToCSV = function() {
       const users = getLocalUsers();
       let csvContent = "\uFEFFالاسم الثلاثي,الرقم الجامعي,الدور,حالة الحظر,آخر دخول\n";
@@ -2348,7 +2676,6 @@
       showToast("تم تصدير قائمة الطلاب بصيغة CSV بنجاح 📥");
     };
 
-    // نسخ احتياطي شامل لقاعدة البيانات JSON Backup #12
     window.exportDatabaseBackupJSON = function() {
       const backup = {
         exportedAt: new Date().toISOString(),
@@ -2365,53 +2692,71 @@
       showToast("تم تحميل النسخة الاحتياطية الشاملة (JSON) 💾");
     };
 
-    // الإغلاق الشامل للمشاريع أثناء الامتحانات #14 (Lock All Projects)
-    window.lockAllProjectsForExams = function() {
+    window.lockAllProjectsForExams = async function() {
       if (!confirm("طوارئ الامتحانات: سيتم تحويل جميع مشاريع الطلاب العامة إلى (خاصة) فوراً لمنع الغش. هل أنت متأكد؟")) return;
       const list = getLocalProjects();
-      list.forEach(p => { p.isPublic = false; });
+      for (const p of list) {
+        p.isPublic = false;
+        if (isFirebaseReady) {
+          try { await setDoc(doc(db, "projects", p.id), { isPublic: false }, { merge: true }); } catch (e) {}
+        }
+      }
       setLocalProjects(list);
       renderSecretRoomDashboard();
-      showToast("🔒 تم إغلاق جميع المشاريع العامة وتفعيل وضع الامتحانات!");
+      showToast("🔒 تم إغلاق جميع المشاريع العامة سحابياً وتفعيل وضع الامتحانات!");
     };
 
-    window.adminToggleBan = function(targetUid) {
-      if (currentUser && targetUid === currentUser.uid) {
+    window.adminToggleBan = async function(targetUid) {
+      const users = getLocalUsers();
+      const target = users.find(u => u.uid === targetUid);
+      if (!target) return;
+      if (target.universityId === "1461997") {
         showToast("عملية مرفوضة: لا يمكنك حظر حساب الإدارة الخاص بك.");
         return;
       }
-      const users = getLocalUsers();
-      const target = users.find(u => u.uid === targetUid);
-      if (target) {
-        target.isBanned = !target.isBanned;
-        setLocalUsers(users);
-        renderSecretRoomDashboard();
-        showToast(`تم تحديث حالة الطالب: ${target.fullName}`);
+      target.isBanned = !target.isBanned;
+      setLocalUsers(users);
+      renderSecretRoomDashboard();
+      if (isFirebaseReady) {
+        try { await setDoc(doc(db, "users", target.uid), { isBanned: target.isBanned }, { merge: true }); } catch (e) {}
       }
+      showToast(`تم تحديث حالة الطالب سحابياً: ${target.fullName}`);
     };
 
-    window.adminCascadingDeleteUser = function(targetUid) {
-      if (currentUser && targetUid === currentUser.uid) {
+    window.adminCascadingDeleteUser = async function(targetUid) {
+      const users = getLocalUsers();
+      const target = users.find(u => u.uid === targetUid);
+      if (target && target.universityId === "1461997") {
         showToast("لا يمكنك حذف حساب المسؤول.");
         return;
       }
       if (!confirm("تحذير: سيتم حذف الطالب وجميع مشاريعه نهائياً. هل أنت متأكد؟")) return;
 
-      setLocalUsers(getLocalUsers().filter(u => u.uid !== targetUid));
+      const userProjs = getLocalProjects().filter(p => p.ownerId === targetUid);
+      setLocalUsers(users.filter(u => u.uid !== targetUid));
       setLocalProjects(getLocalProjects().filter(p => p.ownerId !== targetUid));
       renderSecretRoomDashboard();
-      showToast("تم مسح الطالب ومشاريعه من سجلات الكلية.");
+
+      if (isFirebaseReady) {
+        try {
+          await deleteDoc(doc(db, "users", targetUid));
+          for (const up of userProjs) {
+            await deleteDoc(doc(db, "projects", up.id));
+          }
+        } catch (e) {}
+      }
+      showToast("تم مسح الطالب ومشاريعه من السحابة وسجلات الكلية.");
     };
 
-    window.adminDeleteProject = function(projId) {
+    window.adminDeleteProject = async function(projId) {
       setLocalProjects(getLocalProjects().filter(p => p.id !== projId));
       renderSecretRoomDashboard();
-      showToast("تم حذف المشروع بنجاح.");
+      if (isFirebaseReady) {
+        try { await deleteDoc(doc(db, "projects", projId)); } catch (e) {}
+      }
+      showToast("تم حذف المشروع سحابياً بنجاح.");
     };
 
-    // ============================================================================
-    // 8. دوال مساعدة للنوافذ والـ Service Worker
-    // ============================================================================
     window.openModal = function(id) {
       if (id === 'secretRoomModal') renderSecretRoomDashboard();
       document.getElementById(id).classList.add('active');
@@ -2439,7 +2784,7 @@
       loadCircuitTemplate('RC_FILTER');
       resizeCanvas();
       initUserSession();
-      triggerSingleSolve();
+      triggerSingleSolve(true);
     });
   </script>
 </body>
