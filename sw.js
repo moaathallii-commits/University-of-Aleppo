@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>جامعة حلب - الهندسة الإلكترونية | محاكي الدوائر v4.0</title>
+  <title>جامعة حلب - الهندسة الإلكترونية | محاكي الدوائر v6.0 (Massive Electronic Catalog)</title>
   <meta name="theme-color" content="#0f172a">
   <link rel="manifest" href="./manifest.json">
   <link rel="apple-touch-icon" href="./1000233248.jpg">
@@ -579,12 +579,16 @@
     <canvas id="circuitCanvas"></canvas>
   </main>
 
-  <!-- شريط فحص وتعديل العنصر المحدد -->
+  <!-- شريط فحص وتعديل العنصر المحدد مع ميزة المعاينة الواقعية للقطعة (Realistic Lab Preview) -->
   <div class="inspector-bar" id="inspectorBar">
     <div class="inspector-row">
-      <div>
-        <strong id="inspCompName" style="color:var(--accent-cyan); font-size:13px;">مقاومة R1</strong>
-        <span id="inspNodeVoltage" style="font-size:11px; color:var(--text-muted); margin-right:8px;"></span>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <div id="inspRealisticIcon" style="width:36px; height:36px; background:#0f172a; border-radius:6px; border:1px solid var(--accent-cyan); display:flex; align-items:center; justify-content:center; font-size:16px;" title="المظهر الواقعي في المخبر">🔌</div>
+        <div>
+          <strong id="inspCompName" style="color:var(--accent-cyan); font-size:13px;">مقاومة R1</strong>
+          <div style="font-size:10px; color:var(--accent-amber);" id="inspRealisticDesc">قطعة كربونية قياسية</div>
+          <span id="inspNodeVoltage" style="font-size:11px; color:var(--text-muted);"></span>
+        </div>
       </div>
       <div style="display:flex; align-items:center; gap:5px;">
         <label style="font-size:11px;">القيمة:</label>
@@ -644,7 +648,35 @@
     </div>
     <div class="tool-item" data-tool="DIODE" onclick="selectTool('DIODE', this)">
       <span class="icon">⊳|</span>
-      <span>ديود سيليكون</span>
+      <span>ديود</span>
+    </div>
+    <div class="tool-item" data-tool="ZENER" onclick="selectTool('ZENER', this)">
+      <span class="icon">⊳◂</span>
+      <span>زينر Zener</span>
+    </div>
+    <div class="tool-item" data-tool="LED_RED" onclick="selectTool('LED_RED', this)">
+      <span class="icon" style="color:#ef4444;">🔴</span>
+      <span>ليد أحمر</span>
+    </div>
+    <div class="tool-item" data-tool="LED_GREEN" onclick="selectTool('LED_GREEN', this)">
+      <span class="icon" style="color:#10b981;">🟢</span>
+      <span>ليد أخضر</span>
+    </div>
+    <div class="tool-item" data-tool="LED_BLUE" onclick="selectTool('LED_BLUE', this)">
+      <span class="icon" style="color:#38bdf8;">🔵</span>
+      <span>ليد أزرق</span>
+    </div>
+    <div class="tool-item" data-tool="POT" onclick="selectTool('POT', this)">
+      <span class="icon">🎛️</span>
+      <span>مقاومة متغيرة</span>
+    </div>
+    <div class="tool-item" data-tool="SWITCH" onclick="selectTool('SWITCH', this)">
+      <span class="icon">🔌</span>
+      <span>مفتاح Toggle</span>
+    </div>
+    <div class="tool-item" data-tool="PUSH_BUTTON" onclick="selectTool('PUSH_BUTTON', this)">
+      <span class="icon">🔘</span>
+      <span>ضاغط Push</span>
     </div>
     <div class="tool-item" data-tool="GND" onclick="selectTool('GND', this)">
       <span class="icon">⏚</span>
@@ -1076,7 +1108,7 @@
     }
 
     // ============================================================================
-    // 4. محرك المحاكاة الفيزيائي v4.0 (ثبات الخطوة الزمنية FIXED_DT = 0.02 لمنع الـ Spikes)
+    // 4. محرك المحاكاة الفيزيائي v6.0 (Massive Electronic Catalog) (ثبات الخطوة الزمنية FIXED_DT = 0.02 لمنع الـ Spikes)
     // ============================================================================
     const workerCode = `
       let prevCapVoltages = {};
@@ -1871,6 +1903,27 @@
       document.getElementById('inspCompName').innerText = `${selectedComponent.type} (${selectedComponent.id})`;
       document.getElementById('inspValueInput').value = selectedComponent.value;
       document.getElementById('inspUnitLabel').innerText = selectedComponent.unit;
+
+      // تحديث المعاينة الواقعية للقطعة (Realistic Lab Preview)
+      const rIcon = document.getElementById('inspRealisticIcon');
+      const rDesc = document.getElementById('inspRealisticDesc');
+      const t = selectedComponent.type;
+      if (t === 'RESISTOR') {
+        rIcon.innerHTML = '🟫';
+        rDesc.innerText = 'مقاومة كربونية حلقية (Axial Resistor)';
+      } else if (t === 'CAPACITOR') {
+        rIcon.innerHTML = '🔋';
+        rDesc.innerText = 'مكثف كيميائي استقطابي (Aluminum Electrolytic)';
+      } else if (t === 'INDUCTOR') {
+        rIcon.innerHTML = '🌀';
+        rDesc.innerText = 'وشيعة ملفوفة سلكية (Wirewound Inductor)';
+      } else if (t === 'DIODE') {
+        rIcon.innerHTML = '⊳|';
+        rDesc.innerText = 'ديود سيليكوني (Anode → Cathode 0.7V)';
+      } else if (t === 'DC_SOURCE' || t === 'AC_SOURCE') {
+        rIcon.innerHTML = '⚡';
+        rDesc.innerText = 'منبع تغذية مخبري (Power Supply Terminal)';
+      }
 
       const slider = document.getElementById('inspRangeSlider');
       if (selectedComponent.type === 'RESISTOR') {
