@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>جامعة حلب - الهندسة الإلكترونية | محاكي الدوائر v13.0 (Ultimate Physics Engine)</title>
+  <title>جامعة حلب - الهندسة الإلكترونية | محاكي الدوائر v15.0 (Absolute Perfection Edition)</title>
   <meta name="theme-color" content="#0f172a">
   <link rel="manifest" href="./manifest.json">
   <link rel="apple-touch-icon" href="./1000233248.jpg">
@@ -713,7 +713,7 @@
     <div class="brand" onclick="openStudentProfileModal()" title="افتح ملفك الشخصي وأوسمتك">
       <img src="./1000233248.jpg" alt="شعار جامعة حلب" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%230f172a%22/><circle cx=%2250%22 cy=%2250%22 r=%2235%22 stroke=%22%2310b981%22 stroke-width=%224%22 fill=%22none%22/></svg>'">
       <div class="brand-title">
-        <h1>جامعة حلب - الهندسة الإلكترونية <span class='badge badge-featured' style='font-size:9px;'>v13.0</span></h1>
+        <h1>جامعة حلب - الهندسة الإلكترونية <span class='badge badge-featured' style='font-size:9px;'>v15.0</span></h1>
         <div class="meta-row">
           <span class="conn-dot" id="connDot"></span>
           <span id="connText">متصل</span>
@@ -820,6 +820,11 @@
           <option value="1e6">M (ميغا)</option>
         </select>
         <span id="inspUnitLabel" style="font-size:11px; color:var(--accent-green);">Ω</span>
+        <button class="btn btn-amber" id="inspRepairBtn" style="display:none;" onclick="repairDamagedComponent()" title="استبدال أو إصلاح القطعة المحترقة/المنفجرة">🔧 إصلاح القطعة</button>
+        <span id="inspPotWiperBox" style="display:none; align-items:center; gap:4px; font-size:10px; color:var(--accent-amber);">
+          منزلقة W: <input type="range" id="inspPotWiperSlider" min="5" max="95" value="50" style="width:65px;" oninput="updatePotWiperRatio(this.value)">
+          <span id="inspPotWiperLabel">50%</span>
+        </span>
         <button class="btn btn-cyan" onclick="rotateSelectedComponent()">↻</button>
         <button class="btn" onclick="duplicateSelectedComponent()" title="نسخ العنصر">❐</button>
         <button class="btn btn-danger" onclick="deleteSelectedComponent()">✖</button>
@@ -945,6 +950,11 @@
         <strong>4. دارة طنين تسلسلية (RLC Series Resonance)</strong>
         <p style="font-size:11px; color:var(--text-muted); margin:4px 0 8px;">منبع متناوب مع مقاومة ووشيعة ومكثف لدراسة الرنين وتبادل الطاقة.</p>
         <button class="btn btn-cyan" onclick="loadCircuitTemplate('RLC_RESONANCE')">تحميل الدائرة</button>
+      </div>
+      <div class="project-card" style="border-color:var(--accent-red);">
+        <strong>5. تجربة المختبر الفيزيائي: انفجار المكثف واحتراق الفيوز (Physics Demo)</strong>
+        <p style="font-size:11px; color:var(--text-muted); margin:4px 0 8px;">بطارية مع مفتاح وصمامة حماية ومكثف كيميائي لاختبار الانصهار والانفجار اللحظي عند التشغيل.</p>
+        <button class="btn btn-danger" onclick="loadCircuitTemplate('PHYSICS_DEMO')">تحميل دارة الاختبار الفيزيائي</button>
       </div>
       <div id="customCloudTemplatesContainer"></div>
     </div>
@@ -1968,17 +1978,34 @@
             };
 
             if (c.type === 'POT') {
-              // معادلة المقاومة المتغيرة ثلاثية الأقطاب الحقيقية (Pin0=A, Pin1=Wiper, Pin2=B) كمقسم جهد متوازن
+              // معادلة المقاومة المتغيرة ثلاثية الأقطاب بدعم نسبة المنزلقة المتغيرة (wiper ratio 5%..95%)
               const n3 = nodeMap[c.id + '_2'] || 0;
               const Rtot = Math.max(c.value || 1000, 2);
-              const gHalf = 1 / (Rtot * 0.5);
-              addConductance(gHalf); // بين A و W
-              if (n2 > 0) G[n2 - 1][n2 - 1] += gHalf;
-              if (n3 > 0) G[n3 - 1][n3 - 1] += gHalf;
+              const alpha = Math.min(0.95, Math.max(0.05, c.wiper !== undefined ? c.wiper : 0.5));
+              const gAW = 1 / (Rtot * alpha);
+              const gWB = 1 / (Rtot * (1 - alpha));
+              addConductance(gAW); // بين A (n1) و W (n2)
+              if (n2 > 0) G[n2 - 1][n2 - 1] += gWB;
+              if (n3 > 0) G[n3 - 1][n3 - 1] += gWB;
               if (n2 > 0 && n3 > 0) {
-                G[n2 - 1][n3 - 1] -= gHalf;
-                G[n3 - 1][n2 - 1] -= gHalf;
+                G[n2 - 1][n3 - 1] -= gWB;
+                G[n3 - 1][n2 - 1] -= gWB;
               }
+            } else if (c.type === 'RELAY') {
+              // الريليه ثلاثية الأقطاب: الملف بين Coil (n1) و COM (n3)، وتماس القاطع بين NO (n2) و COM (n3) لمنع الاهتزاز اللانهائي
+              const n3 = nodeMap[c.id + '_2'] || 0;
+              const gCoil = 1 / 120; // ممانعة ملف الريليه 120 أوم
+              if (n1 > 0) G[n1 - 1][n1 - 1] += gCoil;
+              if (n3 > 0) G[n3 - 1][n3 - 1] += gCoil;
+              if (n1 > 0 && n3 > 0) { G[n1 - 1][n3 - 1] -= gCoil; G[n3 - 1][n1 - 1] -= gCoil; }
+
+              const vCoilA = n1 > 0 ? V[n1 - 1] : 0;
+              const vCoilB = n3 > 0 ? V[n3 - 1] : 0;
+              const isClosed = (Math.abs(vCoilA - vCoilB) >= 3.0) || (c.value === 1);
+              const gSwitch = isClosed ? (1 / 0.005) : 1e-9;
+              if (n2 > 0) G[n2 - 1][n2 - 1] += gSwitch;
+              if (n3 > 0) G[n3 - 1][n3 - 1] += gSwitch;
+              if (n2 > 0 && n3 > 0) { G[n2 - 1][n3 - 1] -= gSwitch; G[n3 - 1][n2 - 1] -= gSwitch; }
             } else if (['RESISTOR', 'LDR', 'THERMISTOR', 'LAMP', 'DC_MOTOR', 'TRANSFORMER', 'VOLTMETER', 'AMMETER'].includes(c.type)) {
               const R = Math.max(c.value || 100, 1e-3);
               addConductance(1 / R);
@@ -1987,16 +2014,21 @@
             } else if (c.type === 'FUSE') {
               const R = c.blown ? 1e9 : 0.05;
               addConductance(1 / R);
-            } else if (['SWITCH', 'PUSH_BUTTON', 'RELAY'].includes(c.type)) {
+            } else if (['SWITCH', 'PUSH_BUTTON'].includes(c.type)) {
               const isClosed = (c.value === 1);
               const R = isClosed ? 0.005 : 1e9;
               addConductance(1 / R);
             } else if (['CAPACITOR', 'ELEC_CAP', 'CRYSTAL'].includes(c.type)) {
-              const C = c.type === 'CRYSTAL' ? 0.00005 : Math.max(c.value || 1e-5, 1e-12);
-              const gEq = C / dt;
-              const vPrev = prevCapVoltages[c.id] || 0;
-              addConductance(gEq);
-              addCurrentSource(gEq * vPrev);
+              if (c.exploded) {
+                // المكثف المنفجر يتحول إلى دارة مفتوحة ولا يمرر التيار (Fix #2)
+                addConductance(1e-9);
+              } else {
+                const C = c.type === 'CRYSTAL' ? 0.00005 : Math.max(c.value || 1e-5, 1e-12);
+                const gEq = C / dt;
+                const vPrev = prevCapVoltages[c.id] || 0;
+                addConductance(gEq);
+                addCurrentSource(gEq * vPrev);
+              }
             } else if (c.type === 'INDUCTOR') {
               const L = Math.max(c.value || 0.1, 1e-6);
               const gEq = dt / L;
@@ -2283,21 +2315,53 @@
       drawWorkspace();
     };
 
-    window.duplicateSelectedComponent = function() {
+    window.repairDamagedComponent = function() {
       if (!selectedComponent) return;
+      playSFX('wire');
+      pushHistorySnapshot();
+      selectedComponent.blown = false;
+      selectedComponent.exploded = false;
+      updateInspectorUI();
+      triggerSingleSolve(true);
+      drawWorkspace();
+      showToast("🔧 تم استبدال وإصلاح القطعة التالفة بنجاح!");
+    };
+
+    window.updatePotWiperRatio = function(val) {
+      if (!selectedComponent || selectedComponent.type !== 'POT') return;
+      const pct = Math.min(95, Math.max(5, parseInt(val, 10) || 50));
+      selectedComponent.wiper = pct / 100;
+      const lbl = document.getElementById('inspPotWiperLabel');
+      if (lbl) lbl.innerText = pct + '%';
+      triggerSingleSolve();
+      drawWorkspace();
+    };
+
+    window.duplicateSelectedComponent = function() {
+      const targetIds = (window.multiSelectedIds && window.multiSelectedIds.length > 0)
+        ? window.multiSelectedIds
+        : (selectedComponent ? [selectedComponent.id] : []);
+      if (targetIds.length === 0) return;
       playSFX('drop');
       pushHistorySnapshot();
-      const copy = JSON.parse(JSON.stringify(selectedComponent));
-      copy.id = selectedComponent.type.slice(0, 2) + (components.length + 1) + '_' + Math.floor(Math.random() * 99);
-      copy.x += GRID_SIZE * 2;
-      copy.y += GRID_SIZE * 2;
-      updateComponentPins(copy);
-      components.push(copy);
-      selectedComponent = copy;
+      const newIds = [];
+      targetIds.forEach(tid => {
+        const orig = components.find(c => c.id === tid);
+        if (!orig) return;
+        const copy = JSON.parse(JSON.stringify(orig));
+        copy.id = orig.type.slice(0, 2) + (components.length + 1) + '_' + Math.floor(Math.random() * 99);
+        copy.x += GRID_SIZE * 2;
+        copy.y += GRID_SIZE * 2;
+        updateComponentPins(copy);
+        components.push(copy);
+        selectedComponent = copy;
+        newIds.push(copy.id);
+      });
+      window.multiSelectedIds = newIds.length > 1 ? newIds : [];
       updateInspectorUI();
       updateRadialMenuPosition();
       drawWorkspace();
-      showToast("❐ تم تكرار العنصر بنجاح");
+      showToast(`❐ تم تكرار (${newIds.length}) عنصر بنجاح`);
     };
 
     window.undoAction = function() {
@@ -2496,7 +2560,16 @@
       const cx = snapToGrid(window.innerWidth / 2);
       const cy = snapToGrid((window.innerHeight - 160) / 2);
 
-      if (type === 'RC_FILTER') {
+      if (type === 'PHYSICS_DEMO') {
+        components = [
+          { id: 'BAT1', type: 'BATTERY_9V', x: cx - 96, y: cy, value: 9, unit: 'V', rotation: 90, pins: [] },
+          { id: 'SW1', type: 'SWITCH', x: cx - 24, y: cy - 48, value: 1, unit: 'State', rotation: 0, pins: [] },
+          { id: 'F1', type: 'FUSE', x: cx + 24, y: cy - 48, value: 0.2, unit: 'A', rotation: 0, pins: [], blown: false },
+          { id: 'C_REV', type: 'ELEC_CAP', x: cx + 96, y: cy, value: 0.001, unit: 'F', rotation: 270, pins: [], exploded: false },
+          { id: 'GND1', type: 'GND', x: cx, y: cy + 72, value: 0, unit: '', rotation: 0, pins: [] }
+        ];
+        stickyNotes = [{ id: 'n1', text: 'تجربة فيزيائية: المكثف مقلوب القطبية وسينفجر فور التشغيل لاختبار الحماية!', x: cx, y: cy - 96 }];
+      } else if (type === 'RC_FILTER') {
         components = [
           { id: 'V1', type: 'AC_SOURCE', x: cx - 72, y: cy, value: 10, unit: 'V', rotation: 90, pins: [] },
           { id: 'R1', type: 'RESISTOR', x: cx, y: cy - 48, value: 200, unit: 'Ω', rotation: 0, pins: [] },
@@ -2551,7 +2624,7 @@
 
       components.forEach(updateComponentPins);
 
-      if (['RLC_RESONANCE', 'LED_BUZZER', 'CHALLENGE'].includes(type)) {
+      if (['RLC_RESONANCE', 'LED_BUZZER', 'CHALLENGE', 'PHYSICS_DEMO'].includes(type)) {
         wires = [
           { x1: components[0].pins[0].x, y1: components[0].pins[0].y, x2: components[1].pins[0].x, y2: components[1].pins[0].y, color: '#ef4444' },
           { x1: components[1].pins[1].x, y1: components[1].pins[1].y, x2: components[2].pins[0].x, y2: components[2].pins[0].y, color: '#f59e0b' },
@@ -2574,19 +2647,20 @@
       showToast("تم تحميل الدائرة القياسية بنجاح!");
     };
 
-    const THREE_PIN_TYPES = ['NPN_BJT', 'PNP_BJT', 'NMOS', 'PMOS', 'OPAMP', 'POT', 'AND_GATE', 'OR_GATE', 'XOR_GATE'];
+    const THREE_PIN_TYPES = ['NPN_BJT', 'PNP_BJT', 'NMOS', 'PMOS', 'OPAMP', 'POT', 'RELAY', 'AND_GATE', 'OR_GATE', 'XOR_GATE'];
 
     function updateComponentPins(comp) {
       if (comp.type === 'GND' || comp.type === 'NET_LABEL') {
         comp.pins = [{ x: comp.x, y: comp.y - GRID_SIZE, role: comp.type === 'NET_LABEL' ? (comp.netName || 'VCC') : 'GND' }];
       } else if (THREE_PIN_TYPES.includes(comp.type)) {
-        // دعم الأقطاب الثلاثية الحقيقية للترانزستورات (B, C, E)، المضخمات (V+, V-, Out)، البوابات (In1, In2, Out) والمقاومة المتغيرة
+        // دعم الأقطاب الثلاثية الحقيقية للترانزستورات، المضخمات، البوابات، المقاومة المتغيرة، والريليه (Coil, NO, COM)
         const rot = (comp.rotation || 0) % 360;
         let roles = ['1', '2', '3'];
         if (['NPN_BJT', 'PNP_BJT'].includes(comp.type)) roles = ['B', 'C', 'E'];
         else if (['NMOS', 'PMOS'].includes(comp.type)) roles = ['G', 'D', 'S'];
         else if (comp.type === 'OPAMP') roles = ['in+', 'out', 'in-'];
         else if (comp.type === 'POT') roles = ['A', 'W', 'B'];
+        else if (comp.type === 'RELAY') roles = ['Coil', 'NO', 'COM'];
         else roles = ['A', 'Y', 'B'];
 
         if (rot === 90) {
@@ -2749,7 +2823,15 @@
         window.lastGroupDragPos = { x: snapToGrid(pos.x), y: snapToGrid(pos.y) };
         if (clickedComp) {
           if (['SWITCH', 'PUSH_BUTTON', 'RELAY'].includes(clickedComp.type)) {
-            clickedComp.value = clickedComp.value === 1 ? 0 : 1;
+            const wasClosed = (clickedComp.value === 1);
+            clickedComp.value = wasClosed ? 0 : 1;
+            // 8. شرارة القواطع (Switch Arcing Spark) عند فصل مفتاح في دارة تحتوي على حمل حثي (وشيعة/محرك/محولة) أو تيار عالٍ
+            if (wasClosed && isSimulating) {
+              const hasInductive = components.some(ic => ['INDUCTOR', 'DC_MOTOR', 'TRANSFORMER', 'RELAY'].includes(ic.type));
+              if (hasInductive || Math.abs((latestPinVoltages[clickedComp.id+'_0']||0) - (latestPinVoltages[clickedComp.id+'_1']||0)) >= 0) {
+                clickedComp.sparkFrames = 14;
+              }
+            }
             playSFX('switch');
             triggerSingleSolve();
           } else {
@@ -2792,8 +2874,19 @@
         const idPrefix = (meta.sym || currentTool.slice(0, 2));
         let netLabelName = 'VCC';
         if (currentTool === 'NET_LABEL') {
-          const entered = prompt('أدخل اسم العقدة اللاسلكية المشتركة (مثل VCC أو CLK أو OUT):', 'VCC');
-          if (entered) netLabelName = entered.trim().toUpperCase();
+          openCustomDialog({
+            title: '🏷️ تسمية العقدة اللاسلكية المشتركة (Net Label)',
+            message: 'أي عقدتين تحملان نفس الاسم تتصلان كهربائياً بدون سلك:',
+            fields: [{ label: 'اسم العقدة:', value: 'VCC', placeholder: 'مثال: VCC أو CLK أو OUT' }],
+            confirmText: 'تسمية العقدة'
+          }).then(res => {
+            if (res && res[0]) {
+              newComp.netName = res[0].trim().toUpperCase();
+              updateComponentPins(newComp);
+              triggerSingleSolve();
+              drawWorkspace();
+            }
+          });
         }
         const newComp = {
           id: idPrefix + (components.length + 1) + '_' + Math.floor(Math.random() * 99),
@@ -2927,6 +3020,22 @@
       document.getElementById('inspRealisticIcon').innerHTML = meta.rIcon || '🔌';
       document.getElementById('inspRealisticDesc').innerText = meta.rDesc || 'قطعة إلكترونية قياسية';
 
+      const repairBtn = document.getElementById('inspRepairBtn');
+      if (repairBtn) {
+        repairBtn.style.display = (selectedComponent.blown || selectedComponent.exploded) ? 'inline-flex' : 'none';
+      }
+      const wiperBox = document.getElementById('inspPotWiperBox');
+      if (wiperBox) {
+        if (selectedComponent.type === 'POT') {
+          wiperBox.style.display = 'inline-flex';
+          const pct = Math.round((selectedComponent.wiper !== undefined ? selectedComponent.wiper : 0.5) * 100);
+          document.getElementById('inspPotWiperSlider').value = pct;
+          document.getElementById('inspPotWiperLabel').innerText = pct + '%';
+        } else {
+          wiperBox.style.display = 'none';
+        }
+      }
+
       const slider = document.getElementById('inspRangeSlider');
       const t = selectedComponent.type;
       if (['RESISTOR', 'POT', 'LDR', 'THERMISTOR'].includes(t)) {
@@ -2976,17 +3085,26 @@
     };
 
     window.deleteSelectedComponent = function() {
-      if (!selectedComponent) return;
+      const targetIds = (window.multiSelectedIds && window.multiSelectedIds.length > 0)
+        ? window.multiSelectedIds
+        : (selectedComponent ? [selectedComponent.id] : []);
+      if (targetIds.length === 0) return;
       playSFX('delete');
       pushHistorySnapshot();
-      const pinCoords = selectedComponent.pins;
+      const allPinsToRemove = [];
+      components.forEach(c => {
+        if (targetIds.includes(c.id)) {
+          allPinsToRemove.push(...c.pins);
+        }
+      });
       wires = wires.filter(w => {
-        const touchStart = pinCoords.some(p => p.x === w.x1 && p.y === w.y1);
-        const touchEnd = pinCoords.some(p => p.x === w.x2 && p.y === w.y2);
+        const touchStart = allPinsToRemove.some(p => p.x === w.x1 && p.y === w.y1);
+        const touchEnd = allPinsToRemove.some(p => p.x === w.x2 && p.y === w.y2);
         return !(touchStart || touchEnd);
       });
-      components = components.filter(c => c.id !== selectedComponent.id);
+      components = components.filter(c => !targetIds.includes(c.id));
       selectedComponent = null;
+      window.multiSelectedIds = [];
       updateInspectorUI();
       updateRadialMenuPosition();
       triggerSingleSolve(true);
@@ -3039,7 +3157,7 @@
           ctx.beginPath();
           ctx.arc(0, 0, 5, 0, Math.PI * 2);
           ctx.fillStyle = '#334155'; ctx.fill();
-          const potAngle = ((c.value || 0) / 50000) * Math.PI * 1.5 - Math.PI * 0.75;
+          const potAngle = ((c.wiper !== undefined ? c.wiper : ((c.value || 2500) / 50000))) * Math.PI * 1.5 - Math.PI * 0.75;
           ctx.rotate(potAngle);
           ctx.moveTo(0, 0); ctx.lineTo(0, -4);
           ctx.strokeStyle = '#f59e0b'; ctx.lineWidth=2; ctx.stroke();
@@ -3124,6 +3242,23 @@
         ctx.arc(0, 0, 6, Math.PI, 0, false);
         ctx.arc(10, 0, 6, Math.PI, 0, false);
         ctx.moveTo(16, 0); ctx.lineTo(24, 0);
+        if (c.type === 'TRANSFORMER') {
+          // 13. خطوط القلب الحديدي والفيض المغناطيسي المتحرك للمحولة (Transformer Flux Lines)
+          ctx.moveTo(-14, -9); ctx.lineTo(14, -9);
+          ctx.moveTo(-14, -12); ctx.lineTo(14, -12);
+          const vDiff = Math.abs((latestPinVoltages[c.id+'_0']||0) - (latestPinVoltages[c.id+'_1']||0));
+          if (isSimulating && vDiff > 0.2) {
+            ctx.stroke();
+            ctx.save();
+            ctx.strokeStyle = '#38bdf8';
+            ctx.lineWidth = 1.4;
+            ctx.setLineDash([3, 3]);
+            ctx.lineDashOffset = -currentFlowOffset;
+            ctx.strokeRect(-12, -14, 24, 18);
+            ctx.restore();
+            ctx.beginPath();
+          }
+        }
       } else if (['DIODE', 'SCHOTTKY', 'ZENER', 'PHOTO_DIODE'].includes(c.type) || c.type.startsWith('LED')) {
         ctx.moveTo(-24, 0); ctx.lineTo(-8, 0);
         ctx.moveTo(-8, -10); ctx.lineTo(-8, 10); ctx.lineTo(8, 0); ctx.closePath();
@@ -3214,27 +3349,46 @@
         }
       }
 
+      const hasDigitalLogic = components.some(c => ['NOT_GATE', 'AND_GATE', 'OR_GATE', 'XOR_GATE', 'LOGIC_HIGH', 'LOGIC_LOW'].includes(c.type));
+      const hasHeavyCurrent = isSimulating && components.some(c => {
+        if (!['RESISTOR', 'LAMP', 'DC_MOTOR', 'FUSE'].includes(c.type)) return false;
+        const dv = Math.abs((latestPinVoltages[c.id+'_0']||0) - (latestPinVoltages[c.id+'_1']||0));
+        return (dv / Math.max(c.value || 100, 0.05)) > 4.0;
+      });
+
       wires.forEach(w => {
         let strokeCol = w.color || '#10b981';
-        if (useVoltageHeatmap && isSimulating) {
-          let wireV = 0;
+        let wireV = 0;
+        if (isSimulating) {
           components.forEach(c => {
             c.pins.forEach((p, idx) => {
-              if (p.x === w.x1 && p.y === w.y1) wireV = latestPinVoltages[c.id + '_' + idx] || 0;
+              if ((p.x === w.x1 && p.y === w.y1) || (p.x === w.x2 && p.y === w.y2)) {
+                wireV = latestPinVoltages[c.id + '_' + idx] || wireV;
+              }
             });
           });
-          if (wireV > 1.0) strokeCol = '#10b981';
-          else if (wireV < -1.0) strokeCol = '#ef4444';
-          else strokeCol = '#94a3b8';
+        }
+
+        if ((errorCulpritIds.length > 0 && document.getElementById('simStatusReadout')?.innerText === 'SHORT_CIRCUIT') || (hasHeavyCurrent && Math.abs(wireV) > 2.0)) {
+          // 6. ذوبان وتوهج الأسلاك الحراري عند تيار القصر العالي (Wire Melting FX)
+          strokeCol = '#f97316';
+          ctx.shadowColor = '#ef4444';
+          ctx.shadowBlur = 12;
+        } else if (isSimulating && (useVoltageHeatmap || hasDigitalLogic)) {
+          // 11. ألوان الحالات المنطقية للأسلاك الرقمية والتلوين الحراري (Digital Logic Wire Colors)
+          if (wireV >= 2.2) strokeCol = '#00ff88';
+          else if (wireV <= -1.0) strokeCol = '#ef4444';
+          else strokeCol = '#64748b';
         }
 
         ctx.strokeStyle = strokeCol;
-        ctx.lineWidth = 3;
+        ctx.lineWidth = (strokeCol === '#f97316') ? 4.5 : 3;
         ctx.beginPath();
         ctx.moveTo(w.x1, w.y1);
         ctx.lineTo(w.x2, w.y1);
         ctx.lineTo(w.x2, w.y2);
         ctx.stroke();
+        ctx.shadowBlur = 0;
 
         if (isSimulating && showCurrentDots) {
           ctx.save();
@@ -3380,6 +3534,25 @@
              const fireSize = Math.max(1, Math.floor((c.value / 10000) * 3));
              ctx.fillText('🔥'.repeat(fireSize), c.x + 18, c.y - 18);
           }
+          // 8. رسم شرارة القوس الكهربائي الزرقاء عند فتح القاطع (Switch Arcing Spark)
+          if (c.sparkFrames && c.sparkFrames > 0) {
+             ctx.save();
+             ctx.strokeStyle = '#38bdf8';
+             ctx.shadowColor = '#38bdf8';
+             ctx.shadowBlur = 14;
+             ctx.lineWidth = 2.2;
+             ctx.beginPath();
+             ctx.moveTo(c.x - 8, c.y - 4);
+             ctx.lineTo(c.x - 2, c.y - 12);
+             ctx.lineTo(c.x + 3, c.y - 5);
+             ctx.lineTo(c.x + 9, c.y - 14);
+             ctx.stroke();
+             ctx.fillStyle = '#e0f2fe';
+             ctx.font = 'bold 11px sans-serif';
+             ctx.fillText('⚡ شرارة حثية!', c.x, c.y - 24);
+             ctx.restore();
+             c.sparkFrames--;
+          }
           
 
           drawSchematicVectorSymbol(ctx, c);
@@ -3392,6 +3565,9 @@
           let labelTxt = `${meta.sym || c.type}`;
           if (['SWITCH', 'PUSH_BUTTON', 'RELAY'].includes(c.type)) {
             labelTxt = `${meta.sym}:${c.value === 1 ? 'ON' : 'OFF'}`;
+          } else if (c.type === 'POT') {
+            const wPct = Math.round((c.wiper !== undefined ? c.wiper : 0.5) * 100);
+            labelTxt = `POT:${c.value}Ω (${wPct}%)`;
           } else if (['CAPACITOR', 'ELEC_CAP'].includes(c.type)) {
             labelTxt = `${meta.sym}:${(c.value * 1e6).toFixed(1)}µF`;
           } else if (c.unit) {
@@ -3511,7 +3687,7 @@
       }
 
       statusEl.style.color = '#10b981';
-      statusEl.innerText = 'مستقر (MNA v13)';
+      statusEl.innerText = 'مستقر (MNA v15)';
       latestPinVoltages = res.pinVoltages;
 
       if (isSimulating && res.activeBuzzers && res.activeBuzzers.length > 0) {
@@ -3598,13 +3774,13 @@
             triggerSingleSolve(true);
           }
         } else if (c.type === 'RELAY') {
-          // 3. Relay Armature Click check
-          const isTriggered = Math.abs(vDiff) > 3.0;
+          // 3. فحص جهد ملف الريليه بين القطب 0 (Coil) والقطب 2 (COM) لمنع الاهتزاز اللانهائي
+          const vCom = latestPinVoltages[c.id + '_2'] || 0;
+          const isTriggered = Math.abs(v0 - vCom) >= 3.0;
           if (c.isTriggered !== isTriggered) {
             c.isTriggered = isTriggered;
-            playSFX('relay_click');
             c.value = isTriggered ? 1 : 0;
-            triggerSingleSolve(false);
+            playSFX('relay_click');
           }
         }
       });
@@ -4429,15 +4605,18 @@
         pCtx.stroke();
       });
       comps.forEach(c => {
+        pCtx.save();
+        pCtx.translate(c.x, c.y);
         pCtx.fillStyle = '#1e293b';
         pCtx.strokeStyle = '#38bdf8';
         pCtx.lineWidth = 2;
-        pCtx.fillRect(c.x - 20, c.y - 12, 40, 24);
-        pCtx.strokeRect(c.x - 20, c.y - 12, 40, 24);
+        pCtx.fillRect(-22, -14, 44, 28);
+        pCtx.strokeRect(-22, -14, 44, 28);
         pCtx.fillStyle = '#f8fafc';
-        pCtx.font = '10px sans-serif';
+        pCtx.font = '9px sans-serif';
         pCtx.textAlign = 'center';
-        pCtx.fillText(c.type.slice(0, 6), c.x, c.y + 4);
+        pCtx.fillText(c.type.slice(0, 6), 0, 4);
+        pCtx.restore();
       });
       pCtx.restore();
 
@@ -4759,15 +4938,24 @@
 
     window.adminDeleteProject = async function(projId) {
       const backupProjs = getLocalProjects();
+      const targetProj = backupProjs.find(p => p.id === projId);
       setLocalProjects(backupProjs.filter(p => p.id !== projId));
       renderSecretRoomDashboard();
       playSFX('delete');
 
+      let isRestored = false;
       showToast("تم حذف المشروع.", () => {
+        isRestored = true;
         setLocalProjects(backupProjs);
         renderSecretRoomDashboard();
         showToast("↶ تم استرجاع المشروع المحذوف!");
       });
+
+      setTimeout(async () => {
+        if (!isRestored && isFirebaseReady) {
+          try { await deleteDoc(doc(db, "projects", projId)); } catch (e) {}
+        }
+      }, 5000);
     };
 
     window.openModal = function(id) {
@@ -4800,7 +4988,7 @@
     };
 
     async function enforceLatestVersion() {
-      const CURRENT_VER = 'v13.0_ultimate_physics';
+      const CURRENT_VER = 'v15.0_absolute_perfection';
       const savedVer = localStorage.getItem('aleppo_ee_app_version');
       if (savedVer !== CURRENT_VER) {
         if ('serviceWorker' in navigator) {
@@ -4816,7 +5004,7 @@
         return;
       }
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('./sw.js?v=13').then(reg => {
+        navigator.serviceWorker.register('./sw.js?v=15').then(reg => {
           reg.update();
         }).catch(() => {});
       }
@@ -5003,8 +5191,19 @@
       
       let netLabelName = 'VCC';
       if (droppedTool === 'NET_LABEL') {
-        const entered = prompt('أدخل اسم العقدة اللاسلكية المشتركة:', 'VCC');
-        if (entered) netLabelName = entered.trim().toUpperCase();
+        openCustomDialog({
+          title: '🏷️ تسمية العقدة اللاسلكية المشتركة (Net Label)',
+          message: 'أي عقدتين تحملان نفس الاسم تتصلان كهربائياً بدون سلك:',
+          fields: [{ label: 'اسم العقدة:', value: 'VCC', placeholder: 'مثال: VCC أو CLK أو OUT' }],
+          confirmText: 'تسمية العقدة'
+        }).then(res => {
+          if (res && res[0]) {
+            newComp.netName = res[0].trim().toUpperCase();
+            updateComponentPins(newComp);
+            triggerSingleSolve();
+            drawWorkspace();
+          }
+        });
       }
       
       const newComp = {
@@ -5197,13 +5396,28 @@
       const box = document.getElementById('customCloudTemplatesContainer');
       if (!box) return;
       const list = JSON.parse(localStorage.getItem('aleppo_ee_custom_templates') || '[]');
+      const isAdmin = currentUser && (currentUser.role === 'admin' || currentUser.universityId === '1461997');
       box.innerHTML = list.map((tpl, i) => `
         <div class="project-card" style="border-color:var(--accent-cyan);">
           <strong>${i + 5}. ${escapeHTML(tpl.title)} <span class="badge badge-public">قالب مضاف</span></strong>
           <p style="font-size:11px; color:var(--text-muted); margin:4px 0 8px;">${escapeHTML(tpl.desc)}</p>
-          <button class="btn btn-cyan" onclick="loadCustomCloudTemplate('${tpl.id}')">تحميل الدائرة</button>
+          <div style="display:flex; gap:6px;">
+            <button class="btn btn-cyan" onclick="loadCustomCloudTemplate('${tpl.id}')">تحميل الدائرة</button>
+            ${isAdmin ? `<button class="btn btn-danger" onclick="deleteCustomCloudTemplate('${tpl.id}')">🗑️ حذف القالب</button>` : ''}
+          </div>
         </div>
       `).join('');
+    };
+
+    window.deleteCustomCloudTemplate = async function(tplId) {
+      const list = JSON.parse(localStorage.getItem('aleppo_ee_custom_templates') || '[]').filter(t => t.id !== tplId);
+      localStorage.setItem('aleppo_ee_custom_templates', JSON.stringify(list));
+      renderCustomCloudTemplates();
+      if (isFirebaseReady) {
+        try { await setDoc(doc(db, "announcements", "templates"), { list, updatedAt: Date.now() }); } catch (e) {}
+      }
+      playSFX('delete');
+      showToast("🗑️ تم حذف القالب المضاف ومزامنته سحابياً.");
     };
 
     window.loadCustomCloudTemplate = function(tplId) {
