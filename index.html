@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>جامعة حلب - الهندسة الإلكترونية | محاكي الدوائر v17.0 (Immersive Tactile & Audio-Visual Lab Edition)</title>
+  <title>جامعة حلب - الهندسة الإلكترونية | محاكي الدوائر v18.0 (Zero-Bug Complete Integration Edition)</title>
   <meta name="theme-color" content="#0f172a">
   <link rel="manifest" href="./manifest.json">
   <link rel="apple-touch-icon" href="./1000233248.jpg">
@@ -916,7 +916,7 @@
     <div class="brand" onclick="openStudentProfileModal()" title="افتح ملفك الشخصي وأوسمتك">
       <img src="./1000233248.jpg" alt="شعار جامعة حلب" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%230f172a%22/><circle cx=%2250%22 cy=%2250%22 r=%2235%22 stroke=%22%2310b981%22 stroke-width=%224%22 fill=%22none%22/></svg>'">
       <div class="brand-title">
-        <h1>جامعة حلب - الهندسة الإلكترونية <span class='badge badge-featured' style='font-size:9px;'>v17.0</span></h1>
+        <h1>جامعة حلب - الهندسة الإلكترونية <span class='badge badge-featured' style='font-size:9px;'>v18.0</span></h1>
         <div class="meta-row">
           <span class="conn-dot" id="connDot"></span>
           <span id="connText">متصل</span>
@@ -2199,6 +2199,13 @@
       const FIXED_DT = 0.02;
 
       function isPointOnOrthogonalWire(px, py, w) {
+        if (w.midX !== undefined && w.midY !== undefined) {
+          const onSeg1 = (py === w.y1 && px >= Math.min(w.x1, w.midX) && px <= Math.max(w.x1, w.midX));
+          const onSeg2 = (px === w.midX && py >= Math.min(w.y1, w.midY) && py <= Math.max(w.y1, w.midY));
+          const onSeg3 = (py === w.midY && px >= Math.min(w.midX, w.x2) && px <= Math.max(w.midX, w.x2));
+          const onSeg4 = (px === w.x2 && py >= Math.min(w.midY, w.y2) && py <= Math.max(w.midY, w.y2));
+          return onSeg1 || onSeg2 || onSeg3 || onSeg4;
+        }
         const minX = Math.min(w.x1, w.x2);
         const maxX = Math.max(w.x1, w.x2);
         if (py === w.y1 && px >= minX && px <= maxX) return true;
@@ -2624,7 +2631,7 @@
     let redoStack = [];
 
     function pushHistorySnapshot() {
-      undoStack.push(JSON.stringify({ components, wires, stickyNotes }));
+      undoStack.push(JSON.stringify({ components, wires, stickyNotes, stageZones: window.stageZones || [] }));
       if (undoStack.length > 30) undoStack.shift();
       redoStack = [];
     }
@@ -2754,11 +2761,12 @@
         return;
       }
       playSFX('tap');
-      redoStack.push(JSON.stringify({ components, wires, stickyNotes }));
+      redoStack.push(JSON.stringify({ components, wires, stickyNotes, stageZones: window.stageZones || [] }));
       const prev = JSON.parse(undoStack.pop());
       components = prev.components || [];
       wires = prev.wires || [];
       stickyNotes = prev.stickyNotes || [];
+      window.stageZones = prev.stageZones || [];
       selectedComponent = null;
       triggerHaptic(15);
       updateInspectorUI();
@@ -2773,11 +2781,12 @@
         return;
       }
       playSFX('tap');
-      undoStack.push(JSON.stringify({ components, wires, stickyNotes }));
+      undoStack.push(JSON.stringify({ components, wires, stickyNotes, stageZones: window.stageZones || [] }));
       const next = JSON.parse(redoStack.pop());
       components = next.components || [];
       wires = next.wires || [];
       stickyNotes = next.stickyNotes || [];
+      window.stageZones = next.stageZones || [];
       selectedComponent = null;
       triggerHaptic(15);
       updateInspectorUI();
@@ -2815,9 +2824,15 @@
       drawWorkspace();
     };
 
+    function syncHudZoomBadge() {
+      const badge = document.getElementById('hudZoomBadge');
+      if (badge) badge.innerText = `🔍 ${Math.round(cameraZoom * 100)}%`;
+    }
+
     window.zoomWorkspace = function(delta) {
       playSFX('tap');
       cameraZoom = Math.min(2.2, Math.max(0.5, cameraZoom + delta));
+      syncHudZoomBadge();
       updateRadialMenuPosition();
       drawWorkspace();
     };
@@ -2826,6 +2841,7 @@
       playSFX('tap');
       cameraZoom = 1.0;
       cameraPan = { x: 0, y: 0 };
+      syncHudZoomBadge();
       updateRadialMenuPosition();
       drawWorkspace();
       showToast("تمت إعادة ضبط زاوية الرؤية (100%)");
@@ -3193,7 +3209,7 @@
       }
 
       if (currentTool === 'SELECT') {
-        // فحص النقر على الملصقات النصية أولاً لتحريكها أو حذفها بنقرتين (Fix #7 Sticky Notes)
+        // فحص النقر على الملصقات النصية أو أطر المراحل لتحريكها أو حذفها بنقرتين (Fix #3 & #7)
         const clickedNote = stickyNotes.find(n => Math.abs(n.x - pos.x) < 65 && Math.abs(n.y - pos.y) < 18);
         if (clickedNote) {
           if (isDoubleTap) {
@@ -3205,6 +3221,21 @@
             return;
           }
           window.draggingStickyNote = clickedNote;
+          playSFX('tap');
+          return;
+        }
+
+        const clickedZone = (window.stageZones || []).find(z => pos.x >= z.x && pos.x <= z.x + z.w && pos.y >= z.y && pos.y <= z.y + 26);
+        if (clickedZone) {
+          if (isDoubleTap) {
+            pushHistorySnapshot();
+            window.stageZones = (window.stageZones || []).filter(z => z.id !== clickedZone.id);
+            playSFX('delete');
+            drawWorkspace();
+            showToast("🗑️ تم حذف إطار المرحلة اللوني");
+            return;
+          }
+          window.draggingStageZone = { zone: clickedZone, offsetX: pos.x - clickedZone.x, offsetY: pos.y - clickedZone.y };
           playSFX('tap');
           return;
         }
@@ -3269,23 +3300,38 @@
         const startPoint = pin ? { x: pin.x, y: pin.y } : { x: snapToGrid(pos.x), y: snapToGrid(pos.y) };
         if (!wireStartPin) {
           wireStartPin = startPoint;
+          window.wirePendingWaypoint = null;
           playSFX('pin_c5');
           triggerHaptic(15);
         } else {
+          // إذا نقر الطالب في فراغ بعيد عن أي قطب ولم يثبت نقطة انعطاف بعد، ثبّت زاوية انعطاف (Waypoint) (#12)
+          if (!pin && !window.wirePendingWaypoint && (wireStartPin.x !== startPoint.x && wireStartPin.y !== startPoint.y)) {
+            window.wirePendingWaypoint = { x: startPoint.x, y: startPoint.y };
+            playSFX('grid_tick');
+            showToast("📐 تم تثبيت زاوية انعطاف للسلك (Waypoint)! انقر الآن على القطب الهدف.");
+            drawWorkspace();
+            return;
+          }
           if (wireStartPin.x !== startPoint.x || wireStartPin.y !== startPoint.y) {
             pushHistorySnapshot();
-            wires.push({
+            const newWireObj = {
               x1: wireStartPin.x,
               y1: wireStartPin.y,
               x2: startPoint.x,
               y2: startPoint.y,
               color: activeWireColor
-            });
+            };
+            if (window.wirePendingWaypoint) {
+              newWireObj.midX = window.wirePendingWaypoint.x;
+              newWireObj.midY = window.wirePendingWaypoint.y;
+            }
+            wires.push(newWireObj);
             playSFX('pin_g5');
             triggerHaptic(35);
             triggerSingleSolve();
           }
           wireStartPin = null;
+          window.wirePendingWaypoint = null;
         }
       } else {
         pushHistorySnapshot();
@@ -3319,22 +3365,7 @@
           pins: []
         };
         updateComponentPins(newComp);
-        // 13. الإدراج الذكي للقطعة فوق السلك وقصه تلقائياً (Drop-on-Wire Auto-Split)
-        if (newComp.pins.length === 2) {
-          const splitIdx = wires.findIndex(w => {
-            const onHoriz = (w.y1 === w.y2) && Math.abs(newComp.y - w.y1) <= GRID_SIZE && newComp.x > Math.min(w.x1, w.x2) && newComp.x < Math.max(w.x1, w.x2);
-            return onHoriz;
-          });
-          if (splitIdx >= 0) {
-            const origW = wires[splitIdx];
-            wires.splice(splitIdx, 1);
-            const leftX = Math.min(origW.x1, origW.x2);
-            const rightX = Math.max(origW.x1, origW.x2);
-            wires.push({ x1: leftX, y1: newComp.y, x2: newComp.pins[0].x, y2: newComp.pins[0].y, color: origW.color });
-            wires.push({ x1: newComp.pins[1].x, y1: newComp.pins[1].y, x2: rightX, y2: newComp.y, color: origW.color });
-            showToast("✂️ تم قص السلك ودمج القطعة داخله تلقائياً (Auto-Split)!");
-          }
-        }
+        if (window.tryAutoSplitWireForComponent) window.tryAutoSplitWireForComponent(newComp);
         components.push(newComp);
         selectedComponent = newComp;
         playSFX('drop');
@@ -3363,6 +3394,12 @@
       if (window.draggingStickyNote) {
         window.draggingStickyNote.x = snapToGrid(pos.x);
         window.draggingStickyNote.y = snapToGrid(pos.y);
+        drawWorkspace();
+        return;
+      }
+      if (window.draggingStageZone) {
+        window.draggingStageZone.zone.x = snapToGrid(pos.x - window.draggingStageZone.offsetX);
+        window.draggingStageZone.zone.y = snapToGrid(pos.y - window.draggingStageZone.offsetY);
         drawWorkspace();
         return;
       }
@@ -3428,6 +3465,7 @@
       const loupe = document.getElementById('touchMagnifierLoupe');
       if (loupe) loupe.style.display = 'none';
       window.draggingStickyNote = null;
+      window.draggingStageZone = null;
       if (isBoxSelecting) {
         isBoxSelecting = false;
         window.boxSelectCurr = null;
@@ -3564,6 +3602,7 @@
       components = [];
       wires = [];
       stickyNotes = [];
+      window.stageZones = [];
       selectedComponent = null;
       latestPinVoltages = {};
       errorCulpritIds = [];
@@ -3958,9 +3997,10 @@
         }
       });
 
-      // #12: رسم أقواس التقاطع القافزة تلقائياً عند عبور سلك أفقي فوق سلك عمودي غير متصل به (Auto Wire-Bridge Jump Hoops)
+      // #12: فحص ثنائي الاتجاه لرسم أقواس التقاطع القافزة عند عبور أي مقطع أفقي فوق مقطع عمودي غير متصل به (Bidirectional Auto Wire-Bridge Jump Hoops)
       for (let i = 0; i < wires.length; i++) {
-        for (let j = i + 1; j < wires.length; j++) {
+        for (let j = 0; j < wires.length; j++) {
+          if (i === j) continue;
           const wa = wires[i], wb = wires[j];
           const shareEnd = (wa.x1 === wb.x1 && wa.y1 === wb.y1) || (wa.x1 === wb.x2 && wa.y1 === wb.y2) ||
                            (wa.x2 === wb.x1 && wa.y2 === wb.y1) || (wa.x2 === wb.x2 && wa.y2 === wb.y2);
@@ -4004,7 +4044,13 @@
         ctx.lineWidth = 2;
         ctx.beginPath();
         ctx.moveTo(wireStartPin.x, wireStartPin.y);
-        ctx.lineTo(pointerPos.x, wireStartPin.y);
+        if (window.wirePendingWaypoint) {
+          ctx.lineTo(window.wirePendingWaypoint.x, wireStartPin.y);
+          ctx.lineTo(window.wirePendingWaypoint.x, window.wirePendingWaypoint.y);
+          ctx.lineTo(pointerPos.x, window.wirePendingWaypoint.y);
+        } else {
+          ctx.lineTo(pointerPos.x, wireStartPin.y);
+        }
         ctx.lineTo(pointerPos.x, pointerPos.y);
         ctx.stroke();
         ctx.setLineDash([]);
@@ -4187,7 +4233,9 @@
           ctx.textAlign = 'center';
 
           let labelTxt = `${meta.sym || c.type}`;
-          if (['SWITCH', 'PUSH_BUTTON', 'RELAY'].includes(c.type)) {
+          if (c.customIcLabel) {
+            labelTxt = `📦 [${c.customIcLabel}]`;
+          } else if (['SWITCH', 'PUSH_BUTTON', 'RELAY'].includes(c.type)) {
             labelTxt = `${meta.sym}:${c.value === 1 ? 'ON' : 'OFF'}`;
           } else if (c.type === 'POT') {
             const wPct = Math.round((c.wiper !== undefined ? c.wiper : 0.5) * 100);
@@ -4198,6 +4246,18 @@
             labelTxt = `${meta.sym}:${c.value}${c.unit}`;
           }
           ctx.fillText(labelTxt, c.x, c.y + (isVertical ? 34 : -20));
+          if (c.customIcLabel) {
+            ctx.save();
+            ctx.fillStyle = 'rgba(15, 23, 42, 0.94)';
+            ctx.strokeStyle = '#f59e0b';
+            ctx.lineWidth = 1.6;
+            ctx.fillRect(c.x - 22, c.y - 12, 44, 24);
+            ctx.strokeRect(c.x - 22, c.y - 12, 44, 24);
+            ctx.fillStyle = '#fbbf24';
+            ctx.font = 'bold 8.5px monospace';
+            ctx.fillText(c.customIcLabel.slice(0, 8), c.x, c.y + 3);
+            ctx.restore();
+          }
 
           ctx.fillStyle = '#f59e0b';
           ctx.font = 'bold 10px sans-serif';
@@ -4376,7 +4436,13 @@
           ctx.stroke();
           ctx.restore();
         }
-        requestAnimationFrame(() => drawWorkspace());
+        if (!window._rippleRafPending && window.touchRipples.length > 0) {
+          window._rippleRafPending = true;
+          requestAnimationFrame(() => {
+            window._rippleRafPending = false;
+            drawWorkspace();
+          });
+        }
       }
 
       ctx.restore();
@@ -4413,7 +4479,7 @@
         ctx.fillStyle = '#10b981';
         ctx.font = 'bold 10px sans-serif';
         ctx.textAlign = 'right';
-        ctx.fillText('جامعة حلب - كلية الهندسة الإلكترونية | CAD v17.0', sx + stampW - 8, sy + 16);
+        ctx.fillText('جامعة حلب - كلية الهندسة الإلكترونية | CAD v18.0', sx + stampW - 8, sy + 16);
         ctx.fillStyle = '#e2e8f0';
         ctx.font = '9.5px sans-serif';
         const stName = currentUser ? `${currentUser.fullName} (${currentUser.universityId})` : 'مختبر المحاكاة التفاعلي';
@@ -4475,7 +4541,7 @@
       }
 
       statusEl.style.color = '#10b981';
-      statusEl.innerText = 'مستقر (MNA v17)';
+      statusEl.innerText = 'مستقر (MNA v18)';
       latestPinVoltages = res.pinVoltages;
 
       if (isSimulating && res.activeBuzzers && res.activeBuzzers.length > 0) {
@@ -4907,7 +4973,7 @@
         isFeatured: false,
         ratings: [],
         comments: [],
-        schema: JSON.parse(JSON.stringify({ components, wires, stickyNotes })),
+        schema: JSON.parse(JSON.stringify({ components, wires, stickyNotes, stageZones: window.stageZones || [] })),
         updatedAt: Date.now()
       };
 
@@ -5011,6 +5077,7 @@
       components.forEach(updateComponentPins);
       wires = deepClone.wires || [];
       stickyNotes = deepClone.stickyNotes || [];
+      window.stageZones = deepClone.stageZones || [];
       selectedComponent = null;
       currentForkedFromAuthor = `${proj.ownerName} (${proj.universityId})`;
       document.getElementById('forkAttributionBadge').innerText = `| مقتبس من: ${proj.ownerName}`;
@@ -5616,12 +5683,31 @@
       playSFX('delete');
       renderSecretRoomDashboard();
 
+      let isBulkRestored = false;
       showToast("تم تنفيذ الحذف الجماعي.", () => {
+        isBulkRestored = true;
         setLocalUsers(backupUsers);
         setLocalProjects(backupProjs);
         renderSecretRoomDashboard();
         showToast("↶ تم التراجع واسترجاع البيانات المحذوفة بنجاح!");
       });
+
+      setTimeout(async () => {
+        if (!isBulkRestored && isFirebaseReady) {
+          for (const uid of checkedUsers) {
+            const uObj = backupUsers.find(u => u.uid === uid);
+            if (uObj && uObj.universityId === "1461997") continue;
+            try { await deleteDoc(doc(db, "users", uid)); } catch (e) {}
+            const userProjs = backupProjs.filter(p => p.ownerId === uid);
+            for (const up of userProjs) {
+              try { await deleteDoc(doc(db, "projects", up.id)); } catch (e) {}
+            }
+          }
+          for (const pid of checkedProjs) {
+            try { await deleteDoc(doc(db, "projects", pid)); } catch (e) {}
+          }
+        }
+      }, 5000);
     };
 
     window.publishGlobalAnnouncement = async function() {
@@ -5642,7 +5728,7 @@
     };
 
     window.publishCurrentCircuitAsChallenge = async function() {
-      const schemaObj = { components, wires, stickyNotes };
+      const schemaObj = { components, wires, stickyNotes, stageZones: window.stageZones || [] };
       localStorage.setItem('aleppo_ee_weekly_challenge', JSON.stringify(schemaObj));
       if (isFirebaseReady) {
         try { await setDoc(doc(db, "announcements", "challenge"), { schema: schemaObj, updatedAt: Date.now() }); } catch (e) {}
@@ -5814,12 +5900,24 @@
       setLocalProjects(backupProjs.filter(p => p.ownerId !== targetUid));
       renderSecretRoomDashboard();
 
+      let isUserRestored = false;
       showToast("تم مسح الطالب ومشاريعه.", () => {
+        isUserRestored = true;
         setLocalUsers(backupUsers);
         setLocalProjects(backupProjs);
         renderSecretRoomDashboard();
         showToast("↶ تم استرجاع حساب الطالب ومشاريعه!");
       });
+
+      setTimeout(async () => {
+        if (!isUserRestored && isFirebaseReady) {
+          try { await deleteDoc(doc(db, "users", targetUid)); } catch (e) {}
+          const userProjs = backupProjs.filter(p => p.ownerId === targetUid);
+          for (const up of userProjs) {
+            try { await deleteDoc(doc(db, "projects", up.id)); } catch (e) {}
+          }
+        }
+      }, 5000);
     };
 
     window.adminDeleteProject = async function(projId) {
@@ -5874,7 +5972,7 @@
     };
 
     async function enforceLatestVersion() {
-      const CURRENT_VER = 'v17.0_immersive_tactile_lab';
+      const CURRENT_VER = 'v18.0_zero_bug_complete';
       const savedVer = localStorage.getItem('aleppo_ee_app_version');
       if (savedVer !== CURRENT_VER) {
         if ('serviceWorker' in navigator) {
@@ -5890,7 +5988,7 @@
         return;
       }
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('./sw.js?v=17').then(reg => {
+        navigator.serviceWorker.register('./sw.js?v=18').then(reg => {
           reg.update();
         }).catch(() => {});
       }
@@ -6104,6 +6202,7 @@
         pins: []
       };
       updateComponentPins(newComp);
+      if (window.tryAutoSplitWireForComponent) window.tryAutoSplitWireForComponent(newComp);
       components.push(newComp);
       selectedComponent = newComp;
       playSFX('drop');
@@ -6147,6 +6246,7 @@
         const diff = (dist - initialPinchDist) * 0.004;
         cameraZoom = Math.min(2.2, Math.max(0.5, cameraZoom + diff));
         initialPinchDist = dist;
+        syncHudZoomBadge();
         drawWorkspace();
       }
     }, { passive: true });
@@ -6341,7 +6441,7 @@
       });
       if (!res || !res[0]) return;
       const customTemplates = JSON.parse(localStorage.getItem('aleppo_ee_custom_templates') || '[]');
-      const newTpl = { id: 'tpl_' + Date.now(), title: res[0], desc: res[1] || '', schema: { components, wires, stickyNotes } };
+      const newTpl = { id: 'tpl_' + Date.now(), title: res[0], desc: res[1] || '', schema: { components, wires, stickyNotes, stageZones: window.stageZones || [] } };
       customTemplates.unshift(newTpl);
       localStorage.setItem('aleppo_ee_custom_templates', JSON.stringify(customTemplates));
       renderCustomCloudTemplates();
@@ -6942,11 +7042,51 @@
       lCtx.stroke();
     };
 
+    // #13: دالة موحدة لقص السلك الأفقـي أو العمودي تلقائياً عند إفلات أو وضع عنصر ثنائي الأقطاب فوقه (Auto-Split Horiz & Vert Wires)
+    window.tryAutoSplitWireForComponent = function(newComp) {
+      if (!newComp || !newComp.pins || newComp.pins.length !== 2) return;
+      const splitIdx = wires.findIndex(w => {
+        const onHoriz = (w.y1 === w.y2) && Math.abs(newComp.y - w.y1) <= GRID_SIZE &&
+                        newComp.x > Math.min(w.x1, w.x2) + GRID_SIZE && newComp.x < Math.max(w.x1, w.x2) - GRID_SIZE;
+        const onVert = (w.x1 === w.x2) && Math.abs(newComp.x - w.x1) <= GRID_SIZE &&
+                       newComp.y > Math.min(w.y1, w.y2) + GRID_SIZE && newComp.y < Math.max(w.y1, w.y2) - GRID_SIZE;
+        return onHoriz || onVert;
+      });
+      if (splitIdx < 0) return;
+
+      const origW = wires[splitIdx];
+      wires.splice(splitIdx, 1);
+
+      if (origW.y1 === origW.y2) {
+        newComp.rotation = 0;
+        updateComponentPins(newComp);
+        const leftX = Math.min(origW.x1, origW.x2);
+        const rightX = Math.max(origW.x1, origW.x2);
+        wires.push({ x1: leftX, y1: newComp.y, x2: newComp.pins[0].x, y2: newComp.pins[0].y, color: origW.color });
+        wires.push({ x1: newComp.pins[1].x, y1: newComp.pins[1].y, x2: rightX, y2: newComp.y, color: origW.color });
+      } else {
+        newComp.rotation = 90;
+        updateComponentPins(newComp);
+        const topY = Math.min(origW.y1, origW.y2);
+        const botY = Math.max(origW.y1, origW.y2);
+        wires.push({ x1: newComp.x, y1: topY, x2: newComp.pins[0].x, y2: newComp.pins[0].y, color: origW.color });
+        wires.push({ x1: newComp.pins[1].x, y1: newComp.pins[1].y, x2: newComp.x, y2: botY, color: origW.color });
+      }
+      showToast("✂️ تم قص السلك ودمج القطعة داخله تلقائياً (Auto-Split)!");
+    };
+
     // #30: وضع العرض السينمائي للمناقشات وأجهزة الإسقاط (Presentation / Projector Mode)
     window.toggleProjectorMode = function() {
       playSFX('switch');
       document.body.classList.toggle('projector-mode');
       const isProj = document.body.classList.contains('projector-mode');
+      if (isProj) {
+        selectedComponent = null;
+        window.multiSelectedIds = [];
+        updateInspectorUI();
+        updateRadialMenuPosition();
+        closeEngNumpad();
+      }
       setTimeout(resizeCanvas, 200);
       showToast(isProj ? "📽️ تم تفعيل وضع العرض السينمائي للمناقشات! (انقر 📽️ عرض للعودة)" : "تمت استعادة أدوات التحرير الكاملة");
     };
