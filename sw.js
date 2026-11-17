@@ -1,11 +1,9 @@
-const CACHE_NAME = 'aleppo-ee-sim-v12';
-const ASSETS_TO_CACHE = [
-  './',<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>جامعة حلب - الهندسة الإلكترونية | محاكي الدوائر v13.0 (Interactive Physics & Gamification Suite)</title>
+  <title>جامعة حلب - الهندسة الإلكترونية | محاكي الدوائر v13.0 (Ultimate Physics Engine)</title>
   <meta name="theme-color" content="#0f172a">
   <link rel="manifest" href="./manifest.json">
   <link rel="apple-touch-icon" href="./1000233248.jpg">
@@ -828,7 +826,7 @@ const ASSETS_TO_CACHE = [
       </div>
     </div>
     <div class="inspector-row">
-      <span id="inspSliderLabel" style="font-size:10px; color:var(--text-muted);">تمرير سريع:</span>
+      <span style="font-size:10px; color:var(--text-muted);">تمرير سريع:</span>
       <input type="range" id="inspRangeSlider" min="1" max="10000" step="1" oninput="updateSelectedComponentFromSlider(this.value)">
       <div style="display:flex; align-items:center; gap:4px;">
         <span style="font-size:10px; color:var(--text-muted);">لون السلك:</span>
@@ -1346,6 +1344,29 @@ const ASSETS_TO_CACHE = [
         gain.gain.exponentialRampToValueAtTime(0.001, now + 0.055);
         osc.start(now);
         osc.stop(now + 0.055);
+      } else if (type === 'explosion') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(100, now);
+        osc.frequency.exponentialRampToValueAtTime(10, now + 0.4);
+        gain.gain.setValueAtTime(0.3, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+        osc.start(now);
+        osc.stop(now + 0.4);
+      } else if (type === 'fuse_pop') {
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(800, now);
+        osc.frequency.exponentialRampToValueAtTime(300, now + 0.1);
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+        osc.start(now);
+        osc.stop(now + 0.1);
+      } else if (type === 'relay_click') {
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(300, now);
+        gain.gain.setValueAtTime(0.15, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
+        osc.start(now);
+        osc.stop(now + 0.05);
       } else if (type === 'error') {
         osc.type = 'sawtooth';
         osc.frequency.setValueAtTime(155, now);
@@ -1964,10 +1985,6 @@ const ASSETS_TO_CACHE = [
             } else if (c.type === 'BUZZER') {
               addConductance(1 / 150);
             } else if (c.type === 'FUSE') {
-              if (!c.blown) {
-                const I_approx = Math.abs( (n1>0?V[n1-1]:0) - (n2>0?V[n2-1]:0) ) / 0.05;
-                if (I_approx > (c.value || 0.5)) c.blown = true;
-              }
               const R = c.blown ? 1e9 : 0.05;
               addConductance(1 / R);
             } else if (['SWITCH', 'PUSH_BUTTON', 'RELAY'].includes(c.type)) {
@@ -2119,9 +2136,6 @@ const ASSETS_TO_CACHE = [
 
           if (c.type === 'CAPACITOR' || c.type === 'ELEC_CAP' || c.type === 'CRYSTAL') {
             prevCapVoltages[c.id] = vBranch;
-            if (c.type === 'ELEC_CAP' && !c.exploded) {
-               if (vBranch < -1.5 || vBranch > 25) c.exploded = true; // Reverse polarity or over 25V
-            }
           } else if (c.type === 'INDUCTOR') {
             const L = Math.max(c.value || 0.1, 1e-6);
             prevIndCurrents[c.id] = (prevIndCurrents[c.id] || 0) + (dt / L) * vBranch;
@@ -2139,19 +2153,13 @@ const ASSETS_TO_CACHE = [
           if (Math.abs(vVal) > maxAbsV) maxAbsV = Math.abs(vVal);
         });
 
-        const compStates = {};
-        components.forEach(c => {
-          if (c.blown !== undefined) compStates[c.id] = { blown: c.blown };
-          if (c.exploded !== undefined) compStates[c.id] = { exploded: c.exploded };
-        });
         self.postMessage({
           success: true,
           pinVoltages,
           maxV: maxAbsV,
           sourceV: primarySourceInstantV,
           culpritIds: [],
-          activeBuzzers,
-          compStates
+          activeBuzzers
         });
       };
     `;
@@ -2181,7 +2189,6 @@ const ASSETS_TO_CACHE = [
     let useVoltageHeatmap = false;
     let latestPinVoltages = {};
     let errorCulpritIds = [];
-    let activeSparks = []; // Student #8
     let scopeHistoryCH1 = new Array(115).fill(0);
     let scopeHistoryCH2 = new Array(115).fill(0);
 
@@ -2744,9 +2751,6 @@ const ASSETS_TO_CACHE = [
           if (['SWITCH', 'PUSH_BUTTON', 'RELAY'].includes(clickedComp.type)) {
             clickedComp.value = clickedComp.value === 1 ? 0 : 1;
             playSFX('switch');
-            if (clickedComp.value === 0 && isSimulating) { // Turned off
-               activeSparks.push({ x: clickedComp.x, y: clickedComp.y, time: Date.now() });
-            }
             triggerSingleSolve();
           } else {
             playSFX('tap');
@@ -2924,13 +2928,9 @@ const ASSETS_TO_CACHE = [
       document.getElementById('inspRealisticDesc').innerText = meta.rDesc || 'قطعة إلكترونية قياسية';
 
       const slider = document.getElementById('inspRangeSlider');
-      const lbl = document.getElementById('inspSliderLabel');
       const t = selectedComponent.type;
-      lbl.innerText = 'تمرير سريع:';
       if (['RESISTOR', 'POT', 'LDR', 'THERMISTOR'].includes(t)) {
         slider.min = 10; slider.max = 50000; slider.step = 10;
-        if (t === 'LDR') lbl.innerText = '🔦 التحكم بالضوء (Lux):'; // Student #14
-        if (t === 'THERMISTOR') lbl.innerText = '🌡️ التحكم بالحرارة (C°):'; // Student #15
       } else if (['CAPACITOR', 'ELEC_CAP'].includes(t)) {
         slider.min = 0.00001; slider.max = 0.005; slider.step = 0.00001;
       } else if (t === 'INDUCTOR') {
@@ -3032,9 +3032,18 @@ const ASSETS_TO_CACHE = [
         ctx.lineTo(18, 0);
         ctx.lineTo(24, 0);
         if (c.type === 'POT') {
-          // سهم المنزلقة W المتصل بالقطب الثالث السفلي (0, 24)
           ctx.moveTo(0, 24); ctx.lineTo(0, 9);
           ctx.moveTo(-4, 13); ctx.lineTo(0, 8); ctx.lineTo(4, 13);
+          // 5. Potentiometer Knob indicator
+          ctx.save();
+          ctx.beginPath();
+          ctx.arc(0, 0, 5, 0, Math.PI * 2);
+          ctx.fillStyle = '#334155'; ctx.fill();
+          const potAngle = ((c.value || 0) / 50000) * Math.PI * 1.5 - Math.PI * 0.75;
+          ctx.rotate(potAngle);
+          ctx.moveTo(0, 0); ctx.lineTo(0, -4);
+          ctx.strokeStyle = '#f59e0b'; ctx.lineWidth=2; ctx.stroke();
+          ctx.restore();
         }
       } else if (['NPN_BJT', 'PNP_BJT'].includes(c.type)) {
         // رمز الترانزستور القياسي: القاعدة يسار (-24,0)، المجمع يمين (24,0)، الباعث أسفل (0,24)
@@ -3065,11 +3074,50 @@ const ASSETS_TO_CACHE = [
         if (c.type !== 'NOT_GATE') {
           ctx.moveTo(0, 24); ctx.lineTo(0, 12);
         }
+      } else if (c.type === 'SEVEN_SEG') {
+        // 10. Live 7-Segment Decoder Drawing
+        ctx.moveTo(-24, 0); ctx.lineTo(-15, 0);
+        ctx.moveTo(15, 0); ctx.lineTo(24, 0);
+        ctx.stroke();
+        ctx.save();
+        ctx.fillStyle = '#020617';
+        ctx.fillRect(-12, -16, 24, 32);
+        const vDiff = Math.abs((latestPinVoltages[c.id+'_0']||0) - (latestPinVoltages[c.id+'_1']||0));
+        const num = isSimulating ? Math.max(0, Math.min(9, Math.floor(vDiff))) : 8;
+        const segMap = [
+          [1,1,1,1,1,1,0], [0,1,1,0,0,0,0], [1,1,0,1,1,0,1], [1,1,1,1,0,0,1], [0,1,1,0,0,1,1],
+          [1,0,1,1,0,1,1], [1,0,1,1,1,1,1], [1,1,1,0,0,0,0], [1,1,1,1,1,1,1], [1,1,1,1,0,1,1]
+        ][num] || [0,0,0,0,0,0,0];
+        const segOn = '#ef4444', segOff = '#334155';
+        const drawSeg = (x, y, w, h, on) => { ctx.fillStyle = on ? segOn : segOff; ctx.fillRect(x, y, w, h); };
+        drawSeg(-6, -12, 12, 3, segMap[0]); // A
+        drawSeg(4, -10, 3, 10, segMap[1]);  // B
+        drawSeg(4, 1, 3, 10, segMap[2]);    // C
+        drawSeg(-6, 10, 12, 3, segMap[3]);  // D
+        drawSeg(-7, 1, 3, 10, segMap[4]);   // E
+        drawSeg(-7, -10, 3, 10, segMap[5]); // F
+        drawSeg(-6, -1, 12, 3, segMap[6]);  // G
+        ctx.restore();
+        ctx.beginPath();
       } else if (['CAPACITOR', 'ELEC_CAP'].includes(c.type)) {
-        ctx.moveTo(-24, 0); ctx.lineTo(-5, 0);
-        ctx.moveTo(-5, -12); ctx.lineTo(-5, 12);
-        ctx.moveTo(5, -12); ctx.lineTo(5, 12);
-        ctx.moveTo(5, 0); ctx.lineTo(24, 0);
+        if (c.exploded) {
+          ctx.moveTo(-24, 0); ctx.lineTo(-10, -5); ctx.lineTo(-5, 8);
+          ctx.moveTo(5, -12); ctx.lineTo(15, 6); ctx.lineTo(24, 0);
+        } else {
+          ctx.moveTo(-24, 0); ctx.lineTo(-5, 0);
+          ctx.moveTo(-5, -12); ctx.lineTo(-5, 12);
+          ctx.moveTo(5, -12); ctx.lineTo(5, 12);
+          ctx.moveTo(5, 0); ctx.lineTo(24, 0);
+          // 2. Capacitor Charge Bar
+          if (isSimulating && c.type === 'ELEC_CAP') {
+             ctx.save();
+             const vDiff = (latestPinVoltages[c.id+'_0']||0) - (latestPinVoltages[c.id+'_1']||0);
+             const fillH = Math.min(1.0, Math.max(0, vDiff / 10)) * 24;
+             ctx.fillStyle = 'rgba(56, 189, 248, 0.5)';
+             ctx.fillRect(-5, 12 - fillH, 10, fillH);
+             ctx.restore();
+          }
+        }
       } else if (c.type === 'INDUCTOR' || c.type === 'TRANSFORMER') {
         ctx.moveTo(-24, 0); ctx.lineTo(-16, 0);
         ctx.arc(-10, 0, 6, Math.PI, 0, false);
@@ -3085,6 +3133,16 @@ const ASSETS_TO_CACHE = [
           ctx.moveTo(8, 10); ctx.lineTo(12, 13);
         }
         ctx.moveTo(8, 0); ctx.lineTo(24, 0);
+      } else if (c.type === 'FUSE') {
+        ctx.moveTo(-24, 0); ctx.lineTo(-12, 0);
+        if (c.blown) {
+          ctx.moveTo(-12, 0); ctx.lineTo(-8, -5);
+          ctx.moveTo(12, 0); ctx.lineTo(8, 5);
+        } else {
+          ctx.moveTo(-12, 0); ctx.lineTo(12, 0);
+        }
+        ctx.moveTo(12, 0); ctx.lineTo(24, 0);
+        ctx.strokeRect(-12, -6, 24, 12);
       } else if (['SWITCH', 'PUSH_BUTTON', 'RELAY'].includes(c.type)) {
         ctx.moveTo(-24, 0); ctx.lineTo(-10, 0);
         if (c.value === 1) {
@@ -3097,44 +3155,24 @@ const ASSETS_TO_CACHE = [
         ctx.moveTo(-24, 0); ctx.lineTo(-15, 0);
         ctx.moveTo(15, 0); ctx.lineTo(24, 0);
         ctx.arc(0, 0, 15, 0, Math.PI * 2);
-        // Student #1: Motor Spin Gear
-        if (window.isSimulating) {
-           c.spinAngle = (c.spinAngle || 0) + (window.latestPinVoltages ? ((window.latestPinVoltages[c.id+'_0']||0) - (window.latestPinVoltages[c.id+'_1']||0)) * 0.1 : 0);
-        }
+        ctx.stroke();
+        // 1. Motor Spin
         ctx.save();
-        ctx.rotate(c.spinAngle || 0);
-        ctx.moveTo(-8, 0); ctx.lineTo(8, 0);
-        ctx.moveTo(0, -8); ctx.lineTo(0, 8);
+        ctx.beginPath();
+        ctx.rotate((c.animAngle || 0) * Math.PI / 180);
+        ctx.moveTo(-8, -8); ctx.lineTo(8, 8);
+        ctx.moveTo(-8, 8); ctx.lineTo(8, -8);
+        ctx.moveTo(0, -10); ctx.lineTo(0, 10);
+        ctx.moveTo(-10, 0); ctx.lineTo(10, 0);
+        ctx.strokeStyle = '#38bdf8';
+        ctx.stroke();
         ctx.restore();
-      } else if (c.type === 'SEVEN_SEG') {
-        // Student #10: Live 7-Segment Decoder (reads voltage 0-9V)
-        ctx.moveTo(-24, 0); ctx.lineTo(-15, 0);
-        ctx.moveTo(15, 0); ctx.lineTo(24, 0);
-        ctx.rect(-12, -16, 24, 32);
-        let digit = 0;
-        if (window.isSimulating && window.latestPinVoltages) {
-            const vIn = (window.latestPinVoltages[c.id+'_0']||0) - (window.latestPinVoltages[c.id+'_1']||0);
-            digit = Math.max(0, Math.min(9, Math.floor(Math.abs(vIn))));
-        }
-        ctx.fillStyle = '#ef4444';
-        ctx.font = 'bold 22px monospace';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(digit.toString(), 0, 0);
+        ctx.beginPath();
       } else {
         ctx.moveTo(-24, 0); ctx.lineTo(-15, 0);
         ctx.moveTo(15, 0); ctx.lineTo(24, 0);
         ctx.arc(0, 0, 15, 0, Math.PI * 2);
       }
-      
-      // Explosion / Blown overlay (Student #4 & #7)
-      if (c.exploded) {
-         ctx.fillStyle = '#ef4444';
-         ctx.font = '24px sans-serif';
-         ctx.textAlign = 'center';
-         ctx.fillText('💥', 0, 0);
-      }
-      
       ctx.stroke();
       ctx.restore();
     }
@@ -3185,11 +3223,9 @@ const ASSETS_TO_CACHE = [
               if (p.x === w.x1 && p.y === w.y1) wireV = latestPinVoltages[c.id + '_' + idx] || 0;
             });
           });
-          // Student #11: Digital Logic Colors & Heatmap
-          if (wireV > 3.5) strokeCol = '#10b981'; // Logic High / VCC
-          else if (wireV < -1.0) strokeCol = '#ef4444'; // Negative
-          else if (wireV > 0.5) strokeCol = '#f59e0b'; // Intermediate
-          else strokeCol = '#475569'; // Logic Low / GND
+          if (wireV > 1.0) strokeCol = '#10b981';
+          else if (wireV < -1.0) strokeCol = '#ef4444';
+          else strokeCol = '#94a3b8';
         }
 
         ctx.strokeStyle = strokeCol;
@@ -3214,19 +3250,6 @@ const ASSETS_TO_CACHE = [
           ctx.stroke();
           ctx.restore();
         }
-      });
-
-      // Student #8: Draw Switch Arcing Sparks
-      activeSparks = activeSparks.filter(s => Date.now() - s.time < 300);
-      activeSparks.forEach(s => {
-         ctx.save();
-         ctx.fillStyle = '#38bdf8';
-         ctx.shadowColor = '#38bdf8';
-         ctx.shadowBlur = 10;
-         ctx.beginPath();
-         ctx.arc(s.x, s.y - 10, Math.random() * 6 + 2, 0, Math.PI * 2);
-         ctx.fill();
-         ctx.restore();
       });
 
       if (isBoxSelecting && window.boxSelectCurr) {
@@ -3285,11 +3308,7 @@ const ASSETS_TO_CACHE = [
           (c.type !== 'LAMP' && vDiff >= (c.value || 1.8))
         );
 
-        if (c.exploded || c.blown) {
-          ctx.strokeStyle = '#000000';
-          ctx.fillStyle = '#1e293b';
-          ctx.lineWidth = 2;
-        } else if (isErrorCulprit) {
+        if (isErrorCulprit) {
           ctx.strokeStyle = '#ef4444';
           ctx.shadowColor = '#ef4444';
           ctx.shadowBlur = 16;
@@ -3323,9 +3342,45 @@ const ASSETS_TO_CACHE = [
           const bw = isVertical ? 32 : 50;
           const bh = isVertical ? 50 : 32;
 
-          ctx.fillStyle = isGlowing ? meta.glow : (document.body.classList.contains('solarpunk-light') ? 'rgba(255,255,255,0.88)' : 'rgba(30, 41, 59, 0.85)');
+          // 12. Transistor Region Indicator & Battery Drain Indicator & Explosion Black Smoke
+          let bgFill = isGlowing ? meta.glow : (document.body.classList.contains('solarpunk-light') ? 'rgba(255,255,255,0.88)' : 'rgba(30, 41, 59, 0.85)');
+          if (c.exploded || c.blown) bgFill = 'rgba(0,0,0,0.8)';
+          
+          if (isSimulating) {
+            if (['BATTERY_9V', 'DC_SOURCE'].includes(c.type)) {
+               const I_approx = Math.abs(vDiff - (c.value || 9)) / 0.001; // Internal R approx
+               if (I_approx > 5.0) bgFill = 'rgba(239, 68, 68, 0.4)'; // Heavy drain red tint
+            } else if (['NPN_BJT', 'PNP_BJT'].includes(c.type)) {
+               const vB = latestPinVoltages[c.id + '_0'] || 0;
+               const vC = latestPinVoltages[c.id + '_1'] || 0;
+               const vE = latestPinVoltages[c.id + '_2'] || 0;
+               const vBE = c.type === 'NPN_BJT' ? vB - vE : vE - vB;
+               const vCE = c.type === 'NPN_BJT' ? vC - vE : vE - vC;
+               if (vBE >= 0.6) {
+                 if (vCE > vBE) bgFill = 'rgba(56, 189, 248, 0.3)'; // Active (Blue)
+                 else bgFill = 'rgba(239, 68, 68, 0.3)'; // Saturation (Red)
+               }
+            } else if (['AND_GATE', 'OR_GATE', 'XOR_GATE', 'NOT_GATE'].includes(c.type)) {
+               const vOut = latestPinVoltages[c.id + '_1'] || 0; // pin 1 is out in 3-pin logic
+               if (vOut > 2.5) bgFill = 'rgba(16, 185, 129, 0.2)'; // Logic High Green
+            }
+          }
+          
+          ctx.fillStyle = bgFill;
           ctx.fillRect(c.x - bw / 2, c.y - bh / 2, bw, bh);
           ctx.strokeRect(c.x - bw / 2, c.y - bh / 2, bw, bh);
+          
+          // 14. LDR & NTC Interactive Visual Elements
+          if (c.type === 'LDR') {
+             ctx.fillStyle = '#facc15'; ctx.font = '10px sans-serif';
+             const sunSize = Math.max(1, Math.floor(5 - (c.value / 10000)));
+             ctx.fillText('☀️'.repeat(sunSize), c.x + 18, c.y - 18);
+          } else if (c.type === 'THERMISTOR') {
+             ctx.fillStyle = '#ef4444'; ctx.font = '10px sans-serif';
+             const fireSize = Math.max(1, Math.floor((c.value / 10000) * 3));
+             ctx.fillText('🔥'.repeat(fireSize), c.x + 18, c.y - 18);
+          }
+          
 
           drawSchematicVectorSymbol(ctx, c);
 
@@ -3346,11 +3401,6 @@ const ASSETS_TO_CACHE = [
 
           ctx.fillStyle = '#f59e0b';
           ctx.font = 'bold 10px sans-serif';
-          if (c.type === 'BATTERY_9V' && isSimulating && Math.abs(v0) > 0 && Math.abs(vDiff) < c.value * 0.5) {
-             // Student #9: Battery Drain Indicator under heavy load
-             ctx.fillStyle = '#ef4444';
-             ctx.fillText('Low', c.x, c.y - 30);
-          }
           if (['DC_SOURCE', 'BATTERY_9V', 'AC_SOURCE', 'SQUARE_SOURCE', 'PULSE_SOURCE', 'ELEC_CAP'].includes(c.type)) {
             ctx.fillText('+', c.pins[0].x + (isVertical ? 8 : 8), c.pins[0].y + (isVertical ? 10 : -6));
             ctx.fillText('-', c.pins[1].x + (isVertical ? 8 : -8), c.pins[1].y + (isVertical ? -6 : -6));
@@ -3368,19 +3418,6 @@ const ASSETS_TO_CACHE = [
           ctx.stroke();
         }
 
-        // Student #13: Transformer Flux Lines
-        if (c.type === 'TRANSFORMER' && isSimulating && Math.abs(vDiff) > 1) {
-           ctx.save();
-           ctx.strokeStyle = 'rgba(56, 189, 248, 0.6)';
-           ctx.setLineDash([2, 4]);
-           ctx.lineDashOffset = -currentFlowOffset * 2;
-           ctx.beginPath();
-           ctx.moveTo(c.x - 5, c.y - 15); ctx.lineTo(c.x - 5, c.y + 15);
-           ctx.moveTo(c.x + 5, c.y - 15); ctx.lineTo(c.x + 5, c.y + 15);
-           ctx.stroke();
-           ctx.restore();
-        }
-
         // رسم الساق الثالثة للقطع ثلاثية الأقطاب + حساب الاستطاعة والتحذير الدخاني (Student #1 & #3)
         if (c.pins.length === 3) {
           ctx.beginPath();
@@ -3394,27 +3431,8 @@ const ASSETS_TO_CACHE = [
           if (pWatts > 0.5) {
             ctx.fillStyle = '#ef4444';
             ctx.font = 'bold 10px sans-serif';
-            // Student #6: Wire Melting / Resistor Burning threshold
             ctx.fillText(`🔥 ${(pWatts).toFixed(2)}W!`, c.x, c.y - 26);
-            if (pWatts > 5.0) c.blown = true; // Burns out if > 5W
           }
-        }
-        
-        // Student #12: Transistor Region Indicator
-        if (isSimulating && ['NPN_BJT', 'PNP_BJT'].includes(c.type)) {
-           const vB = latestPinVoltages[c.id + '_0'] || 0;
-           const vC = latestPinVoltages[c.id + '_1'] || 0;
-           const vE = latestPinVoltages[c.id + '_2'] || 0;
-           const vBE = Math.abs(vB - vE);
-           const vCE = Math.abs(vC - vE);
-           let region = 'Cutoff';
-           ctx.fillStyle = '#94a3b8'; // Grey
-           if (vBE >= 0.65) {
-              if (vCE > 0.3) { region = 'Active'; ctx.fillStyle = '#38bdf8'; } // Blue
-              else { region = 'Sat'; ctx.fillStyle = '#ef4444'; } // Red
-           }
-           ctx.font = '8px sans-serif';
-           ctx.fillText(region, c.x, c.y - 20);
         }
 
         c.pins.forEach((p, idx) => {
@@ -3496,18 +3514,6 @@ const ASSETS_TO_CACHE = [
       statusEl.innerText = 'مستقر (MNA v13)';
       latestPinVoltages = res.pinVoltages;
 
-      // Update states from worker (Fuse, Cap explosions)
-      if (res.compStates) {
-        let needsDraw = false;
-        components.forEach(c => {
-          if (res.compStates[c.id]) {
-            if (res.compStates[c.id].blown && !c.blown) { c.blown = true; playSFX('error'); showToast("💥 انصهر الفيوز بسبب زيادة التيار!"); needsDraw = true; }
-            if (res.compStates[c.id].exploded && !c.exploded) { c.exploded = true; playSFX('error'); showToast("💥 انفجر المكثف الكيميائي بسبب عكس القطبية أو الجهد الزائد!"); needsDraw = true; }
-          }
-        });
-        if (needsDraw) drawWorkspace();
-      }
-
       if (isSimulating && res.activeBuzzers && res.activeBuzzers.length > 0) {
         const now = Date.now();
         if (now - lastBuzzerBeepTime > 180) {
@@ -3564,6 +3570,45 @@ const ASSETS_TO_CACHE = [
       if (!isSimulating) return;
       simTime += 0.02;
       currentFlowOffset = (currentFlowOffset + 1.8) % 18;
+
+      // 15 Interactive Physics Mechanics (v13.0 Updates)
+      components.forEach(c => {
+        const v0 = latestPinVoltages[c.id + '_0'] || 0;
+        const v1 = latestPinVoltages[c.id + '_1'] || 0;
+        const vDiff = v0 - v1;
+
+        if (c.type === 'DC_MOTOR') {
+          // 1. Motor Spin proportional to voltage
+          c.animAngle = ((c.animAngle || 0) + vDiff * 3) % 360;
+        } else if (c.type === 'ELEC_CAP' && !c.exploded) {
+          // 4. Electrolytic Explosion on reverse polarity (<-1.5V) or over-voltage
+          if (vDiff < -1.5) {
+            c.exploded = true;
+            playSFX('explosion');
+            showToast("💥 انفجار! تم تطبيق انحياز عكسي ضار على المكثف الكيميائي.");
+            triggerSingleSolve(true);
+          }
+        } else if (c.type === 'FUSE' && !c.blown) {
+          // 7. Fuse Blown State
+          const I = Math.abs(vDiff / 0.05);
+          if (I > (c.value || 0.5)) {
+            c.blown = true;
+            playSFX('fuse_pop');
+            showToast(`🔥 انصهار الفيوز! التيار المار (${I.toFixed(2)}A) تجاوز تحمل الصمامة.`);
+            triggerSingleSolve(true);
+          }
+        } else if (c.type === 'RELAY') {
+          // 3. Relay Armature Click check
+          const isTriggered = Math.abs(vDiff) > 3.0;
+          if (c.isTriggered !== isTriggered) {
+            c.isTriggered = isTriggered;
+            playSFX('relay_click');
+            c.value = isTriggered ? 1 : 0;
+            triggerSingleSolve(false);
+          }
+        }
+      });
+
       solverWorker.postMessage({ components, wires, time: simTime, resetState: false });
       setTimeout(() => requestAnimationFrame(simulationLoop), 60);
     }
@@ -4755,7 +4800,7 @@ const ASSETS_TO_CACHE = [
     };
 
     async function enforceLatestVersion() {
-      const CURRENT_VER = 'v13.0_interactive_physics';
+      const CURRENT_VER = 'v13.0_ultimate_physics';
       const savedVer = localStorage.getItem('aleppo_ee_app_version');
       if (savedVer !== CURRENT_VER) {
         if ('serviceWorker' in navigator) {
@@ -5257,57 +5302,3 @@ const ASSETS_TO_CACHE = [
   </script>
 </body>
 </html>
-
-  './index.html',
-  './manifest.json',
-  './1000233248.jpg',
-  'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js',
-  'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js',
-  'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js'
-];
-
-self.addEventListener('install', (event) => {
-  self.skipWaiting();
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS_TO_CACHE))
-  );
-});
-
-self.addEventListener('activate', (event) => {
-  event.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k)))
-    ).then(() => self.clients.claim())
-  );
-});
-
-self.addEventListener('fetch', (event) => {
-  if (event.request.method !== 'GET') return;
-  if (event.request.url.includes('firestore.googleapis.com') || event.request.url.includes('identitytoolkit')) {
-    return;
-  }
-
-  // استراتيجية Network-First لملف الصفحة الرئيسية لضمان جلب أحدث التعديلات دائماً عند توفر الإنترنت، والعودة للكاش عند انقطاعه
-  if (event.request.mode === 'navigate' || event.request.url.endsWith('index.html') || event.request.url.endsWith('/')) {
-    event.respondWith(
-      fetch(event.request).then((networkResponse) => {
-        return caches.open(CACHE_NAME).then((cache) => {
-          cache.put(event.request, networkResponse.clone());
-          return networkResponse;
-        });
-      }).catch(() => caches.match(event.request).then((res) => res || caches.match('./index.html')))
-    );
-    return;
-  }
-
-  // باقي الأصول تعمل بنظام Stale-While-Revalidate
-  event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      const fetchPromise = fetch(event.request).then((networkResponse) => {
-        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, networkResponse.clone()));
-        return networkResponse;
-      }).catch(() => cachedResponse);
-      return cachedResponse || fetchPromise;
-    })
-  );
-});
