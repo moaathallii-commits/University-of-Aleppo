@@ -1,4 +1,4 @@
-const CACHE_NAME = 'aleppo-ee-sim-v9';
+const CACHE_NAME = 'aleppo-ee-sim-v12';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -43,7 +43,7 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // باقي الأصول (الأيقونة ومكتبات Firebase) تعمل بنظام Stale-While-Revalidate
+  // باقي الأصول تعمل بنظام Stale-While-Revalidate
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       const fetchPromise = fetch(event.request).then((networkResponse) => {
