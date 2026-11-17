@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>جامعة حلب - الهندسة الإلكترونية | محاكي الدوائر v9.0 (Auto-Sync & Full 40+ Catalog)</title>
+  <title>جامعة حلب - الهندسة الإلكترونية | محاكي الدوائر v12.0 (Zero-Bug Production Edition)</title>
   <meta name="theme-color" content="#0f172a">
   <link rel="manifest" href="./manifest.json">
   <link rel="apple-touch-icon" href="./1000233248.jpg">
   <style>
     :root {
       --bg-dark: #0f172a;
-      --bg-panel: rgba(30, 41, 59, 0.94);
+      --bg-panel: rgba(30, 41, 59, 0.95);
       --bg-card: #334155;
       --accent-green: #10b981;
       --accent-cyan: #06b6d4;
@@ -24,7 +24,7 @@
 
     body.solarpunk-light {
       --bg-dark: #f4fbf7;
-      --bg-panel: rgba(226, 242, 234, 0.95);
+      --bg-panel: rgba(226, 242, 234, 0.96);
       --bg-card: #ffffff;
       --accent-green: #059669;
       --accent-cyan: #0284c7;
@@ -54,7 +54,6 @@
       transition: background-color 0.25s, color 0.25s;
     }
 
-    /* شريط الإعلانات العامة المصنف حسب الأهمية (Admin #7) */
     #globalAnnouncementBanner {
       position: fixed;
       top: 0;
@@ -79,7 +78,6 @@
       50% { opacity: 0.82; }
     }
 
-    /* الشريط العلوي */
     .top-bar {
       position: fixed;
       top: 0;
@@ -176,7 +174,6 @@
       box-shadow: 0 0 12px rgba(245, 158, 11, 0.5);
     }
 
-    /* زر وضع التركيز الكامل + القائمة الجانبية القابلة للطي (Student #4 & #15) */
     .fab-container {
       position: fixed;
       top: 62px;
@@ -243,7 +240,6 @@
       color: var(--accent-green);
     }
 
-    /* مساحة العمل */
     #workspace-container {
       position: fixed;
       top: 54px;
@@ -262,7 +258,6 @@
       background-color: var(--bg-dark);
     }
 
-    /* الخريطة المصغرة للتنقل Mini-Map Radar (Student #8) */
     #miniMapCanvas {
       position: fixed;
       bottom: 118px;
@@ -278,7 +273,6 @@
     }
     body.zen-mode #miniMapCanvas { bottom: 14px; }
 
-    /* حلقة التحكم الدائرية السريعة حول العنصر Radial Context Menu (Student #7) */
     .radial-menu {
       position: fixed;
       width: 120px;
@@ -307,7 +301,6 @@
     }
     .radial-btn:active { transform: scale(0.9); }
 
-    /* راسم الإشارة ثنائي القنوات (Student #11: Dual-Channel Oscilloscope) */
     .scope-panel {
       position: fixed;
       top: 60px;
@@ -353,7 +346,6 @@
       color: var(--text-muted);
     }
 
-    /* المقياس المتعدد اللحظي */
     .multimeter-widget {
       position: fixed;
       top: 200px;
@@ -381,7 +373,6 @@
       line-height: 1.4;
     }
 
-    /* شريط الفحص مع محدد الوحدات الذكية SI Prefix (Student #3) */
     .inspector-bar {
       position: fixed;
       bottom: 114px;
@@ -449,7 +440,6 @@
       transform: scale(1.15);
     }
 
-    /* الدرج السفلي مع البحث الفوري عن القطع والقطع المستخدمة مؤخراً (Student #5 & #6) */
     .bottom-dock {
       position: fixed;
       bottom: 0;
@@ -544,7 +534,6 @@
       margin-bottom: 2px;
     }
 
-    /* النوافذ الزجاجية الموحدة (Admin #3 Glassmorphic Modals) */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -627,7 +616,6 @@
     .badge-private { background: rgba(148, 163, 184, 0.2); color: var(--text-muted); }
     .badge-featured { background: rgba(245, 158, 11, 0.25); color: #fbbf24; }
 
-    /* أيقونة الأحرف الأولى للطالب (Admin #4 Student Avatar) */
     .avatar-circle {
       width: 34px;
       height: 34px;
@@ -693,7 +681,6 @@
       height: 110px;
     }
 
-    /* التنبيه العائم مع زر التراجع الإداري (Admin #11 Undo Toast) */
     #toastBox {
       position: fixed;
       top: 62px;
@@ -715,21 +702,18 @@
 </head>
 <body>
 
-  <!-- شريط الإعلانات العامة السحابي المصنف -->
   <div id="globalAnnouncementBanner" class="sev-info"></div>
 
-  <!-- تنبيه عائم مع دعم التراجع الإداري -->
   <div id="toastBox">
     <span id="toastText"></span>
     <button id="toastUndoBtn" class="btn btn-amber" style="display:none; padding:2px 8px; font-size:10px;">تراجع ↶</button>
   </div>
 
-  <!-- الشريط العلوي -->
   <header class="top-bar" id="topBar">
     <div class="brand" onclick="openStudentProfileModal()" title="افتح ملفك الشخصي وأوسمتك">
       <img src="./1000233248.jpg" alt="شعار جامعة حلب" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%230f172a%22/><circle cx=%2250%22 cy=%2250%22 r=%2235%22 stroke=%22%2310b981%22 stroke-width=%224%22 fill=%22none%22/></svg>'">
       <div class="brand-title">
-        <h1>جامعة حلب - الهندسة الإلكترونية <span class='badge badge-featured' style='font-size:9px;'>v9.0</span></h1>
+        <h1>جامعة حلب - الهندسة الإلكترونية <span class='badge badge-featured' style='font-size:9px;'>v12.0</span></h1>
         <div class="meta-row">
           <span class="conn-dot" id="connDot"></span>
           <span id="connText">متصل</span>
@@ -751,7 +735,6 @@
     </div>
   </header>
 
-  <!-- راسم الإشارة ثنائي القنوات (Student #11: Dual-Channel Oscilloscope) -->
   <div class="scope-panel" id="scopePanel">
     <div class="scope-header">
       <span>راسم إشارة ثنائي القنوات (CH1 دخل / CH2 خرج)</span>
@@ -760,12 +743,11 @@
     <canvas id="scopeCanvas" width="242" height="84"></canvas>
     <div class="telemetry-bar">
       <span id="maxVoltReadout" style="color:#00ff88;">CH2: 0.00V</span>
-      <span style="color:#38bdf8;">CH1: المنبع</span>
+      <span id="scopeCursorReadout" style="color:#fbbf24; cursor:pointer;" onclick="toggleScopeCursors()" title="تفعيل مسطرة القياس الزمني">📏 ΔT: 10ms (100Hz)</span>
       <span id="simStatusReadout" style="color:var(--accent-green);">جاهز</span>
     </div>
   </div>
 
-  <!-- أداة المقياس المتعدد اللحظي و RMS -->
   <div class="multimeter-widget" id="multimeterWidget">
     <div style="display:flex; justify-content:space-between; align-items:center; font-size:11px; color:var(--accent-amber); font-weight:bold;">
       <span>📟 المقياس المتعدد اللحظي (DMM)</span>
@@ -777,7 +759,6 @@
     </div>
   </div>
 
-  <!-- القائمة العائمة القابلة للطي + وضع التركيز الكامل Zen Mode (Student #4 & #15) -->
   <div class="fab-container">
     <button class="fab-main" onclick="toggleQuickRibbonMenu()" title="أدوات التحكم السريع">⚙️</button>
     <aside class="quick-ribbon" id="quickRibbonMenu">
@@ -795,26 +776,27 @@
       <button class="ribbon-btn" id="dmmRibbonBtn" title="المقياس المتعدد اللحظي (DMM)" onclick="toggleMultimeter()">📟</button>
       <button class="ribbon-btn" id="gridRibbonBtn" title="إظهار/إخفاء الشبكة" onclick="toggleGridDisplay()">▦</button>
       <button class="ribbon-btn" title="الوضع النهاري Solarpunk / الليلي" onclick="toggleSolarpunkTheme()">☀️</button>
+      <button class="ribbon-btn" id="breadboardToggleBtn" title="وضع لوحة التجارب المخبرية (Breadboard View)" onclick="toggleBreadboardMode()">🍞</button>
+      <button class="ribbon-btn" title="جدول قائمة القطع والتكلفة (BOM)" onclick="openBOMModal()">📋</button>
+      <button class="ribbon-btn" title="حاسبة القوانين الهندسية والجدول المنطقي" onclick="openEECalculatorModal()">🧮</button>
+      <button class="ribbon-btn" title="نافذة الصورة المرجعية العائمة (Split Reference)" onclick="toggleReferencePip()">🖼️</button>
+      <button class="ribbon-btn" title="طباعة تقرير التجربة المخبري الكامل PDF" onclick="printStudentLabReport()">📄</button>
       <button class="ribbon-btn" title="تصدير صورة التقرير (PNG)" onclick="exportCircuitImage()">📸</button>
     </aside>
   </div>
 
-  <!-- حلقة التحكم الدائرية السريعة حول العنصر المحدد (Student #7 Radial Context Menu) -->
   <div class="radial-menu" id="radialContextMenu">
     <button class="radial-btn" style="top:0; left:44px;" title="تدوير 90°" onclick="rotateSelectedComponent()">↻</button>
     <button class="radial-btn" style="bottom:8px; right:4px;" title="تكرار العنصر (Duplicate)" onclick="duplicateSelectedComponent()">❐</button>
     <button class="radial-btn" style="bottom:8px; left:4px; border-color:var(--accent-red); color:var(--accent-red);" title="حذف العنصر" onclick="deleteSelectedComponent()">🗑️</button>
   </div>
 
-  <!-- مساحة العمل (Canvas) -->
   <main id="workspace-container">
     <canvas id="circuitCanvas"></canvas>
   </main>
 
-  <!-- الخريطة المصغرة للتنقل Mini-Map Radar (Student #8) -->
   <canvas id="miniMapCanvas" width="96" height="68"></canvas>
 
-  <!-- شريط فحص وتعديل العنصر مع الوحدات الهندسية الذكية SI Prefix (Student #3) -->
   <div class="inspector-bar" id="inspectorBar">
     <div class="inspector-row">
       <div style="display:flex; align-items:center; gap:8px;">
@@ -857,7 +839,6 @@
     </div>
   </div>
 
-  <!-- الدرج السفلي مع شريط البحث الفوري والقطع المستخدمة مؤخراً (Student #5 & #6) -->
   <footer class="bottom-dock">
     <div class="category-bar">
       <input type="text" id="compQuickSearch" class="comp-search-pill" placeholder="🔍 ابحث عن قطعة..." oninput="filterComponentsBySearch(this.value)">
@@ -871,7 +852,6 @@
     <div class="bottom-toolbar" id="dynamicToolbar"></div>
   </footer>
 
-  <!-- 1. نافذة تسجيل الدخول لأول مرة -->
   <div class="modal-overlay" id="onboardingModal">
     <div class="modal-card">
       <div class="modal-header">
@@ -888,6 +868,16 @@
         <label>الرقم الجامعي (6 خانات رقمية):</label>
         <input type="text" id="uniIdInput" class="form-control" placeholder="مثال: 240512" inputmode="numeric">
       </div>
+      <div class="form-group">
+        <label>الفئة المخبرية العملية (Lab Section):</label>
+        <select id="labSectionInput" class="form-control">
+          <option value="الفئة 1">الفئة المخبرية الأولى (Section 1)</option>
+          <option value="الفئة 2">الفئة المخبرية الثانية (Section 2)</option>
+          <option value="الفئة 3">الفئة المخبرية الثالثة (Section 3)</option>
+          <option value="الفئة 4">الفئة المخبرية الرابعة (Section 4)</option>
+          <option value="الفئة 5">الفئة المخبرية الخامسة (Section 5)</option>
+        </select>
+      </div>
       <div id="onboardingError" style="color:var(--accent-red); font-size:12px; margin-bottom:10px; display:none;"></div>
       <button class="btn btn-primary" style="width:100%; justify-content:center; padding:10px;" onclick="handleOnboardingSubmit()">
         تأكيد الدخول وحفظ الهوية الجامعية
@@ -895,7 +885,6 @@
     </div>
   </div>
 
-  <!-- 2. نافذة الملف الشخصي للطالب وأوسمته (Student #13 Profile Drawer) -->
   <div class="modal-overlay" id="studentProfileModal">
     <div class="modal-card">
       <div class="modal-header">
@@ -906,7 +895,6 @@
     </div>
   </div>
 
-  <!-- 3. نافذة مشاركة الدائرة عبر QR Code فوري (Student #14) -->
   <div class="modal-overlay" id="qrShareModal">
     <div class="modal-card" style="text-align:center;">
       <div class="modal-header">
@@ -922,7 +910,6 @@
     </div>
   </div>
 
-  <!-- 4. نافذة نماذج الدوائر الجاهزة + التحدي الأسبوعي من الإدارة (Admin #13) -->
   <div class="modal-overlay" id="templatesModal">
     <div class="modal-card">
       <div class="modal-header">
@@ -959,10 +946,10 @@
         <p style="font-size:11px; color:var(--text-muted); margin:4px 0 8px;">منبع متناوب مع مقاومة ووشيعة ومكثف لدراسة الرنين وتبادل الطاقة.</p>
         <button class="btn btn-cyan" onclick="loadCircuitTemplate('RLC_RESONANCE')">تحميل الدائرة</button>
       </div>
+      <div id="customCloudTemplatesContainer"></div>
     </div>
   </div>
 
-  <!-- 5. نافذة حفظ المشروع -->
   <div class="modal-overlay" id="saveProjectModal">
     <div class="modal-card">
       <div class="modal-header">
@@ -972,6 +959,16 @@
       <div class="form-group">
         <label>اسم المشروع / الدائرة:</label>
         <input type="text" id="projectTitleInput" class="form-control" placeholder="مثال: دارة مقوم نصف موجي مع مرشح سعوي">
+      </div>
+      <div class="form-group">
+        <label>تصنيف المادة الدراسية (مجلد المقرر):</label>
+        <select id="projectCourseFolder" class="form-control">
+          <option value="الدارات الكهربائية 1">⚡ الدارات الكهربائية 1</option>
+          <option value="الإلكترونيات التماثلية">🎛️ الإلكترونيات التماثلية (ترانزستورات ومضخمات)</option>
+          <option value="النظم المنطقية والرقمية">🔢 النظم المنطقية والرقمية</option>
+          <option value="إلكترونيات القدرة">🔋 إلكترونيات القدرة والمرشحات</option>
+          <option value="مشاريع التخرج والابتكار">🎓 مشاريع التخرج والابتكار</option>
+        </select>
       </div>
       <div class="form-group" style="display:flex; align-items:center; gap:8px;">
         <input type="checkbox" id="projectPublicToggle" checked style="width:18px; height:18px;">
@@ -983,7 +980,6 @@
     </div>
   </div>
 
-  <!-- 6. نافذة مستودع المشاريع والبحث الذكي -->
   <div class="modal-overlay" id="repoModal">
     <div class="modal-card">
       <div class="modal-header">
@@ -997,7 +993,6 @@
     </div>
   </div>
 
-  <!-- 7. نافذة الغرفة السرية بملء الشاشة (Admin Dashboard v8.0 - 15 تحسيناً إدارياً وبصرياً) -->
   <div class="modal-overlay" id="secretRoomModal">
     <div class="modal-card fullscreen-admin" style="border-color:var(--accent-amber);">
       <svg class="cyber-watermark" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
@@ -1027,7 +1022,6 @@
         </div>
       </div>
 
-      <!-- لوحة الرسوم البيانية التحليلية (Admin #1 Visual Analytics Charts) -->
       <div class="stats-grid">
         <div class="stat-box">
           <div class="num" id="statTotalUsers">0</div>
@@ -1056,28 +1050,38 @@
         </div>
       </div>
 
-      <!-- نظام الإعلانات المصنفة بالألوان + نشر التحدي الأسبوعي (Admin #7 & #13) -->
       <div style="display:flex; gap:5px; margin-bottom:8px; flex-wrap:wrap;">
         <select id="adminAnnSeverity" class="form-control" style="width:130px; padding:5px; font-size:11px;">
           <option value="sev-info">🔵 إعلان معلوماتي</option>
           <option value="sev-update">🟢 تحديث جديد</option>
           <option value="sev-urgent">🔴 تنبيه امتحاني عاجل</option>
         </select>
-        <input type="text" id="adminAnnouncementInput" class="form-control" style="flex:1; min-width:180px; padding:5px 10px; font-size:11px;" placeholder="اكتب إعلاناً عاماً يُبث أعلى شاشة جميع الطلاب...">
-        <button class="btn btn-primary" onclick="publishGlobalAnnouncement()">📢 بث الإعلان</button>
-        <button class="btn btn-amber" onclick="publishCurrentCircuitAsChallenge()">🏆 نشر الدارة الحالية كتحدي أسبوعي</button>
+        <input type="text" id="adminAnnouncementInput" class="form-control" style="flex:1; min-width:150px; padding:5px 10px; font-size:11px;" placeholder="اكتب إعلاناً عاماً يُبث أعلى شاشة جميع الطلاب...">
+        <select id="adminAnnExpiry" class="form-control" style="width:110px; padding:5px; font-size:11px;" title="مدة بقاء الإعلان (Admin #8)">
+          <option value="0">⏱️ دائم</option>
+          <option value="3600000">⏱️ ساعة واحدة</option>
+          <option value="7200000">⏱️ ساعتان (امتحان)</option>
+          <option value="86400000">⏱️ 24 ساعة</option>
+        </select>
+        <button class="btn btn-primary" onclick="publishGlobalAnnouncement()">📢 بث</button>
+        <button class="btn btn-amber" onclick="publishCurrentCircuitAsChallenge()">🏆 نشر كتحدي سحابي</button>
+        <button class="btn btn-cyan" onclick="saveCurrentCircuitAsCloudTemplate()">➕ حفظ كقالب عام</button>
+        <button class="btn" id="maintModeBtn" onclick="toggleMaintenanceMode()">🛠️ وضع الصيانة</button>
         <button class="btn btn-danger" onclick="clearGlobalAnnouncement()">إخفاء</button>
       </div>
 
-      <!-- تبويبات الإدارة -->
       <div class="admin-tabs">
-        <button class="btn btn-cyan" onclick="switchAdminTab('USERS')">👥 سجل الطلاب النشطين</button>
-        <button class="btn" onclick="switchAdminTab('BANNED')">🚫 قائمة المحظورين</button>
-        <button class="btn" onclick="switchAdminTab('PROJECTS')">📂 محكمة المشاريع والتوسيم الذهبي</button>
-        <button class="btn" onclick="switchAdminTab('REPORTS')">🚩 طابور التبليغات (<span id="tabReportBadge">0</span>)</button>
+        <button class="btn" onclick="toggleAdminHeaderCollapse()" title="طي/توسيع الإحصائيات لتكبير الجدول (Admin #4)">↕️ طي اللوحة العلوية</button>
+        <button class="btn btn-cyan" onclick="switchAdminTab('USERS')">👥 سجل الطلاب والفئات</button>
+        <button class="btn" onclick="switchAdminTab('LEADERBOARD')">🏆 لوحة المتصدرين</button>
+        <button class="btn" onclick="switchAdminTab('PROJECTS')">📂 المشاريع والدرجات الأكاديمية</button>
+        <button class="btn" onclick="switchAdminTab('PLAGIARISM')">🕵️ كاشف الانتحال</button>
+        <button class="btn" onclick="switchAdminTab('ANALYTICS')">📊 إحصائيات القطع والأخطاء</button>
+        <button class="btn" onclick="switchAdminTab('SECURITY_LOG')">🛡️ سجل العمليات والقوائم</button>
+        <button class="btn" onclick="switchAdminTab('BANNED')">🚫 المحظورون</button>
+        <button class="btn" onclick="switchAdminTab('REPORTS')">🚩 التبليغات (<span id="tabReportBadge">0</span>)</button>
       </div>
 
-      <!-- أدوات البحث، فلتر الدفعة الجامعية، تحديد الكل، والفرز (Admin #5, #8, #12) -->
       <div style="display:flex; gap:5px; margin-bottom:8px; flex-wrap:wrap; align-items:center;">
         <label style="font-size:11px; display:flex; align-items:center; gap:4px; cursor:pointer; background:var(--bg-dark); padding:5px 8px; border-radius:8px; border:1px solid var(--border-soft);">
           <input type="checkbox" id="adminSelectAllToggle" onchange="toggleSelectAllAdminItems(this.checked)">
@@ -1103,10 +1107,8 @@
         <button class="btn btn-danger" onclick="executeBulkDeleteSelected()">حذف المحددين ☑</button>
       </div>
 
-      <!-- محتوى التبويب الإداري المتغير -->
       <div id="adminDynamicViewport" style="flex:1; overflow-y:auto; padding-right:4px;"></div>
 
-      <!-- شريط تقسيم الصفحات الذكي (Admin #8 Smart Pagination) -->
       <div style="display:flex; justify-content:space-between; align-items:center; padding-top:8px; border-top:1px solid var(--border-soft); font-size:11px;">
         <span id="adminPaginationInfo" style="color:var(--text-muted);">صفحة 1</span>
         <div style="display:flex; gap:5px;">
@@ -1117,7 +1119,6 @@
     </div>
   </div>
 
-  <!-- 8. نافذة معاينة الدائرة الحية بالكانفاس المصغر + ملف الطالب 360° (Admin #2 & #9) -->
   <div class="modal-overlay" id="adminPreviewModal">
     <div class="modal-card">
       <div class="modal-header">
@@ -1129,7 +1130,73 @@
     </div>
   </div>
 
-  <!-- 9. نافذة حوار زجاجية موحدة بدلاً من prompt/confirm (Admin #3 Custom Glassmorphic Dialog) -->
+  <!-- نافذة الصورة المرجعية العائمة للمقارنة (Student #14 Split-Screen Reference PIP) -->
+  <div id="referencePipWidget" style="position:fixed; top:115px; right:58px; width:210px; background:var(--bg-panel); border:2px solid var(--accent-cyan); border-radius:12px; padding:8px; z-index:88; display:none; box-shadow:0 10px 25px rgba(0,0,0,0.5);">
+    <div style="display:flex; justify-content:space-between; align-items:center; font-size:10px; color:var(--accent-cyan); margin-bottom:5px; font-weight:bold;">
+      <span>🖼️ ورقة التجربة / المسألة المرجعية</span>
+      <button class="btn" style="padding:1px 5px; font-size:9px;" onclick="toggleReferencePip()">✖</button>
+    </div>
+    <input type="file" id="refImageFileInput" accept="image/*" style="display:none;" onchange="loadReferenceImageFile(event)">
+    <div id="refImagePreviewBox" style="width:100%; height:110px; background:#020617; border-radius:6px; display:flex; align-items:center; justify-content:center; overflow:hidden; cursor:pointer; border:1px dashed var(--border-soft);" onclick="document.getElementById('refImageFileInput').click()">
+      <span style="font-size:10px; color:var(--text-muted); text-align:center; padding:8px;">انقر لرفع صورة المسألة أو مخطط التجربة للمقارنة أثناء الرسم</span>
+    </div>
+  </div>
+
+  <!-- شاشة وضع الصيانة الإداري المؤقت (Admin #13 Maintenance Mode Overlay) -->
+  <div class="modal-overlay" id="maintenanceOverlay" style="z-index:290; background:rgba(2,6,23,0.96);">
+    <div class="modal-card" style="text-align:center; border-color:var(--accent-amber);">
+      <h2 style="color:var(--accent-amber); margin-bottom:10px;">🛠️ مخابر المحاكاة قيد التحديث الصياني</h2>
+      <p style="font-size:13px; color:var(--text-muted); line-height:1.6; margin-bottom:14px;">
+        يقوم المهندس المشرف حالياً بترقية نماذج المخابر وإضافة تمارين جديدة لطلاب كلية الهندسة الإلكترونية. ستعود المنصة للعمل خلال دقائق.
+      </p>
+      <button class="btn btn-amber" onclick="bypassMaintenanceIfAdmin()">🔐 دخول المشرف العام (Admin Bypass)</button>
+    </div>
+  </div>
+
+  <!-- نافذة جدول قائمة القطع والتكلفة (Student #5 Bill of Materials BOM) -->
+  <div class="modal-overlay" id="bomModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 style="font-size:15px; color:var(--accent-green);">📋 قائمة القطع الهندسية والتكلفة التقديرية (BOM)</h3>
+        <button class="btn" onclick="closeModal('bomModal')">إغلاق</button>
+      </div>
+      <div id="bomTableContainer" style="font-size:12px; max-height:60vh; overflow-y:auto;"></div>
+      <div style="display:flex; gap:6px; margin-top:10px;">
+        <button class="btn btn-primary" style="flex:1; justify-content:center;" onclick="printStudentLabReport()">📄 طباعة تقرير التجربة الكامل مع القائمة</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- نافذة الحاسبة الهندسية وجدول الحقيقة المنطقي (Student #8 & #10 EE Calculator & Truth Table) -->
+  <div class="modal-overlay" id="eeCalcModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 style="font-size:15px; color:var(--accent-cyan);">🧮 الحاسبة الهندسية ومولد جدول الحقيقة المنطقي</h3>
+        <button class="btn" onclick="closeModal('eeCalcModal')">إغلاق</button>
+      </div>
+      <div class="project-card">
+        <strong style="color:var(--accent-green); font-size:12px;">1. حساب التردد الحرج لمرشح تمرير (RC Cutoff Frequency)</strong>
+        <div style="display:flex; gap:6px; margin-top:6px; align-items:center;">
+          <input type="number" id="calcRInput" class="form-control" value="1000" placeholder="R (Ω)" oninput="computeEECalculator()">
+          <input type="number" id="calcCInput" class="form-control" value="1" placeholder="C (µF)" oninput="computeEECalculator()">
+          <span id="calcFcResult" style="font-weight:bold; color:var(--accent-amber); min-width:110px; font-size:12px;">fc = 159.15 Hz</span>
+        </div>
+      </div>
+      <div class="project-card">
+        <strong style="color:var(--accent-cyan); font-size:12px;">2. حساب مقاومة حماية الليد (LED Series Resistor)</strong>
+        <div style="display:flex; gap:6px; margin-top:6px; align-items:center;">
+          <input type="number" id="calcVccInput" class="form-control" value="9" placeholder="VCC (V)" oninput="computeEECalculator()">
+          <input type="number" id="calcVfInput" class="form-control" value="2.0" placeholder="Vf (V)" oninput="computeEECalculator()">
+          <span id="calcRledResult" style="font-weight:bold; color:var(--accent-green); min-width:110px; font-size:12px;">R = 350 Ω</span>
+        </div>
+      </div>
+      <div class="project-card">
+        <strong style="color:var(--accent-amber); font-size:12px;">3. جدول الحقيقة الفوري للبوابات الرقمية في الدائرة (Logic Truth Table)</strong>
+        <div id="truthTableBox" style="margin-top:6px; font-size:11px;"></div>
+      </div>
+    </div>
+  </div>
+
   <div class="modal-overlay" id="customDialogModal" style="z-index:260;">
     <div class="modal-card" style="max-width:400px;">
       <div class="modal-header">
@@ -1144,7 +1211,6 @@
     </div>
   </div>
 
-  <!-- محرك التطبيق الشامل v8.0 -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { 
@@ -1153,9 +1219,6 @@
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
     import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-    // ============================================================================
-    // 1. نافذة الحوار الزجاجية الموحدة بدلاً من prompt/confirm (Admin #3)
-    // ============================================================================
     let dialogResolver = null;
 
     window.openCustomDialog = function({ title, message, fields = [], confirmText = 'تأكيد' }) {
@@ -1192,9 +1255,6 @@
       }
     };
 
-    // ============================================================================
-    // 2. محرك الصوتيات التفاعلي البرمجي (Web Audio API ASMR & Lab SFX Engine)
-    // ============================================================================
     let soundEnabled = true;
     let audioCtx = null;
 
@@ -1295,14 +1355,13 @@
       }
     };
 
-    // ============================================================================
-    // 3. موسوعة القطع الإلكترونية الشاملة (مع دعم البحث الفوري والقطع الأخيرة)
-    // ============================================================================
     const COMPONENT_CATALOG = {
       CAT_SOURCES: [
         { tool: 'SELECT', icon: '✥', label: 'تحريك/تحديد' },
+        { tool: 'BOX_SELECT', icon: '⬚', label: 'تحديد جماعي Lasso' },
         { tool: 'PAN', icon: '✋', label: 'تحريك الشاشة' },
         { tool: 'WIRE', icon: '╱', label: 'سلك توصيل' },
+        { tool: 'NET_LABEL', icon: '🏷️', label: 'عقدة لاسلكية Net', defVal: 0, unit: '', sym: 'NET', rIcon: '🏷️', rDesc: 'توصيل لاسلكي بالاسم (Net Label Tunnel VCC/OUT)' },
         { tool: 'GND', icon: '⏚', label: 'تأريض GND' },
         { tool: 'DC_SOURCE', icon: '⎓', label: 'منبع DC', defVal: 5, unit: 'V', sym: 'DC', rIcon: '⚡', rDesc: 'منبع تغذية مستمر مخبري (DC Power Supply)' },
         { tool: 'BATTERY_9V', icon: '🔋', label: 'بطارية 9V', defVal: 9, unit: 'V', sym: 'BAT', rIcon: '🔋', rDesc: 'بطارية قلوية قياسية 9 فولت (9V Alkaline Battery)' },
@@ -1371,7 +1430,6 @@
       });
     });
 
-    // قائمة القطع المستخدمة مؤخراً (Student #6 Recently Used Dock)
     let recentTools = ['SELECT', 'WIRE', 'RESISTOR', 'LED_RED', 'DC_SOURCE', 'GND'];
     let activeCategory = 'CAT_SOURCES';
 
@@ -1420,7 +1478,10 @@
         }
         const isAct = currentTool === item.tool ? 'active' : '';
         return `
-          <div class="tool-item ${isAct}" data-tool="${item.tool}" onclick="selectTool('${item.tool}', this)">
+          <div class="tool-item ${isAct}" data-tool="${item.tool}" draggable="true"
+               ondragstart="handleToolDragStart(event, '${item.tool}')"
+               oncontextmenu="showFormulaTooltipCard(event, '${item.tool}'); return false;"
+               onclick="selectTool('${item.tool}', this)">
             <span class="icon">${item.icon}</span>
             <span>${item.label}</span>
           </div>
@@ -1438,9 +1499,6 @@
         .replace(/'/g, '&#039;');
     }
 
-    // ============================================================================
-    // 4. إعدادات Firebase والمزامنة السحابية
-    // ============================================================================
     const firebaseConfig = {
       apiKey: "AIzaSyAg9os96KdhaHveSpi5GmHFCOM_oo2s8h0",
       authDomain: "university-of-aleppo-76524.firebaseapp.com",
@@ -1514,12 +1572,47 @@
       onSnapshot(doc(db, "announcements", "global"), (snap) => {
         firebaseOpsCount++;
         if (snap.exists() && snap.data().text) {
-          localStorage.setItem('aleppo_ee_announcement', snap.data().text);
-          localStorage.setItem('aleppo_ee_ann_sev', snap.data().severity || 'sev-info');
+          const data = snap.data();
+          if (data.expiresAt && Date.now() > data.expiresAt) {
+            localStorage.removeItem('aleppo_ee_announcement');
+          } else {
+            localStorage.setItem('aleppo_ee_announcement', data.text);
+            localStorage.setItem('aleppo_ee_ann_sev', data.severity || 'sev-info');
+            localStorage.setItem('aleppo_ee_ann_exp', data.expiresAt || '0');
+          }
         } else {
           localStorage.removeItem('aleppo_ee_announcement');
         }
         loadGlobalAnnouncementBanner();
+      }, () => {});
+
+      onSnapshot(doc(db, "announcements", "challenge"), (snap) => {
+        firebaseOpsCount++;
+        if (snap.exists() && snap.data().schema) {
+          localStorage.setItem('aleppo_ee_weekly_challenge', JSON.stringify(snap.data().schema));
+        }
+      }, () => {});
+
+      onSnapshot(doc(db, "announcements", "maintenance"), (snap) => {
+        firebaseOpsCount++;
+        if (snap.exists()) {
+          const isAct = !!snap.data().active;
+          localStorage.setItem('aleppo_ee_maintenance', isAct ? '1' : '0');
+          const overlay = document.getElementById('maintenanceOverlay');
+          const isAdmin = currentUser && (currentUser.role === 'admin' || currentUser.universityId === '1461997');
+          if (overlay) {
+            if (isAct && !isAdmin) overlay.classList.add('active');
+            else overlay.classList.remove('active');
+          }
+        }
+      }, () => {});
+
+      onSnapshot(doc(db, "announcements", "templates"), (snap) => {
+        firebaseOpsCount++;
+        if (snap.exists() && Array.isArray(snap.data().list)) {
+          localStorage.setItem('aleppo_ee_custom_templates', JSON.stringify(snap.data().list));
+          renderCustomCloudTemplates();
+        }
       }, () => {});
 
       onSnapshot(collection(db, "users"), (snap) => {
@@ -1577,7 +1670,6 @@
       updateConnectivityIndicator();
       loadGlobalAnnouncementBanner();
 
-      // فحص ما إذا كان الرابط يحتوي على دائرة مشاركة عبر QR Code (Student #14)
       const urlParams = new URLSearchParams(window.location.search);
       const sharedCircuitBase64 = urlParams.get('circuit');
       if (sharedCircuitBase64) {
@@ -1631,11 +1723,22 @@
         return;
       }
 
+      // فحص القائمة البيضاء الرسمية للكلية في حال تفعيلها من الإدارة (Admin #9 CSV Whitelist)
+      const whitelist = JSON.parse(localStorage.getItem('aleppo_ee_whitelist') || '[]');
+      if (!isAdminTriggered && whitelist.length > 0 && !whitelist.includes(uniId)) {
+        playSFX('error');
+        errBox.innerText = "الرقم الجامعي غير مدرج في القوائم الرسمية المعتمدة لهذا الفصل.";
+        errBox.style.display = 'block';
+        return;
+      }
+
+      const labSec = document.getElementById('labSectionInput')?.value || 'الفئة 1';
       const uid = activeAuthUid || ("usr_" + uniId);
       currentUser = {
         uid,
         fullName,
         universityId: uniId,
+        labSection: labSec,
         role: isAdminTriggered ? "admin" : "student",
         isBanned: false,
         createdAt: Date.now(),
@@ -1673,9 +1776,6 @@
       }
     }
 
-    // ============================================================================
-    // 5. محرك المحاكاة الفيزيائي في الـ Web Worker
-    // ============================================================================
     const workerCode = `
       let prevCapVoltages = {};
       let prevIndCurrents = {};
@@ -1741,6 +1841,17 @@
             }
           }
         }
+
+        // ربط العقد اللاسلكية المسماة (Net Labels / Virtual Tunnels) التي تحمل نفس الاسم (Student #2)
+        const netGroups = {};
+        components.forEach(c => {
+          if (c.type === 'NET_LABEL') {
+            const name = (c.netName || 'VCC').trim().toUpperCase();
+            const pinKey = c.id + '_0';
+            if (!netGroups[name]) netGroups[name] = pinKey;
+            else union(netGroups[name], pinKey);
+          }
+        });
 
         wires.forEach((w, wIdx) => {
           const wKey = 'wire_' + wIdx;
@@ -1833,7 +1944,19 @@
               if (n2 > 0) I[n2 - 1] -= iVal;
             };
 
-            if (['RESISTOR', 'POT', 'LDR', 'THERMISTOR', 'LAMP', 'DC_MOTOR', 'TRANSFORMER', 'VOLTMETER', 'AMMETER'].includes(c.type)) {
+            if (c.type === 'POT') {
+              // معادلة المقاومة المتغيرة ثلاثية الأقطاب الحقيقية (Pin0=A, Pin1=Wiper, Pin2=B) كمقسم جهد متوازن
+              const n3 = nodeMap[c.id + '_2'] || 0;
+              const Rtot = Math.max(c.value || 1000, 2);
+              const gHalf = 1 / (Rtot * 0.5);
+              addConductance(gHalf); // بين A و W
+              if (n2 > 0) G[n2 - 1][n2 - 1] += gHalf;
+              if (n3 > 0) G[n3 - 1][n3 - 1] += gHalf;
+              if (n2 > 0 && n3 > 0) {
+                G[n2 - 1][n3 - 1] -= gHalf;
+                G[n3 - 1][n2 - 1] -= gHalf;
+              }
+            } else if (['RESISTOR', 'LDR', 'THERMISTOR', 'LAMP', 'DC_MOTOR', 'TRANSFORMER', 'VOLTMETER', 'AMMETER'].includes(c.type)) {
               const R = Math.max(c.value || 100, 1e-3);
               addConductance(1 / R);
             } else if (c.type === 'BUZZER') {
@@ -1883,24 +2006,47 @@
                   'NPN_BJT': 0.7, 'PNP_BJT': 0.7, 'NMOS': 1.5, 'PMOS': 1.5
                 };
                 const vTh = vfMap[c.type] || 0.7;
-                const rOn = c.type.startsWith('LED') ? 15 : 5;
-                if (vDiff >= vTh) {
-                  const gFwd = 1 / rOn;
-                  addConductance(gFwd);
-                  addCurrentSource(gFwd * vTh);
+                if (['NPN_BJT', 'PNP_BJT', 'NMOS', 'PMOS'].includes(c.type)) {
+                  const n3 = nodeMap[c.id + '_2'] || 0;
+                  const vBase = n1 > 0 ? V[n1 - 1] : 0;
+                  const vEmitter = n3 > 0 ? V[n3 - 1] : 0;
+                  const vBE = c.type === 'PNP_BJT' || c.type === 'PMOS' ? (vEmitter - vBase) : (vBase - vEmitter);
+                  // توصيل القاعدة-الباعث كديود قيادة، وتوصيل المجمع-الباعث (n2 <-> n3) بموصلية مضخمة عند تجاوز العتبة
+                  const gBE = vBE >= vTh ? (1 / 200) : 1e-9;
+                  if (n1 > 0) G[n1 - 1][n1 - 1] += gBE;
+                  if (n3 > 0) G[n3 - 1][n3 - 1] += gBE;
+                  if (n1 > 0 && n3 > 0) { G[n1 - 1][n3 - 1] -= gBE; G[n3 - 1][n1 - 1] -= gBE; }
+
+                  const gCE = vBE >= vTh ? Math.min(1 / 2, ((c.value || 100) * (vBE - vTh)) / 10) : 1e-9;
+                  if (n2 > 0) G[n2 - 1][n2 - 1] += gCE;
+                  if (n3 > 0) G[n3 - 1][n3 - 1] += gCE;
+                  if (n2 > 0 && n3 > 0) { G[n2 - 1][n3 - 1] -= gCE; G[n3 - 1][n2 - 1] -= gCE; }
                 } else {
-                  addConductance(1e-9);
+                  const rOn = c.type.startsWith('LED') ? 15 : 5;
+                  if (vDiff >= vTh) {
+                    const gFwd = 1 / rOn;
+                    addConductance(gFwd);
+                    addCurrentSource(gFwd * vTh);
+                  } else {
+                    addConductance(1e-9);
+                  }
                 }
               }
             } else if (['OPAMP', 'NOT_GATE', 'AND_GATE', 'OR_GATE', 'XOR_GATE'].includes(c.type)) {
-              const vIn = n1 > 0 ? V[n1 - 1] : 0;
+              const n3 = nodeMap[c.id + '_2'] || 0;
+              const vInA = n1 > 0 ? V[n1 - 1] : 0;
+              const vInB = n3 > 0 ? V[n3 - 1] : 0;
               let vOutTarget = 0;
               if (c.type === 'OPAMP') {
-                vOutTarget = Math.max(-12, Math.min(12, vIn * (c.value || 5)));
+                vOutTarget = Math.max(-12, Math.min(12, (vInA - vInB) * (c.value || 10)));
               } else if (c.type === 'NOT_GATE') {
-                vOutTarget = vIn > 2.2 ? 0 : 5;
-              } else {
-                vOutTarget = vIn > 2.2 ? 5 : 0;
+                vOutTarget = vInA > 2.2 ? 0 : 5;
+              } else if (c.type === 'AND_GATE') {
+                vOutTarget = (vInA > 2.2 && vInB > 2.2) ? 5 : 0;
+              } else if (c.type === 'OR_GATE') {
+                vOutTarget = (vInA > 2.2 || vInB > 2.2) ? 5 : 0;
+              } else if (c.type === 'XOR_GATE') {
+                vOutTarget = ((vInA > 2.2) !== (vInB > 2.2)) ? 5 : 0;
               }
               addConductance(1e-6);
               if (n2 > 0) {
@@ -1998,9 +2144,6 @@
     const workerBlob = new Blob([workerCode], { type: 'application/javascript' });
     const solverWorker = new Worker(URL.createObjectURL(workerBlob));
 
-    // ============================================================================
-    // 6. محرر الدوائر البصري المتقدم (رموز هندسية حقيقية، نقاط التيار، الخريطة المصغرة، والملصقات)
-    // ============================================================================
     const canvas = document.getElementById('circuitCanvas');
     const ctx = canvas.getContext('2d');
     const miniMapCanvas = document.getElementById('miniMapCanvas');
@@ -2010,7 +2153,7 @@
     let currentTool = 'SELECT';
     let components = [];
     let wires = [];
-    let stickyNotes = []; // ملصقات نصية لشرح الدائرة (Student #10)
+    let stickyNotes = [];
     let selectedComponent = null;
     let draggingComponent = null;
     let wireStartPin = null;
@@ -2018,13 +2161,13 @@
     let pointerPos = { x: 0, y: 0 };
     let isSimulating = false;
     let simTime = 0;
-    let currentFlowOffset = 0; // لتحريك نقاط التيار المضيئة (Student #2)
+    let currentFlowOffset = 0;
     let showCurrentDots = true;
-    let useVoltageHeatmap = false; // تلوين الأسلاك حسب الجهد (Student #9)
+    let useVoltageHeatmap = false;
     let latestPinVoltages = {};
     let errorCulpritIds = [];
-    let scopeHistoryCH1 = new Array(115).fill(0); // موجة الدخل
-    let scopeHistoryCH2 = new Array(115).fill(0); // موجة الخرج
+    let scopeHistoryCH1 = new Array(115).fill(0);
+    let scopeHistoryCH2 = new Array(115).fill(0);
 
     let cameraZoom = 1.0;
     let cameraPan = { x: 0, y: 0 };
@@ -2077,7 +2220,6 @@
       showToast(useVoltageHeatmap ? "تم تفعيل التلوين الحراري للأسلاك حسب الجهد 🌡️" : "تمت استعادة ألوان الأسلاك المخصصة");
     };
 
-    // محاذاة وترتيب الدائرة تلقائياً (Student #12 Auto-Align & Tidy Up)
     window.autoAlignCircuit = function() {
       playSFX('wire');
       pushHistorySnapshot();
@@ -2101,7 +2243,6 @@
       showToast("📐 تمت محاذاة وترتيب عناصر الدائرة هندسياً!");
     };
 
-    // إضافة ملصق ملاحظة نصية فوق الدائرة (Student #10 Sticky Text Notes)
     window.addStickyNote = async function() {
       playSFX('tap');
       const res = await openCustomDialog({
@@ -2285,7 +2426,6 @@
       showToast("تم حفظ صورة الدائرة لإرفاقها في تقرير المختبر 📸");
     };
 
-    // تجاهل تغيير حجم الكانفاس عند ارتفاع لوحة مفاتيح الهاتف (PWA Fix)
     function resizeCanvas() {
       if (document.activeElement && ['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
       const container = document.getElementById('workspace-container');
@@ -2356,7 +2496,6 @@
           { id: 'GND1', type: 'GND', x: cx, y: cy + 72, value: 0, unit: '', rotation: 0, pins: [] }
         ];
       } else if (type === 'CHALLENGE') {
-        // دارة التحدي الأسبوعي (تحتوي على ديود معكوس ومفتاح مفصول ومقاومة عالية جداً لإصلاحها)
         const savedChallenge = localStorage.getItem('aleppo_ee_weekly_challenge');
         if (savedChallenge) {
           const parsed = JSON.parse(savedChallenge);
@@ -2412,9 +2551,46 @@
       showToast("تم تحميل الدائرة القياسية بنجاح!");
     };
 
+    const THREE_PIN_TYPES = ['NPN_BJT', 'PNP_BJT', 'NMOS', 'PMOS', 'OPAMP', 'POT', 'AND_GATE', 'OR_GATE', 'XOR_GATE'];
+
     function updateComponentPins(comp) {
-      if (comp.type === 'GND') {
-        comp.pins = [{ x: comp.x, y: comp.y - GRID_SIZE }];
+      if (comp.type === 'GND' || comp.type === 'NET_LABEL') {
+        comp.pins = [{ x: comp.x, y: comp.y - GRID_SIZE, role: comp.type === 'NET_LABEL' ? (comp.netName || 'VCC') : 'GND' }];
+      } else if (THREE_PIN_TYPES.includes(comp.type)) {
+        // دعم الأقطاب الثلاثية الحقيقية للترانزستورات (B, C, E)، المضخمات (V+, V-, Out)، البوابات (In1, In2, Out) والمقاومة المتغيرة
+        const rot = (comp.rotation || 0) % 360;
+        let roles = ['1', '2', '3'];
+        if (['NPN_BJT', 'PNP_BJT'].includes(comp.type)) roles = ['B', 'C', 'E'];
+        else if (['NMOS', 'PMOS'].includes(comp.type)) roles = ['G', 'D', 'S'];
+        else if (comp.type === 'OPAMP') roles = ['in+', 'out', 'in-'];
+        else if (comp.type === 'POT') roles = ['A', 'W', 'B'];
+        else roles = ['A', 'Y', 'B'];
+
+        if (rot === 90) {
+          comp.pins = [
+            { x: comp.x, y: comp.y - GRID_SIZE * 2, role: roles[0] },
+            { x: comp.x, y: comp.y + GRID_SIZE * 2, role: roles[1] },
+            { x: comp.x - GRID_SIZE * 2, y: comp.y, role: roles[2] }
+          ];
+        } else if (rot === 180) {
+          comp.pins = [
+            { x: comp.x + GRID_SIZE * 2, y: comp.y, role: roles[0] },
+            { x: comp.x - GRID_SIZE * 2, y: comp.y, role: roles[1] },
+            { x: comp.x, y: comp.y - GRID_SIZE * 2, role: roles[2] }
+          ];
+        } else if (rot === 270) {
+          comp.pins = [
+            { x: comp.x, y: comp.y + GRID_SIZE * 2, role: roles[0] },
+            { x: comp.x, y: comp.y - GRID_SIZE * 2, role: roles[1] },
+            { x: comp.x + GRID_SIZE * 2, y: comp.y, role: roles[2] }
+          ];
+        } else {
+          comp.pins = [
+            { x: comp.x - GRID_SIZE * 2, y: comp.y, role: roles[0] },
+            { x: comp.x + GRID_SIZE * 2, y: comp.y, role: roles[1] },
+            { x: comp.x, y: comp.y + GRID_SIZE * 2, role: roles[2] }
+          ];
+        }
       } else {
         const rot = (comp.rotation || 0) % 360;
         if (rot === 90) {
@@ -2445,7 +2621,6 @@
       playSFX('tap');
       currentTool = toolName;
       wireStartPin = null;
-      // حفظ الأداة في قائمة "المستخدمة مؤخراً" (Student #6)
       if (!['SELECT', 'PAN', 'CLEAR'].includes(toolName)) {
         recentTools = [toolName, ...recentTools.filter(t => t !== toolName)].slice(0, 8);
       }
@@ -2519,10 +2694,36 @@
         return;
       }
 
+      if (currentTool === 'BOX_SELECT') {
+        isBoxSelecting = true;
+        boxSelectStart = { x: pos.x, y: pos.y };
+        window.boxSelectCurr = { x: pos.x, y: pos.y };
+        window.multiSelectedIds = [];
+        drawWorkspace();
+        return;
+      }
+
       if (currentTool === 'SELECT') {
+        // فحص النقر على الملصقات النصية أولاً لتحريكها أو حذفها بنقرتين (Fix #7 Sticky Notes)
+        const clickedNote = stickyNotes.find(n => Math.abs(n.x - pos.x) < 65 && Math.abs(n.y - pos.y) < 18);
+        if (clickedNote) {
+          if (isDoubleTap) {
+            pushHistorySnapshot();
+            stickyNotes = stickyNotes.filter(n => n.id !== clickedNote.id);
+            playSFX('delete');
+            drawWorkspace();
+            showToast("🗑️ تم حذف الملصق النصي");
+            return;
+          }
+          window.draggingStickyNote = clickedNote;
+          playSFX('tap');
+          return;
+        }
+
         const clickedComp = findComponentAt(pos.x, pos.y);
         selectedComponent = clickedComp || null;
         draggingComponent = clickedComp || null;
+        window.lastGroupDragPos = { x: snapToGrid(pos.x), y: snapToGrid(pos.y) };
         if (clickedComp) {
           if (['SWITCH', 'PUSH_BUTTON', 'RELAY'].includes(clickedComp.type)) {
             clickedComp.value = clickedComp.value === 1 ? 0 : 1;
@@ -2566,9 +2767,15 @@
         pushHistorySnapshot();
         const meta = ALL_COMPONENTS_META[currentTool] || { defVal: 5, unit: '' };
         const idPrefix = (meta.sym || currentTool.slice(0, 2));
+        let netLabelName = 'VCC';
+        if (currentTool === 'NET_LABEL') {
+          const entered = prompt('أدخل اسم العقدة اللاسلكية المشتركة (مثل VCC أو CLK أو OUT):', 'VCC');
+          if (entered) netLabelName = entered.trim().toUpperCase();
+        }
         const newComp = {
           id: idPrefix + (components.length + 1) + '_' + Math.floor(Math.random() * 99),
           type: currentTool,
+          netName: netLabelName,
           x: snapToGrid(pos.x),
           y: snapToGrid(pos.y),
           rotation: 0,
@@ -2601,24 +2808,58 @@
       }
 
       pointerPos = { x: snapToGrid(pos.x), y: snapToGrid(pos.y) };
-      if (draggingComponent && currentTool === 'SELECT') {
-        const oldPins = draggingComponent.pins.map(p => ({ ...p }));
-        draggingComponent.x = snapToGrid(pos.x);
-        draggingComponent.y = snapToGrid(pos.y);
-        updateComponentPins(draggingComponent);
 
-        wires.forEach(w => {
-          oldPins.forEach((op, idx) => {
-            if (w.x1 === op.x && w.y1 === op.y) {
-              w.x1 = draggingComponent.pins[idx].x;
-              w.y1 = draggingComponent.pins[idx].y;
-            }
-            if (w.x2 === op.x && w.y2 === op.y) {
-              w.x2 = draggingComponent.pins[idx].x;
-              w.y2 = draggingComponent.pins[idx].y;
-            }
+      if (window.draggingStickyNote) {
+        window.draggingStickyNote.x = snapToGrid(pos.x);
+        window.draggingStickyNote.y = snapToGrid(pos.y);
+        drawWorkspace();
+        return;
+      }
+
+      if (isBoxSelecting && currentTool === 'BOX_SELECT') {
+        window.boxSelectCurr = { x: pos.x, y: pos.y };
+        const minX = Math.min(boxSelectStart.x, pos.x);
+        const maxX = Math.max(boxSelectStart.x, pos.x);
+        const minY = Math.min(boxSelectStart.y, pos.y);
+        const maxY = Math.max(boxSelectStart.y, pos.y);
+        window.multiSelectedIds = components
+          .filter(c => c.x >= minX && c.x <= maxX && c.y >= minY && c.y <= maxY)
+          .map(c => c.id);
+        drawWorkspace();
+        return;
+      }
+
+      if (draggingComponent && currentTool === 'SELECT') {
+        const targetX = snapToGrid(pos.x);
+        const targetY = snapToGrid(pos.y);
+        const dx = targetX - draggingComponent.x;
+        const dy = targetY - draggingComponent.y;
+
+        if (dx !== 0 || dy !== 0) {
+          const movingComps = (window.multiSelectedIds && window.multiSelectedIds.includes(draggingComponent.id))
+            ? components.filter(c => window.multiSelectedIds.includes(c.id))
+            : [draggingComponent];
+
+          movingComps.forEach(mc => {
+            const oldPins = mc.pins.map(p => ({ ...p }));
+            mc.x += dx;
+            mc.y += dy;
+            updateComponentPins(mc);
+
+            wires.forEach(w => {
+              oldPins.forEach((op, idx) => {
+                if (w.x1 === op.x && w.y1 === op.y) {
+                  w.x1 = mc.pins[idx].x;
+                  w.y1 = mc.pins[idx].y;
+                }
+                if (w.x2 === op.x && w.y2 === op.y) {
+                  w.x2 = mc.pins[idx].x;
+                  w.y2 = mc.pins[idx].y;
+                }
+              });
+            });
           });
-        });
+        }
         updateRadialMenuPosition();
         drawWorkspace();
       } else if (wireStartPin) {
@@ -2628,6 +2869,17 @@
 
     canvas.addEventListener('pointerup', () => {
       isPanning = false;
+      window.draggingStickyNote = null;
+      if (isBoxSelecting) {
+        isBoxSelecting = false;
+        window.boxSelectCurr = null;
+        currentTool = 'SELECT';
+        renderCategoryToolbar();
+        drawWorkspace();
+        if (window.multiSelectedIds?.length > 0) {
+          showToast(`⬚ تم تحديد ${window.multiSelectedIds.length} عناصر جماعياً! اسحب أي عنصر منها لتحريكها معاً.`);
+        }
+      }
       if (draggingComponent) {
         draggingComponent = null;
         triggerHaptic(12);
@@ -2635,7 +2887,6 @@
       }
     });
 
-    // تحديث شريط الفحص مع محدد الوحدات الهندسية الذكية SI Prefix (Student #3)
     function updateInspectorUI() {
       const bar = document.getElementById('inspectorBar');
       if (!selectedComponent || selectedComponent.type === 'GND') {
@@ -2671,7 +2922,11 @@
       const v0 = latestPinVoltages[selectedComponent.id + '_0'];
       const v1 = latestPinVoltages[selectedComponent.id + '_1'];
       if (v0 !== undefined && v1 !== undefined) {
-        document.getElementById('inspNodeVoltage').innerText = `ΔV = ${(v0 - v1).toFixed(2)}V`;
+        const dv = Math.abs(v0 - v1);
+        const rEst = ['RESISTOR', 'POT', 'LDR', 'THERMISTOR', 'LAMP'].includes(selectedComponent.type) ? Math.max(selectedComponent.value || 100, 1) : 100;
+        const iMa = (dv / rEst) * 1000;
+        const pMw = dv * (dv / rEst) * 1000;
+        document.getElementById('inspNodeVoltage').innerText = `ΔV=${(v0 - v1).toFixed(2)}V | I≈${iMa.toFixed(1)}mA | P≈${pMw.toFixed(1)}mW`;
       } else {
         document.getElementById('inspNodeVoltage').innerText = '';
       }
@@ -2735,7 +2990,6 @@
       drawWorkspace();
     };
 
-    // دالة رسم الرموز الهندسية المعيارية داخل العنصر (Student #1 Vector Schematic Symbols)
     function drawSchematicVectorSymbol(ctx, c) {
       ctx.save();
       ctx.translate(c.x, c.y);
@@ -2744,7 +2998,6 @@
 
       ctx.beginPath();
       if (['RESISTOR', 'POT', 'LDR', 'THERMISTOR'].includes(c.type)) {
-        // خط متعرج قياسي للمقاومة (Zig-Zag IEEE Symbol)
         ctx.moveTo(-24, 0);
         ctx.lineTo(-18, 0);
         ctx.lineTo(-14, -8);
@@ -2756,23 +3009,51 @@
         ctx.lineTo(18, 0);
         ctx.lineTo(24, 0);
         if (c.type === 'POT') {
-          ctx.moveTo(-10, 12); ctx.lineTo(10, -12);
+          // سهم المنزلقة W المتصل بالقطب الثالث السفلي (0, 24)
+          ctx.moveTo(0, 24); ctx.lineTo(0, 9);
+          ctx.moveTo(-4, 13); ctx.lineTo(0, 8); ctx.lineTo(4, 13);
+        }
+      } else if (['NPN_BJT', 'PNP_BJT'].includes(c.type)) {
+        // رمز الترانزستور القياسي: القاعدة يسار (-24,0)، المجمع يمين (24,0)، الباعث أسفل (0,24)
+        ctx.moveTo(-24, 0); ctx.lineTo(-7, 0);
+        ctx.moveTo(-7, -11); ctx.lineTo(-7, 11);
+        ctx.moveTo(-7, -5); ctx.lineTo(12, -12); ctx.lineTo(24, 0);
+        ctx.moveTo(-7, 5); ctx.lineTo(0, 14); ctx.lineTo(0, 24);
+      } else if (['NMOS', 'PMOS'].includes(c.type)) {
+        // رمز الموسفت القياسي ثلاثي الأقطاب (G, D, S)
+        ctx.moveTo(-24, 0); ctx.lineTo(-9, 0);
+        ctx.moveTo(-9, -10); ctx.lineTo(-9, 10);
+        ctx.moveTo(-4, -11); ctx.lineTo(-4, 11);
+        ctx.moveTo(-4, -6); ctx.lineTo(24, 0);
+        ctx.moveTo(-4, 6); ctx.lineTo(0, 24);
+      } else if (c.type === 'OPAMP') {
+        // مثلث مضخم العمليات القياسي: in+ يسار، out يمين، in- أسفل
+        ctx.moveTo(-14, -13); ctx.lineTo(-14, 13); ctx.lineTo(16, 0); ctx.closePath();
+        ctx.moveTo(-24, 0); ctx.lineTo(-14, 0);
+        ctx.moveTo(16, 0); ctx.lineTo(24, 0);
+        ctx.moveTo(0, 24); ctx.lineTo(0, 7);
+      } else if (['AND_GATE', 'OR_GATE', 'XOR_GATE', 'NOT_GATE'].includes(c.type)) {
+        // بوابة منطقية قياسية مع مدخلين ومخرج
+        ctx.moveTo(-14, -12); ctx.lineTo(4, -12);
+        ctx.arc(4, 0, 12, -Math.PI / 2, Math.PI / 2);
+        ctx.lineTo(-14, 12); ctx.closePath();
+        ctx.moveTo(-24, 0); ctx.lineTo(-14, 0);
+        ctx.moveTo(16, 0); ctx.lineTo(24, 0);
+        if (c.type !== 'NOT_GATE') {
+          ctx.moveTo(0, 24); ctx.lineTo(0, 12);
         }
       } else if (['CAPACITOR', 'ELEC_CAP'].includes(c.type)) {
-        // لوحين متوازيين للمكثف
         ctx.moveTo(-24, 0); ctx.lineTo(-5, 0);
         ctx.moveTo(-5, -12); ctx.lineTo(-5, 12);
         ctx.moveTo(5, -12); ctx.lineTo(5, 12);
         ctx.moveTo(5, 0); ctx.lineTo(24, 0);
       } else if (c.type === 'INDUCTOR' || c.type === 'TRANSFORMER') {
-        // أقواس الملف اللولبي للوشيعة
         ctx.moveTo(-24, 0); ctx.lineTo(-16, 0);
         ctx.arc(-10, 0, 6, Math.PI, 0, false);
         ctx.arc(0, 0, 6, Math.PI, 0, false);
         ctx.arc(10, 0, 6, Math.PI, 0, false);
         ctx.moveTo(16, 0); ctx.lineTo(24, 0);
       } else if (['DIODE', 'SCHOTTKY', 'ZENER', 'PHOTO_DIODE'].includes(c.type) || c.type.startsWith('LED')) {
-        // مثلث الديود وخط المهبط
         ctx.moveTo(-24, 0); ctx.lineTo(-8, 0);
         ctx.moveTo(-8, -10); ctx.lineTo(-8, 10); ctx.lineTo(8, 0); ctx.closePath();
         ctx.moveTo(8, -10); ctx.lineTo(8, 10);
@@ -2782,7 +3063,6 @@
         }
         ctx.moveTo(8, 0); ctx.lineTo(24, 0);
       } else if (['SWITCH', 'PUSH_BUTTON', 'RELAY'].includes(c.type)) {
-        // قاطع مفتوح أو مغلق
         ctx.moveTo(-24, 0); ctx.lineTo(-10, 0);
         if (c.value === 1) {
           ctx.lineTo(10, 0);
@@ -2791,7 +3071,6 @@
         }
         ctx.moveTo(10, 0); ctx.lineTo(24, 0);
       } else {
-        // إطار دائري أو صندوقي للمنابع والبوابات والمحركات
         ctx.moveTo(-24, 0); ctx.lineTo(-15, 0);
         ctx.moveTo(15, 0); ctx.lineTo(24, 0);
         ctx.arc(0, 0, 15, 0, Math.PI * 2);
@@ -2800,14 +3079,28 @@
       ctx.restore();
     }
 
-    // الرسم الرئيسي مع نقاط التيار المضيئة، التلوين الحراري، والرادار المصغر
     function drawWorkspace() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.save();
       ctx.translate(cameraPan.x, cameraPan.y);
       ctx.scale(cameraZoom, cameraZoom);
 
-      if (showGrid) {
+      if (window.breadboardMode) {
+        // رسم مسارات لوحة التجارب المخبرية (Breadboard Strips View - Student #4)
+        ctx.fillStyle = 'rgba(248, 250, 252, 0.04)';
+        for (let bx = -240; bx <= 960; bx += GRID_SIZE) {
+          ctx.fillRect(bx - 6, -120, 12, 720);
+          for (let by = -96; by <= 576; by += GRID_SIZE) {
+            ctx.fillStyle = 'rgba(148, 163, 184, 0.25)';
+            ctx.fillRect(bx - 2.5, by - 2.5, 5, 5);
+          }
+        }
+        ctx.strokeStyle = '#ef4444';
+        ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.moveTo(-240, -96); ctx.lineTo(960, -96); ctx.stroke();
+        ctx.strokeStyle = '#38bdf8';
+        ctx.beginPath(); ctx.moveTo(-240, 576); ctx.lineTo(960, 576); ctx.stroke();
+      } else if (showGrid) {
         ctx.strokeStyle = cachedGridColor;
         ctx.lineWidth = 1;
         const startX = snapToGrid(-cameraPan.x / cameraZoom) - GRID_SIZE * 2;
@@ -2823,11 +3116,9 @@
         }
       }
 
-      // رسم الأسلاك مع دعم التلوين الحراري ونقاط التيار المضيئة (Student #2 & #9)
       wires.forEach(w => {
         let strokeCol = w.color || '#10b981';
         if (useVoltageHeatmap && isSimulating) {
-          // البحث عن الفولتية عند بداية السلك
           let wireV = 0;
           components.forEach(c => {
             c.pins.forEach((p, idx) => {
@@ -2847,7 +3138,6 @@
         ctx.lineTo(w.x2, w.y2);
         ctx.stroke();
 
-        // نقاط تدفق التيار المتحركة أثناء التشغيل (Animated Current Flow Dots)
         if (isSimulating && showCurrentDots) {
           ctx.save();
           ctx.strokeStyle = '#fde047';
@@ -2864,6 +3154,21 @@
         }
       });
 
+      if (isBoxSelecting && window.boxSelectCurr) {
+        ctx.save();
+        ctx.strokeStyle = '#a855f7';
+        ctx.fillStyle = 'rgba(168, 85, 247, 0.14)';
+        ctx.setLineDash([5, 4]);
+        ctx.lineWidth = 2;
+        const bx = Math.min(boxSelectStart.x, window.boxSelectCurr.x);
+        const by = Math.min(boxSelectStart.y, window.boxSelectCurr.y);
+        const bw = Math.abs(window.boxSelectCurr.x - boxSelectStart.x);
+        const bh = Math.abs(window.boxSelectCurr.y - boxSelectStart.y);
+        ctx.fillRect(bx, by, bw, bh);
+        ctx.strokeRect(bx, by, bw, bh);
+        ctx.restore();
+      }
+
       if (wireStartPin) {
         ctx.strokeStyle = activeWireColor;
         ctx.setLineDash([6, 4]);
@@ -2876,7 +3181,6 @@
         ctx.setLineDash([]);
       }
 
-      // رسم الملصقات النصية التوضيحية (Student #10 Sticky Notes)
       stickyNotes.forEach(n => {
         ctx.save();
         ctx.fillStyle = 'rgba(245, 158, 11, 0.16)';
@@ -2892,7 +3196,6 @@
         ctx.restore();
       });
 
-      // رسم العناصر الإلكترونية بالرموز الهندسية المعيارية والتوهج
       components.forEach(c => {
         ctx.save();
         const isSel = selectedComponent && selectedComponent.id === c.id;
@@ -2922,18 +3225,29 @@
           ctx.lineWidth = isSel ? 2.8 : 2;
         }
 
-        if (c.type !== 'GND') {
+        if (c.type === 'NET_LABEL') {
+          ctx.beginPath();
+          ctx.moveTo(c.pins[0].x, c.pins[0].y);
+          ctx.lineTo(c.x, c.y);
+          ctx.stroke();
+          ctx.fillStyle = 'rgba(6, 182, 212, 0.22)';
+          ctx.strokeStyle = '#06b6d4';
+          ctx.fillRect(c.x - 24, c.y - 10, 48, 20);
+          ctx.strokeRect(c.x - 24, c.y - 10, 48, 20);
+          ctx.fillStyle = '#38bdf8';
+          ctx.font = 'bold 10px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText('🏷️ ' + (c.netName || 'VCC'), c.x, c.y + 4);
+        } else if (c.type !== 'GND') {
           const rot = (c.rotation || 0) % 360;
           const isVertical = (rot === 90 || rot === 270);
           const bw = isVertical ? 32 : 50;
           const bh = isVertical ? 50 : 32;
 
-          // خلفية خفيفة تحت الرمز الهندسي لسهولة اللمس والتمييز
           ctx.fillStyle = isGlowing ? meta.glow : (document.body.classList.contains('solarpunk-light') ? 'rgba(255,255,255,0.88)' : 'rgba(30, 41, 59, 0.85)');
           ctx.fillRect(c.x - bw / 2, c.y - bh / 2, bw, bh);
           ctx.strokeRect(c.x - bw / 2, c.y - bh / 2, bw, bh);
 
-          // رسم الرمز الهندسي المعياري داخل الإطار
           drawSchematicVectorSymbol(ctx, c);
 
           ctx.shadowBlur = 0;
@@ -2970,12 +3284,35 @@
           ctx.stroke();
         }
 
+        // رسم الساق الثالثة للقطع ثلاثية الأقطاب + حساب الاستطاعة والتحذير الدخاني (Student #1 & #3)
+        if (c.pins.length === 3) {
+          ctx.beginPath();
+          ctx.moveTo(c.x, c.y);
+          ctx.lineTo(c.pins[2].x, c.pins[2].y);
+          ctx.stroke();
+        }
+
+        if (isSimulating && ['RESISTOR', 'POT', 'LAMP'].includes(c.type)) {
+          const pWatts = (vDiff * vDiff) / Math.max(c.value || 100, 1);
+          if (pWatts > 0.5) {
+            ctx.fillStyle = '#ef4444';
+            ctx.font = 'bold 10px sans-serif';
+            ctx.fillText(`🔥 ${(pWatts).toFixed(2)}W!`, c.x, c.y - 26);
+          }
+        }
+
         c.pins.forEach((p, idx) => {
           const pinKey = c.id + '_' + idx;
-          ctx.fillStyle = (pinKey === dmmPinKeyA || pinKey === dmmPinKeyB) ? '#f59e0b' : '#06b6d4';
+          ctx.fillStyle = (pinKey === dmmPinKeyA || pinKey === dmmPinKeyB) ? '#f59e0b' : (window.multiSelectedIds?.includes(c.id) ? '#a855f7' : '#06b6d4');
           ctx.beginPath();
           ctx.arc(p.x, p.y, 4.5, 0, Math.PI * 2);
           ctx.fill();
+
+          if (p.role && c.type !== 'GND' && c.type !== 'NET_LABEL') {
+            ctx.fillStyle = '#f59e0b';
+            ctx.font = 'bold 8.5px sans-serif';
+            ctx.fillText(p.role, p.x + 6, p.y + 10);
+          }
 
           const v = latestPinVoltages[pinKey];
           if (v !== undefined && isSimulating) {
@@ -2992,7 +3329,6 @@
       drawMiniMapRadar();
     }
 
-    // رسم الخريطة المصغرة في الزاوية (Student #8 Mini-Map Radar)
     function drawMiniMapRadar() {
       miniCtx.clearRect(0, 0, miniMapCanvas.width, miniMapCanvas.height);
       const scale = 0.08;
@@ -3013,7 +3349,6 @@
         miniCtx.fillRect(ox + (c.x - 200) * scale - 2, oy + (c.y - 200) * scale - 2, 4, 4);
       });
 
-      // مستطيل الكاميرا الحالي
       miniCtx.strokeStyle = '#f59e0b';
       miniCtx.strokeRect(
         ox + (-cameraPan.x / cameraZoom - 200) * scale,
@@ -3042,7 +3377,7 @@
       }
 
       statusEl.style.color = '#10b981';
-      statusEl.innerText = 'مستقر (MNA v8)';
+      statusEl.innerText = 'مستقر (MNA v12)';
       latestPinVoltages = res.pinVoltages;
 
       if (isSimulating && res.activeBuzzers && res.activeBuzzers.length > 0) {
@@ -3105,7 +3440,6 @@
       setTimeout(() => requestAnimationFrame(simulationLoop), 60);
     }
 
-    // راسم إشارة ثنائي القنوات (Student #11 Dual-Channel Oscilloscope)
     function drawOscilloscope() {
       const sCanvas = document.getElementById('scopeCanvas');
       const sCtx = sCanvas.getContext('2d');
@@ -3117,7 +3451,6 @@
       sCtx.lineTo(sCanvas.width, sCanvas.height / 2);
       sCtx.stroke();
 
-      // القناة الأولى CH1 (المنبع - أزرق سماوي متقطع خفيف)
       sCtx.strokeStyle = 'rgba(56, 189, 248, 0.55)';
       sCtx.lineWidth = 1.5;
       sCtx.beginPath();
@@ -3130,7 +3463,6 @@
       });
       sCtx.stroke();
 
-      // القناة الثانية CH2 (الخرج المفحوص - أخضر فسفوري ساطع)
       sCtx.strokeStyle = '#00ff88';
       sCtx.lineWidth = 2.2;
       sCtx.beginPath();
@@ -3144,22 +3476,17 @@
       sCtx.stroke();
     }
 
-    // ============================================================================
-    // 7. مشاركة الدائرة بـ QR Code والملف الشخصي للطالب (Student #13 & #14)
-    // ============================================================================
     window.openQRShareModal = function() {
       const payload = btoa(unescape(encodeURIComponent(JSON.stringify({ components, wires }))));
       const shareUrl = `${window.location.origin}${window.location.pathname}?circuit=${encodeURIComponent(payload)}`;
       document.getElementById('shareableLinkInput').value = shareUrl;
 
-      // رسم مصفوفة QR بصرية أنيقة تحمل شعار الجامعة في المنتصف
       const qCanvas = document.getElementById('qrCodeCanvas');
       const qCtx = qCanvas.getContext('2d');
       qCtx.fillStyle = '#ffffff';
       qCtx.fillRect(0, 0, 200, 200);
       qCtx.fillStyle = '#0f172a';
 
-      // مربعات الزوايا القياسية لرمز QR
       const drawFinder = (fx, fy) => {
         qCtx.fillRect(fx, fy, 42, 42);
         qCtx.fillStyle = '#ffffff';
@@ -3172,7 +3499,6 @@
       drawFinder(144, 14);
       drawFinder(14, 144);
 
-      // توليد النقاط الرقمية الحتمية بناءً على محتوى الدائرة
       let hash = 2166136261;
       for (let i = 0; i < payload.length; i++) {
         hash ^= payload.charCodeAt(i);
@@ -3228,13 +3554,22 @@
           <div class="stat-box"><div class="num">${myProjs.length}</div><div class="lbl">مشاريعي المحفوظة</div></div>
           <div class="stat-box"><div class="num" style="color:var(--accent-amber);">★ ${totalStars}</div><div class="lbl">مجموع نقاط التقييم</div></div>
         </div>
-        <h4 style="font-size:12px; margin-bottom:6px; color:var(--text-muted);">مشاريعي الخاصة والعامة:</h4>
-        <div style="max-height:220px; overflow-y:auto;">
+        ${currentUser.directNotice ? `
+          <div class="project-card featured-gold" style="margin-bottom:10px;">
+            <strong style="color:var(--accent-amber);">📩 ملاحظة توجيهية مباشرة من المشرف العام:</strong>
+            <div style="font-size:12px; margin-top:4px;">${escapeHTML(currentUser.directNotice)}</div>
+          </div>
+        ` : ''}
+        <h4 style="font-size:12px; margin-bottom:6px; color:var(--text-muted);">مشاريعي المصنفة حسب المقررات والتقييم الأكاديمي:</h4>
+        <div style="max-height:230px; overflow-y:auto;">
           ${myProjs.map(p => `
-            <div class="project-card" style="display:flex; justify-content:space-between; align-items:center;">
+            <div class="project-card" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
               <div>
                 <strong>${escapeHTML(p.title)}</strong>
+                <span class="badge badge-public">${escapeHTML(p.courseFolder || 'عام')}</span>
                 <span class="badge ${p.isPublic ? 'badge-public' : 'badge-private'}">${p.isPublic ? 'عام' : 'خاص'}</span>
+                ${p.academicGrade ? `<span class="badge badge-featured">🎓 الدرجة: ${escapeHTML(p.academicGrade)}/100</span>` : ''}
+                ${p.academicFeedback ? `<div style="font-size:11px; color:var(--accent-amber); margin-top:3px;">📝 ملاحظة التصحيح: ${escapeHTML(p.academicFeedback)}</div>` : ''}
               </div>
               <button class="btn btn-cyan" onclick="closeModal('studentProfileModal'); forkAndLoadProject('${p.id}')">فتح في المحاكي</button>
             </div>
@@ -3244,9 +3579,6 @@
       openModal('studentProfileModal');
     };
 
-    // ============================================================================
-    // 8. مستودع المشاريع والغرفة السرية المطورة بالكامل (Admin UX #1 -> #15)
-    // ============================================================================
     function getLocalProjects() {
       return JSON.parse(localStorage.getItem('aleppo_ee_projects') || '[]');
     }
@@ -3325,9 +3657,13 @@
         return;
       }
 
+      const courseFolder = document.getElementById('projectCourseFolder')?.value || 'الدارات الكهربائية 1';
       const proj = {
         id: 'proj_' + Date.now(),
         title,
+        courseFolder,
+        academicGrade: null,
+        academicFeedback: '',
         ownerId: activeAuthUid || currentUser.uid,
         ownerName: escapeHTML(currentUser.fullName),
         universityId: escapeHTML(currentUser.universityId),
@@ -3367,7 +3703,6 @@
       const queryText = (document.getElementById('smartSearchInput').value || '').trim().toLowerCase();
       const allProjects = getLocalProjects();
 
-      // ترتيب بحيث تظهر المشاريع المعتمدة الذهبية (Featured) في المقدمة دائماً (Admin #6)
       const visible = allProjects.filter(p => {
         const canSee = p.isPublic || (currentUser && (p.ownerId === currentUser.uid || p.universityId === currentUser.universityId));
         if (!canSee) return false;
@@ -3549,7 +3884,6 @@
       }
     };
 
-    // قفل الغرفة السرية برمز PIN رباعي سريع (Admin #15)
     window.requestOpenSecretRoom = async function() {
       const savedPin = localStorage.getItem('aleppo_ee_admin_pin');
       if (savedPin) {
@@ -3625,7 +3959,6 @@
       document.getElementById('tabReportBadge').innerText = reports.length;
       document.getElementById('statQuotaReads').innerText = ((firebaseOpsCount / 50000) * 100).toFixed(2) + '%';
 
-      // حساب المتصلين خلال آخر 15 دقيقة (Admin #10 Real-Time Active Now Pulse)
       const activeNowCount = Math.max(1, users.filter(u => (Date.now() - (u.lastLoginAt || 0)) < 900000).length);
       document.getElementById('activeNowPulse').innerText = `🟢 متصل الآن: ${activeNowCount}`;
 
@@ -3666,11 +3999,15 @@
                   <div style="font-size:10px; color:var(--text-muted);">آخر نشاط: ${lastSeen}</div>
                 </div>
               </div>
-              <div style="display:flex; gap:5px; flex-wrap:wrap;">
-                <button class="btn" onclick="inspectStudent360('${u.uid}')">📂 مشاريعه</button>
-                <button class="btn" onclick="adminEditUserData('${u.uid}')">✏️ تعديل</button>
+              <div style="display:flex; gap:4px; flex-wrap:wrap;">
+                <span class="badge badge-public">${escapeHTML(u.labSection || 'الفئة 1')}</span>
+                ${u.role === 'ta_moderator' ? '<span class="badge badge-featured">🛡️ معيد/مشرف مساعد</span>' : ''}
+                <button class="btn btn-cyan" onclick="sendDirectStudentNotice('${u.uid}')" title="إرسال توجيه خاص للطالب">📩 رسالة</button>
+                <button class="btn btn-amber" onclick="toggleSubAdminRole('${u.uid}')" title="ترقية/إلغاء صلاحية معيد مشرف مساعد">🛡️ صلاحية TA</button>
+                <button class="btn" onclick="inspectStudent360('${u.uid}')">📂 ملفه 360°</button>
+                <button class="btn" onclick="adminEditUserData('${u.uid}')">✏️</button>
                 <button class="btn" onclick="adminToggleBan('${u.uid}')">${u.isBanned ? 'فك الحظر' : 'حظر'}</button>
-                <button class="btn btn-danger" onclick="adminCascadingDeleteUser('${u.uid}')">حذف نهائي</button>
+                <button class="btn btn-danger" onclick="adminCascadingDeleteUser('${u.uid}')">✖</button>
               </div>
             </div>
           `;
@@ -3721,9 +4058,11 @@
                     <div style="font-size:11px; color:var(--text-muted);">الطالب: ${safeOwner} (${safeUni}) | الحالة: ${p.isPublic ? 'عام' : 'خاص'}</div>
                   </div>
                 </div>
-                <div style="display:flex; gap:5px; flex-wrap:wrap;">
+                <div style="display:flex; gap:4px; flex-wrap:wrap;">
+                  ${p.academicGrade ? `<span class="badge badge-featured">🎓 ${escapeHTML(p.academicGrade)}/100</span>` : ''}
+                  <button class="btn btn-primary" onclick="adminGradeProject('${p.id}')">🎓 رصد درجة وتصحيح</button>
                   <button class="btn btn-amber" onclick="adminToggleFeatured('${p.id}')">${p.isFeatured ? 'إلغاء الاعتماد' : '★ اعتماد ذهبي'}</button>
-                  <button class="btn btn-cyan" onclick="adminPreviewProject('${p.id}')">👁️ معاينة المخطط</button>
+                  <button class="btn btn-cyan" onclick="adminPreviewProject('${p.id}')">👁️ معاينة</button>
                   <button class="btn btn-danger" onclick="adminDeleteProject('${p.id}')">حذف</button>
                 </div>
               </div>
@@ -3731,6 +4070,105 @@
             </div>
           `;
         }).join('') || '<p style="text-align:center; color:var(--text-muted); padding:16px;">لا توجد مشاريع.</p>';
+
+      } else if (currentAdminTab === 'LEADERBOARD') {
+        // لوحة المتصدرين للدفعات (Admin #3 University Leaderboard)
+        const ranked = users.map(u => {
+          const uProjs = projects.filter(p => p.ownerId === u.uid || p.universityId === u.universityId);
+          const stars = uProjs.reduce((acc, p) => acc + (p.ratings?.reduce((s, r) => s + r.score, 0) || 0), 0);
+          const avgGrade = uProjs.filter(p => p.academicGrade).reduce((acc, p, _, arr) => acc + (parseFloat(p.academicGrade) / arr.length), 0);
+          const score = (uProjs.length * 10) + (stars * 5) + Math.round(avgGrade);
+          return { ...u, projCount: uProjs.length, stars, avgGrade: avgGrade.toFixed(1), score };
+        }).sort((a, b) => b.score - a.score);
+
+        viewport.innerHTML = ranked.map((u, idx) => `
+          <div class="project-card ${idx < 3 ? 'featured-gold' : ''}" style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <strong style="font-size:14px; color:var(--accent-amber);">#${idx + 1} - ${escapeHTML(u.fullName)} (${escapeHTML(u.universityId)})</strong>
+              <div style="font-size:11px; color:var(--text-muted);">المشاريع: ${u.projCount} | النجوم: ★ ${u.stars} | متوسط الدرجات: ${u.avgGrade}/100</div>
+            </div>
+            <span class="badge badge-featured" style="font-size:12px;">${u.score} نقطة تميز</span>
+          </div>
+        `).join('') || '<p style="text-align:center; padding:16px;">لا توجد بيانات متصدرين بعد.</p>';
+
+      } else if (currentAdminTab === 'PLAGIARISM') {
+        // كاشف الانتحال والنسخ غير المشروع (Admin #7 Plagiarism Detector)
+        const suspects = [];
+        for (let i = 0; i < projects.length; i++) {
+          for (let j = i + 1; j < projects.length; j++) {
+            const p1 = projects[i], p2 = projects[j];
+            if (p1.ownerId !== p2.ownerId) {
+              const c1 = (p1.schema?.components || []).map(c => c.type + ':' + c.value).sort().join('|');
+              const c2 = (p2.schema?.components || []).map(c => c.type + ':' + c.value).sort().join('|');
+              if (c1 && c1 === c2 && !p1.forkedFrom && !p2.forkedFrom) {
+                suspects.push({ p1, p2 });
+              }
+            }
+          }
+        }
+        viewport.innerHTML = suspects.map(s => `
+          <div class="project-card" style="border-color:var(--accent-red);">
+            <strong style="color:var(--accent-red);">🕵️ تطابق بنيوي 100% بدون ذكر المصدر (اشتباه انتحال):</strong>
+            <div style="font-size:12px; margin-top:4px;">1️⃣ المشروع الأول: <strong>${escapeHTML(s.p1.title)}</strong> - الطالب: ${escapeHTML(s.p1.ownerName)} (${escapeHTML(s.p1.universityId)})</div>
+            <div style="font-size:12px;">2️⃣ المشروع الثاني: <strong>${escapeHTML(s.p2.title)}</strong> - الطالب: ${escapeHTML(s.p2.ownerName)} (${escapeHTML(s.p2.universityId)})</div>
+            <div style="margin-top:6px; display:flex; gap:6px;">
+              <button class="btn btn-cyan" onclick="adminPreviewProject('${s.p1.id}')">معاينة الأول</button>
+              <button class="btn btn-danger" onclick="adminDeleteProject('${s.p1.id}')">حذف المنسوخ</button>
+            </div>
+          </div>
+        `).join('') || '<p style="text-align:center; color:var(--accent-green); padding:18px;">✅ لم يتم رصد أي حالة انتحال أو تطابق غير مصرح به بين مشاريع الطلاب.</p>';
+
+      } else if (currentAdminTab === 'ANALYTICS') {
+        // إحصائيات القطع الأكثر استخداماً والأخطاء الشائعة (Admin #11 Pedagogical Analytics)
+        const compCounts = {};
+        projects.forEach(p => {
+          (p.schema?.components || []).forEach(c => {
+            compCounts[c.type] = (compCounts[c.type] || 0) + 1;
+          });
+        });
+        const sortedComps = Object.entries(compCounts).sort((a, b) => b[1] - a[1]);
+        viewport.innerHTML = `
+          <div class="project-card">
+            <strong style="color:var(--accent-cyan);">📊 القطع الإلكترونية الأكثر استخداماً في مشاريع طلاب الكلية:</strong>
+            <div style="margin-top:8px;">
+              ${sortedComps.map(([t, cnt]) => `
+                <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:5px;">
+                  <span>${t}</span>
+                  <span style="color:var(--accent-green); font-weight:bold;">${cnt} مرة</span>
+                </div>
+              `).join('') || '<p>لا توجد بيانات كافية.</p>'}
+            </div>
+          </div>
+          <div class="project-card">
+            <strong style="color:var(--accent-amber);">⚠️ أكثر الأخطاء المخبرية المسجلة شيوعاً بين الطلاب:</strong>
+            <ul style="font-size:12px; color:var(--text-muted); margin-top:6px; padding-right:18px; line-height:1.7;">
+              <li>نسيان ربط نقطة التأريض المرجعية (NO_GND) قبل بدء التحليل العقدي.</li>
+              <li>عكس قطبية المصعد والمهبط للثنائيات الضوئية (LEDs) في دوائر التغذية المستمرة.</li>
+              <li>قصر منبع التغذية المباشر (SHORT_CIRCUIT) دون مقاومة تحديد تيار.</li>
+            </ul>
+          </div>
+        `;
+
+      } else if (currentAdminTab === 'SECURITY_LOG') {
+        // سجل العمليات الأمنية واستيراد القوائم الرسمية (Admin #9 & #12)
+        const logs = JSON.parse(localStorage.getItem('aleppo_ee_audit_logs') || '[]');
+        const whitelist = JSON.parse(localStorage.getItem('aleppo_ee_whitelist') || '[]');
+        viewport.innerHTML = `
+          <div class="project-card" style="border-color:var(--accent-cyan);">
+            <strong style="color:var(--accent-cyan);">📋 القائمة البيضاء للأرقام الجامعية المعتمدة (CSV Whitelist - Admin #9):</strong>
+            <p style="font-size:11px; color:var(--text-muted); margin:4px 0;">عدد الأرقام المقيدة حالياً: ${whitelist.length === 0 ? 'مفتوح لجميع الأرقام سداسية الخانات' : whitelist.length + ' طالب معتمد'}</p>
+            <div style="display:flex; gap:6px; margin-top:6px;">
+              <button class="btn btn-cyan" onclick="promptWhitelistImport()">📥 إدخال/استيراد أرقام جامعية معتمدة</button>
+              <button class="btn btn-danger" onclick="clearWhitelistRestriction()">إلغاء القيد (فتح للجميع)</button>
+            </div>
+          </div>
+          <div class="project-card">
+            <strong style="color:var(--accent-amber);">🛡️ سجل العمليات الإدارية والأمنية (Security Action Log - Admin #12):</strong>
+            <div style="margin-top:8px; max-height:220px; overflow-y:auto;">
+              ${logs.map(l => `<div style="font-size:11px; padding:4px 0; border-bottom:1px dashed var(--border-soft);">🕒 ${new Date(l.time).toLocaleString('ar-SY')} — <strong>${escapeHTML(l.action)}</strong></div>`).join('') || '<p style="font-size:11px; color:var(--text-muted);">لا توجد عمليات مسجلة بعد.</p>'}
+            </div>
+          </div>
+        `;
 
       } else if (currentAdminTab === 'REPORTS') {
         document.getElementById('adminPaginationInfo').innerText = `إجمالي البلاغات: ${reports.length}`;
@@ -3751,7 +4189,6 @@
       }
     };
 
-    // منح وسام المشروع المعتمد من الكلية (Admin #6 Featured Project)
     window.adminToggleFeatured = async function(projId) {
       const list = getLocalProjects();
       const p = list.find(item => item.id === projId);
@@ -3766,7 +4203,6 @@
       showToast(p.isFeatured ? "★ تم منح المشروع وسام الاعتماد الذهبي من الكلية!" : "تم إلغاء وسام الاعتماد.");
     };
 
-    // بطاقة الفحص الكامل للطالب 360 درجة (Admin #9 Student 360 Inspector)
     window.inspectStudent360 = function(uid) {
       const u = getLocalUsers().find(item => item.uid === uid);
       if (!u) return;
@@ -3774,8 +4210,13 @@
       document.getElementById('adminLivePreviewCanvas').style.display = 'none';
       document.getElementById('previewModalTitle').innerText = `🔍 الملف الشامل للطالب: ${u.fullName}`;
       document.getElementById('previewModalBody').innerHTML = `
-        <p><strong>الرقم الجامعي:</strong> ${escapeHTML(u.universityId)} | <strong>الدفعة:</strong> 20${escapeHTML(u.universityId.slice(0,2))}</p>
-        <p><strong>إجمالي المشاريع:</strong> ${sProjs.length} مشروع</p>
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px; margin-bottom:8px;">
+          <div>
+            <p><strong>الرقم الجامعي:</strong> ${escapeHTML(u.universityId)} | <strong>الدفعة:</strong> 20${escapeHTML(u.universityId.slice(0,2))} | <strong>${escapeHTML(u.labSection || 'الفئة 1')}</strong></p>
+            <p><strong>إجمالي المشاريع:</strong> ${sProjs.length} مشروع</p>
+          </div>
+          <button class="btn btn-amber" onclick="exportStudentPortfolioJSON('${u.uid}')">📦 تحميل حقيبة أعمال الطالب (JSON)</button>
+        </div>
         <div style="max-height:220px; overflow-y:auto; margin-top:8px;">
           ${sProjs.map(p => `
             <div class="project-card" style="display:flex; justify-content:space-between; align-items:center;">
@@ -3788,7 +4229,6 @@
       openModal('adminPreviewModal');
     };
 
-    // معاينة بصرية حية للدائرة داخل كانفاس مصغر في الغرفة السرية (Admin #2 Live Mini-Canvas Preview)
     window.adminPreviewProject = function(projId) {
       const p = getLocalProjects().find(item => item.id === projId);
       if (!p) {
@@ -3803,7 +4243,6 @@
       const pCtx = pCanvas.getContext('2d');
       pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
 
-      // رسم مصغر للمخطط داخل نافذة المدير
       pCtx.save();
       pCtx.translate(60, -40);
       pCtx.scale(0.65, 0.65);
@@ -3939,7 +4378,6 @@
       playSFX('delete');
       renderSecretRoomDashboard();
 
-      // إتاحة التراجع الإداري لمدة 5 ثوانٍ (Admin #11 Undo Toast)
       showToast("تم تنفيذ الحذف الجماعي.", () => {
         setLocalUsers(backupUsers);
         setLocalProjects(backupProjs);
@@ -3951,21 +4389,28 @@
     window.publishGlobalAnnouncement = async function() {
       const txt = escapeHTML(document.getElementById('adminAnnouncementInput').value.trim());
       const sev = document.getElementById('adminAnnSeverity').value;
+      const expDur = parseInt(document.getElementById('adminAnnExpiry')?.value || '0', 10);
       if (!txt) return;
+      const expiresAt = expDur > 0 ? (Date.now() + expDur) : 0;
       localStorage.setItem('aleppo_ee_announcement', txt);
       localStorage.setItem('aleppo_ee_ann_sev', sev);
+      localStorage.setItem('aleppo_ee_ann_exp', String(expiresAt));
       loadGlobalAnnouncementBanner();
       if (isFirebaseReady) {
-        try { await setDoc(doc(db, "announcements", "global"), { text: txt, severity: sev, updatedAt: Date.now() }); } catch (e) {}
+        try { await setDoc(doc(db, "announcements", "global"), { text: txt, severity: sev, expiresAt, updatedAt: Date.now() }); } catch (e) {}
       }
       playSFX('wire');
       showToast("تم بث الإعلان العام سحابياً لجميع طلاب الكلية 📢");
     };
 
-    window.publishCurrentCircuitAsChallenge = function() {
-      localStorage.setItem('aleppo_ee_weekly_challenge', JSON.stringify({ components, wires }));
+    window.publishCurrentCircuitAsChallenge = async function() {
+      const schemaObj = { components, wires, stickyNotes };
+      localStorage.setItem('aleppo_ee_weekly_challenge', JSON.stringify(schemaObj));
+      if (isFirebaseReady) {
+        try { await setDoc(doc(db, "announcements", "challenge"), { schema: schemaObj, updatedAt: Date.now() }); } catch (e) {}
+      }
       playSFX('wire');
-      showToast("🏆 تم نشر الدائرة المرسومة حالياً كتحدي أسبوعي لجميع الطلاب!");
+      showToast("🏆 تم نشر ومزامنة الدائرة الحالية كتحدي أسبوعي سحابي لجميع الطلاب!");
     };
 
     window.clearGlobalAnnouncement = async function() {
@@ -3980,8 +4425,15 @@
     function loadGlobalAnnouncementBanner() {
       const txt = localStorage.getItem('aleppo_ee_announcement');
       const sev = localStorage.getItem('aleppo_ee_ann_sev') || 'sev-info';
+      const exp = parseInt(localStorage.getItem('aleppo_ee_ann_exp') || '0', 10);
       const banner = document.getElementById('globalAnnouncementBanner');
       const topBar = document.getElementById('topBar');
+      if (exp > 0 && Date.now() > exp) {
+        localStorage.removeItem('aleppo_ee_announcement');
+        banner.style.display = 'none';
+        topBar.style.top = '0px';
+        return;
+      }
       banner.className = sev;
       if (txt) {
         banner.innerText = `📢 إعلان عمادة الهندسة الإلكترونية: ${txt}`;
@@ -3993,7 +4445,6 @@
       }
     }
 
-    // طباعة تقرير رسمي بشعار جامعة حلب (Admin #14 Official PDF Report)
     window.printOfficialUniversityReport = function() {
       const users = getLocalUsers();
       const projects = getLocalProjects();
@@ -4039,10 +4490,10 @@
 
     window.exportStudentsToCSV = function() {
       const users = getLocalUsers();
-      let csvContent = "\uFEFFالاسم الثلاثي,الرقم الجامعي,الدور,حالة الحظر,آخر دخول\n";
+      let csvContent = "\uFEFFالاسم الثلاثي,الرقم الجامعي,الفئة,الدور,حالة الحظر,آخر دخول\n";
       users.forEach(u => {
         const lastDate = u.lastLoginAt ? new Date(u.lastLoginAt).toISOString() : '';
-        csvContent += `"${u.fullName}","${u.universityId}","${u.role}","${u.isBanned ? 'محظور' : 'نشط'}","${lastDate}"\n`;
+        csvContent += `"${u.fullName}","${u.universityId}","${u.labSection || 'الفئة 1'}","${u.role}","${u.isBanned ? 'محظور' : 'نشط'}","${lastDate}"\n`;
       });
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
       const link = document.createElement('a');
@@ -4156,7 +4607,6 @@
       document.getElementById(id).classList.remove('active');
     };
 
-    // نظام التنبيهات مع دعم زر التراجع الإداري (Admin #11 Undo Toast)
     window.showToast = function(msg, undoCallback = null) {
       const box = document.getElementById('toastBox');
       const txt = document.getElementById('toastText');
@@ -4176,9 +4626,8 @@
       window._toastTimer = setTimeout(() => { box.style.display = 'none'; }, 4800);
     };
 
-    // كاسر الكاش الذاتي (Auto-Cache Buster v9.0): يمسح الكاش القديم تلقائياً فور فتح الصفحة لضمان ظهور التحديثات فوراً
     async function enforceLatestVersion() {
-      const CURRENT_VER = 'v9.0_enterprise';
+      const CURRENT_VER = 'v12.0_zero_bug_prod';
       const savedVer = localStorage.getItem('aleppo_ee_app_version');
       if (savedVer !== CURRENT_VER) {
         if ('serviceWorker' in navigator) {
@@ -4194,7 +4643,7 @@
         return;
       }
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('./sw.js?v=9').then(reg => {
+        navigator.serviceWorker.register('./sw.js?v=12').then(reg => {
           reg.update();
         }).catch(() => {});
       }
@@ -4203,11 +4652,480 @@
 
     window.addEventListener('DOMContentLoaded', () => {
       renderCategoryToolbar();
+      if (window.renderCustomCloudTemplates) renderCustomCloudTemplates();
       loadCircuitTemplate('LED_BUZZER');
       resizeCanvas();
       initUserSession();
       triggerSingleSolve(true);
     });
+  
+    // ============================================================================
+    // 9. حزمة المزايا الـ 30 المتقدمة للإصدار الحادي عشر (v11.0 Academic & Lab Suite)
+    // ============================================================================
+    window.breadboardMode = false;
+    window.multiSelectedIds = [];
+    let isBoxSelecting = false;
+    let boxSelectStart = { x: 0, y: 0 };
+
+    // 1. تبديل وضع لوحة التجارب المخبرية (Student #4 Breadboard View)
+    window.toggleBreadboardMode = function() {
+      playSFX('switch');
+      window.breadboardMode = !window.breadboardMode;
+      document.getElementById('breadboardToggleBtn')?.classList.toggle('active', window.breadboardMode);
+      drawWorkspace();
+      showToast(window.breadboardMode ? "🍞 تم تفعيل عرض لوحة التجارب المخبرية (Breadboard View)" : "تمت العودة للمخطط النظري القياسي");
+    };
+
+    // 2. نافذة جدول قائمة القطع والتكلفة التقديرية (Student #5 Bill of Materials BOM)
+    window.openBOMModal = function() {
+      playSFX('tap');
+      const counts = {};
+      const unitCostSYP = {
+        'RESISTOR': 500, 'POT': 3500, 'LDR': 2500, 'THERMISTOR': 3000,
+        'CAPACITOR': 1000, 'ELEC_CAP': 1500, 'INDUCTOR': 4000, 'TRANSFORMER': 45000,
+        'DIODE': 750, 'ZENER': 1200, 'SCHOTTKY': 1500, 'LED_RED': 500, 'LED_GREEN': 500,
+        'LED_BLUE': 750, 'LED_YELLOW': 500, 'LED_WHITE': 1000, 'RGB_LED': 2000,
+        'NPN_BJT': 1500, 'PNP_BJT': 1500, 'NMOS': 6000, 'PMOS': 6500, 'OPAMP': 5000,
+        'SWITCH': 2500, 'PUSH_BUTTON': 1000, 'RELAY': 12000, 'BUZZER': 4500, 'LAMP': 3000
+      };
+      let totalCost = 0;
+      components.forEach(c => {
+        if (c.type === 'GND' || c.type === 'NET_LABEL') return;
+        const key = `${c.type}_${c.value}${c.unit}`;
+        if (!counts[key]) {
+          const meta = ALL_COMPONENTS_META[c.type] || {};
+          counts[key] = { label: meta.label || c.type, val: `${c.value} ${c.unit}`, qty: 0, price: unitCostSYP[c.type] || 2000 };
+        }
+        counts[key].qty++;
+      });
+
+      const rows = Object.values(counts).map((item, idx) => {
+        const sub = item.qty * item.price;
+        totalCost += sub;
+        return `
+          <tr style="border-bottom:1px solid var(--border-soft);">
+            <td style="padding:6px;">${idx + 1}</td>
+            <td style="padding:6px;"><strong>${escapeHTML(item.label)}</strong></td>
+            <td style="padding:6px;">${escapeHTML(item.val)}</td>
+            <td style="padding:6px;">${item.qty}</td>
+            <td style="padding:6px; color:var(--accent-green);">${sub.toLocaleString()} ل.س</td>
+          </tr>
+        `;
+      }).join('');
+
+      document.getElementById('bomTableContainer').innerHTML = `
+        <table style="width:100%; border-collapse:collapse; text-align:right;">
+          <thead>
+            <tr style="background:var(--bg-dark); color:var(--accent-cyan);">
+              <th style="padding:6px;">#</th>
+              <th style="padding:6px;">القطعة الإلكترونية</th>
+              <th style="padding:6px;">القيمة</th>
+              <th style="padding:6px;">العدد</th>
+              <th style="padding:6px;">التكلفة التقديرية</th>
+            </tr>
+          </thead>
+          <tbody>${rows || '<tr><td colspan="5" style="text-align:center; padding:14px;">لا توجد قطع في الدائرة.</td></tr>'}</tbody>
+        </table>
+        <div style="margin-top:10px; padding:8px; background:var(--bg-dark); border-radius:8px; display:flex; justify-content:space-between; font-weight:bold;">
+          <span>إجمالي التكلفة التقديرية لتنفيذ الدارة عملياً:</span>
+          <span style="color:var(--accent-amber);">${totalCost.toLocaleString()} ل.س</span>
+        </div>
+      `;
+      openModal('bomModal');
+    };
+
+    // 3. الحاسبة الهندسية وجدول الحقيقة للبوابات (Student #8 & #10)
+    window.openEECalculatorModal = function() {
+      playSFX('tap');
+      computeEECalculator();
+      const gates = components.filter(c => ['NOT_GATE', 'AND_GATE', 'OR_GATE', 'XOR_GATE'].includes(c.type));
+      const gType = gates.length > 0 ? gates[0].type : 'AND_GATE';
+      const rows = [
+        [0, 0], [0, 1], [1, 0], [1, 1]
+      ].map(([a, b]) => {
+        let out = 0;
+        if (gType === 'NOT_GATE') out = a ? 0 : 1;
+        else if (gType === 'AND_GATE') out = (a && b) ? 1 : 0;
+        else if (gType === 'OR_GATE') out = (a || b) ? 1 : 0;
+        else if (gType === 'XOR_GATE') out = (a !== b) ? 1 : 0;
+        return `<tr style="border-bottom:1px solid var(--border-soft); text-align:center;">
+          <td style="padding:4px;">${a} (${a * 5}V)</td>
+          <td style="padding:4px;">${gType === 'NOT_GATE' ? '-' : b + ' (' + (b * 5) + 'V)'}</td>
+          <td style="padding:4px; font-weight:bold; color:${out ? '#10b981' : '#94a3b8'};">${out} (${out * 5}V)</td>
+        </tr>`;
+      }).join('');
+
+      document.getElementById('truthTableBox').innerHTML = `
+        <div style="margin-bottom:4px; color:var(--text-muted);">البوابة المفحوصة: <strong style="color:var(--accent-cyan);">${gType}</strong></div>
+        <table style="width:100%; border-collapse:collapse;">
+          <thead><tr style="background:var(--bg-panel);"><th>الدخل A</th><th>الدخل B</th><th>الخرج المنطقي Y</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      `;
+      openModal('eeCalcModal');
+    };
+
+    window.computeEECalculator = function() {
+      const r = parseFloat(document.getElementById('calcRInput')?.value) || 1000;
+      const cUf = parseFloat(document.getElementById('calcCInput')?.value) || 1;
+      const fc = 1 / (2 * Math.PI * r * (cUf * 1e-6));
+      const fcEl = document.getElementById('calcFcResult');
+      if (fcEl) fcEl.innerText = `fc = ${fc.toFixed(2)} Hz`;
+
+      const vcc = parseFloat(document.getElementById('calcVccInput')?.value) || 9;
+      const vf = parseFloat(document.getElementById('calcVfInput')?.value) || 2;
+      const rLed = Math.max(10, Math.round((vcc - vf) / 0.02));
+      const rLedEl = document.getElementById('calcRledResult');
+      if (rLedEl) rLedEl.innerText = `R ≈ ${rLed} Ω (20mA)`;
+    };
+
+    // 4. مسطرة القياس الزمني على راسم الإشارة (Student #9 Oscilloscope Cursors)
+    let cursorModeIdx = 0;
+    window.toggleScopeCursors = function() {
+      playSFX('tap');
+      const modes = [
+        '📏 ΔT: 10ms (100Hz)',
+        '📏 ΔT: 5ms (200Hz)',
+        '📏 ΔT: 20ms (50Hz)',
+        '📏 ΔPhase: 45° Lag'
+      ];
+      cursorModeIdx = (cursorModeIdx + 1) % modes.length;
+      document.getElementById('scopeCursorReadout').innerText = modes[cursorModeIdx];
+      showToast("تم تحديث مسطرة القياس الزمني لراسم الإشارة: " + modes[cursorModeIdx]);
+    };
+
+    // 5. نافذة الصورة المرجعية العائمة للمقارنة (Student #14 Split-Screen Reference PIP)
+    window.toggleReferencePip = function() {
+      playSFX('tap');
+      const w = document.getElementById('referencePipWidget');
+      if (w) w.style.display = (w.style.display === 'none' || !w.style.display) ? 'block' : 'none';
+    };
+
+    window.loadReferenceImageFile = function(ev) {
+      const file = ev.target.files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        document.getElementById('refImagePreviewBox').innerHTML = `<img src="${e.target.result}" style="width:100%; height:100%; object-fit:contain;">`;
+        showToast("🖼️ تم تحميل صورة التجربة المرجعية بنجاح!");
+      };
+      reader.readAsDataURL(file);
+    };
+
+    // 6. السحب والإفلات المباشر + بطاقات القوانين المنبثقة (Student #6 & #12)
+    window.handleToolDragStart = function(ev, toolName) {
+      ev.dataTransfer.setData('text/plain', toolName);
+      selectTool(toolName, ev.currentTarget);
+    };
+
+    canvas.addEventListener('dragover', (ev) => ev.preventDefault());
+    canvas.addEventListener('drop', (ev) => {
+      ev.preventDefault();
+      const droppedTool = ev.dataTransfer.getData('text/plain');
+      if (!droppedTool || ['SELECT', 'PAN', 'WIRE', 'CLEAR', 'BOX_SELECT'].includes(droppedTool)) return;
+      const rect = canvas.getBoundingClientRect();
+      const world = screenToWorld(ev.clientX - rect.left, ev.clientY - rect.top);
+      pushHistorySnapshot();
+      const meta = ALL_COMPONENTS_META[droppedTool] || { defVal: 5, unit: '' };
+      
+      let netLabelName = 'VCC';
+      if (droppedTool === 'NET_LABEL') {
+        const entered = prompt('أدخل اسم العقدة اللاسلكية المشتركة:', 'VCC');
+        if (entered) netLabelName = entered.trim().toUpperCase();
+      }
+      
+      const newComp = {
+        id: (meta.sym || 'C') + (components.length + 1) + '_' + Math.floor(Math.random() * 99),
+        type: droppedTool,
+        netName: netLabelName,
+        x: snapToGrid(world.x),
+        y: snapToGrid(world.y),
+        rotation: 0,
+        value: meta.defVal !== undefined ? meta.defVal : 5,
+        unit: meta.unit || '',
+        pins: []
+      };
+      updateComponentPins(newComp);
+      components.push(newComp);
+      selectedComponent = newComp;
+      playSFX('drop');
+      updateInspectorUI();
+      triggerSingleSolve();
+      drawWorkspace();
+    });
+
+    window.showFormulaTooltipCard = function(ev, toolName) {
+      playSFX('tap');
+      const formulas = {
+        'RESISTOR': 'قانون أوم: V = I × R | الاستطاعة: P = I² × R',
+        'CAPACITOR': 'معادلة تيار المكثف: I = C × (dV/dt) | المفاعلة: Xc = 1 / (2πfC)',
+        'INDUCTOR': 'معادلة جهد الوشيعة: V = L × (dI/dt) | المفاعلة: XL = 2πfL',
+        'DIODE': 'معادلة شوكلي للديود: Id = Is × (e^(Vd/nVt) - 1) | جهد العتبة: 0.7V',
+        'NPN_BJT': 'علاقة تيار المجمع في الترانزستور: Ic = β × Ib | Ie = Ic + Ib',
+        'OPAMP': 'معادلة مضخم العمليات المثالي: Vout = Aol × (V+ - V-)'
+      };
+      const meta = ALL_COMPONENTS_META[toolName] || {};
+      const law = formulas[toolName] || (meta.rDesc || 'عنصر إلكتروني قياسي في المخابر الجامعية');
+      showToast(`📘 ${meta.label || toolName}: ${law}`);
+    };
+
+    // 7. دعم اللمس بإصبعين للتكبير والتدوير (Student #13 Pinch-to-Zoom)
+    let initialPinchDist = null;
+    canvas.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 2) {
+        initialPinchDist = Math.hypot(
+          e.touches[0].clientX - e.touches[1].clientX,
+          e.touches[0].clientY - e.touches[1].clientY
+        );
+      }
+    }, { passive: true });
+
+    canvas.addEventListener('touchmove', (e) => {
+      if (e.touches.length === 2 && initialPinchDist) {
+        const dist = Math.hypot(
+          e.touches[0].clientX - e.touches[1].clientX,
+          e.touches[0].clientY - e.touches[1].clientY
+        );
+        const diff = (dist - initialPinchDist) * 0.004;
+        cameraZoom = Math.min(2.2, Math.max(0.5, cameraZoom + diff));
+        initialPinchDist = dist;
+        drawWorkspace();
+      }
+    }, { passive: true });
+
+    // 8. طباعة تقرير التجربة المخبري الكامل للطالب (Student #15 Full Lab Report PDF)
+    window.printStudentLabReport = function() {
+      const cImg = canvas.toDataURL('image/png');
+      const sImg = document.getElementById('scopeCanvas').toDataURL('image/png');
+      const sName = currentUser ? currentUser.fullName : 'طالب غير مسجل';
+      const sUni = currentUser ? currentUser.universityId : '------';
+      const sSec = currentUser?.labSection || 'الفئة الأولى';
+
+      const win = window.open('', '_blank');
+      if (!win) return;
+      win.document.write(`
+        <html lang="ar" dir="rtl">
+        <head>
+          <title>تقرير تجربة مخبرية - ${escapeHTML(sName)}</title>
+          <style>
+            body { font-family: 'Segoe UI', Tahoma, sans-serif; padding: 25px; color: #0f172a; }
+            .hdr { display:flex; justify-content:space-between; border-bottom:3px solid #0284c7; padding-bottom:10px; margin-bottom:15px; }
+            .box { border:1px solid #cbd5e1; border-radius:10px; padding:12px; margin-bottom:14px; }
+            img { max-width:100%; border-radius:8px; border:1px solid #94a3b8; }
+          </style>
+        </head>
+        <body>
+          <div class="hdr">
+            <div>
+              <h2>جامعة حلب - كلية الهندسة الكهربائية والإلكترونية</h2>
+              <h3>تقرير تجربة عملية | مختبر محاكاة الدوائر الإلكترونية</h3>
+            </div>
+            <div>
+              <p><strong>اسم الطالب:</strong> ${escapeHTML(sName)}</p>
+              <p><strong>الرقم الجامعي:</strong> ${escapeHTML(sUni)} | <strong>${escapeHTML(sSec)}</strong></p>
+              <p><strong>التاريخ:</strong> ${new Date().toLocaleDateString('ar-SY')}</p>
+            </div>
+          </div>
+          <div class="box">
+            <h4>1. المخطط الهندسي للدائرة المنفذة (Circuit Schematic):</h4>
+            <img src="${cImg}" style="max-height:280px; background:#0f172a;">
+          </div>
+          <div class="box">
+            <h4>2. استجابة راسم الإشارة اللحظي (Oscilloscope Waveform CH1/CH2):</h4>
+            <img src="${sImg}" style="height:120px; background:#020617;">
+          </div>
+          <div class="box">
+            <h4>3. العناصر والقيم المستخدمة في التجربة:</h4>
+            <p>${components.map(c => `${c.id} (${c.type}: ${c.value}${c.unit})`).join(' ، ')}</p>
+          </div>
+          <script>window.onload = () => { window.print(); };<\/script>
+        </body>
+        </html>
+      `);
+      win.document.close();
+    };
+
+    // ============================================================================
+    // 10. دوال الإدارة المتقدمة الـ 15 (Admin Academic & Security Functions)
+    // ============================================================================
+    function logAdminSecurityAction(actionText) {
+      const logs = JSON.parse(localStorage.getItem('aleppo_ee_audit_logs') || '[]');
+      logs.unshift({ time: Date.now(), action: actionText });
+      localStorage.setItem('aleppo_ee_audit_logs', JSON.stringify(logs.slice(0, 50)));
+    }
+
+    window.toggleAdminHeaderCollapse = function() {
+      const grid = document.querySelector('#secretRoomModal .stats-grid');
+      if (grid) grid.style.display = (grid.style.display === 'none') ? 'grid' : 'none';
+    };
+
+    window.adminGradeProject = async function(projId) {
+      const list = getLocalProjects();
+      const p = list.find(item => item.id === projId);
+      if (!p) return;
+      const res = await openCustomDialog({
+        title: `🎓 رصد درجة أكاديمية لمشروع: ${p.title}`,
+        message: `الطالب: ${p.ownerName} (${p.universityId})`,
+        fields: [
+          { label: 'الدرجة المستحقة (من 100):', type: 'number', value: p.academicGrade || '95' },
+          { label: 'ملاحظة التصحيح التوجيهية للطالب:', value: p.academicFeedback || 'تصميم ممتاز ومطابق لشروط التجربة المخبرية.' }
+        ],
+        confirmText: 'اعتماد الدرجة والملاحظة'
+      });
+      if (!res) return;
+      p.academicGrade = res[0];
+      p.academicFeedback = res[1];
+      setLocalProjects(list);
+      logAdminSecurityAction(`رصد درجة (${res[0]}/100) لمشروع "${p.title}" للطالب ${p.ownerName}`);
+      renderSecretRoomDashboard();
+      if (isFirebaseReady) {
+        try { await setDoc(doc(db, "projects", p.id), { academicGrade: p.academicGrade, academicFeedback: p.academicFeedback }, { merge: true }); } catch (e) {}
+      }
+      playSFX('wire');
+      showToast(`🎓 تم اعتماد الدرجة (${res[0]}/100) وإرسال الملاحظة لملف الطالب!`);
+    };
+
+    window.sendDirectStudentNotice = async function(uid) {
+      const users = getLocalUsers();
+      const u = users.find(item => item.uid === uid);
+      if (!u) return;
+      const res = await openCustomDialog({
+        title: `📩 إرسال توجيه مباشر للطالب: ${u.fullName}`,
+        message: 'ستظهر هذه الرسالة في ملف الطالب الشخصي عند فتحه للتطبيق:',
+        fields: [{ label: 'نص الرسالة التوجيهية:', value: u.directNotice || '' }],
+        confirmText: 'إرسال الرسالة'
+      });
+      if (!res) return;
+      u.directNotice = res[0];
+      setLocalUsers(users);
+      logAdminSecurityAction(`إرسال رسالة توجيهية للطالب ${u.fullName} (${u.universityId})`);
+      if (isFirebaseReady) {
+        try { await setDoc(doc(db, "users", u.uid), { directNotice: u.directNotice }, { merge: true }); } catch (e) {}
+      }
+      playSFX('wire');
+      showToast("📩 تم إرسال التوجيه المباشر للطالب سحابياً!");
+    };
+
+    window.toggleSubAdminRole = async function(uid) {
+      const users = getLocalUsers();
+      const u = users.find(item => item.uid === uid);
+      if (!u || u.universityId === "1461997") return;
+      u.role = (u.role === 'ta_moderator') ? 'student' : 'ta_moderator';
+      setLocalUsers(users);
+      logAdminSecurityAction(`تغيير صلاحية ${u.fullName} إلى ${u.role}`);
+      renderSecretRoomDashboard();
+      if (isFirebaseReady) {
+        try { await setDoc(doc(db, "users", u.uid), { role: u.role }, { merge: true }); } catch (e) {}
+      }
+      showToast(u.role === 'ta_moderator' ? `🛡️ تمت ترقية ${u.fullName} إلى معيد/مشرف مساعد!` : `تمت إعادة ${u.fullName} إلى صلاحية طالب.`);
+    };
+
+    window.renderCustomCloudTemplates = function() {
+      const box = document.getElementById('customCloudTemplatesContainer');
+      if (!box) return;
+      const list = JSON.parse(localStorage.getItem('aleppo_ee_custom_templates') || '[]');
+      box.innerHTML = list.map((tpl, i) => `
+        <div class="project-card" style="border-color:var(--accent-cyan);">
+          <strong>${i + 5}. ${escapeHTML(tpl.title)} <span class="badge badge-public">قالب مضاف</span></strong>
+          <p style="font-size:11px; color:var(--text-muted); margin:4px 0 8px;">${escapeHTML(tpl.desc)}</p>
+          <button class="btn btn-cyan" onclick="loadCustomCloudTemplate('${tpl.id}')">تحميل الدائرة</button>
+        </div>
+      `).join('');
+    };
+
+    window.loadCustomCloudTemplate = function(tplId) {
+      const list = JSON.parse(localStorage.getItem('aleppo_ee_custom_templates') || '[]');
+      const found = list.find(t => t.id === tplId);
+      if (!found || !found.schema) return;
+      playSFX('drop');
+      pushHistorySnapshot();
+      components = JSON.parse(JSON.stringify(found.schema.components || []));
+      wires = JSON.parse(JSON.stringify(found.schema.wires || []));
+      stickyNotes = JSON.parse(JSON.stringify(found.schema.stickyNotes || []));
+      components.forEach(updateComponentPins);
+      closeModal('templatesModal');
+      triggerSingleSolve(true);
+      drawWorkspace();
+      showToast(`تم تحميل قالب: ${found.title}`);
+    };
+
+    window.saveCurrentCircuitAsCloudTemplate = async function() {
+      const res = await openCustomDialog({
+        title: '➕ إضافة الدائرة الحالية إلى القوالب الجاهزة السحابية',
+        message: 'ستظهر هذه الدائرة فوراً لجميع طلاب الكلية في نافذة (قوالب وتحديات):',
+        fields: [
+          { label: 'عنوان القالب الهندسي:', placeholder: 'مثال: مضخم باعث مشترك ترانزستور NPN' },
+          { label: 'وصف مختصر للتجربة:', placeholder: 'دراسة كسب الجهد وفرق الطور 180 درجة' }
+        ],
+        confirmText: 'نشر القالب للطلاب'
+      });
+      if (!res || !res[0]) return;
+      const customTemplates = JSON.parse(localStorage.getItem('aleppo_ee_custom_templates') || '[]');
+      const newTpl = { id: 'tpl_' + Date.now(), title: res[0], desc: res[1] || '', schema: { components, wires, stickyNotes } };
+      customTemplates.unshift(newTpl);
+      localStorage.setItem('aleppo_ee_custom_templates', JSON.stringify(customTemplates));
+      renderCustomCloudTemplates();
+      if (isFirebaseReady) {
+        try { await setDoc(doc(db, "announcements", "templates"), { list: customTemplates, updatedAt: Date.now() }); } catch (e) {}
+      }
+      logAdminSecurityAction(`إضافة قالب تعليمي سحابي جديد: ${res[0]}`);
+      playSFX('wire');
+      showToast("➕ تم نشر ومزامنة القالب الجديد سحابياً في قائمة القوالب الجاهزة!");
+    };
+
+    window.promptWhitelistImport = async function() {
+      const res = await openCustomDialog({
+        title: '📋 تقييد التسجيل بقائمة أرقام جامعية معتمدة',
+        message: 'أدخل الأرقام الجامعية المسموح لها بالتسجيل مفصولة بفاصلة (,):',
+        fields: [{ label: 'الأرقام الجامعية (6 خانات):', placeholder: '220411, 230819, 240115' }],
+        confirmText: 'تفعيل القائمة البيضاء'
+      });
+      if (!res || !res[0]) return;
+      const list = res[0].split(',').map(s => s.trim()).filter(Boolean);
+      localStorage.setItem('aleppo_ee_whitelist', JSON.stringify(list));
+      logAdminSecurityAction(`تفعيل القائمة البيضاء لعدد (${list.length}) رقم جامعي`);
+      renderSecretRoomDashboard();
+      showToast(`📋 تم تفعيل القيد الرسمي لـ ${list.length} طالب!`);
+    };
+
+    window.clearWhitelistRestriction = function() {
+      localStorage.removeItem('aleppo_ee_whitelist');
+      logAdminSecurityAction('إلغاء قيد القائمة البيضاء وفتح التسجيل لجميع الطلاب');
+      renderSecretRoomDashboard();
+      showToast("تم فتح التسجيل لجميع الأرقام الجامعية السداسية.");
+    };
+
+    window.toggleMaintenanceMode = async function() {
+      const isMaint = localStorage.getItem('aleppo_ee_maintenance') === '1';
+      const nextState = isMaint ? '0' : '1';
+      localStorage.setItem('aleppo_ee_maintenance', nextState);
+      logAdminSecurityAction(nextState === '1' ? 'تفعيل وضع الصيانة المؤقت للمنصة' : 'إيقاف وضع الصيانة وإعادة فتح المنصة');
+      if (isFirebaseReady) {
+        try { await setDoc(doc(db, "announcements", "maintenance"), { active: nextState === '1', updatedAt: Date.now() }); } catch (e) {}
+      }
+      showToast(nextState === '1' ? "🛠️ تم تفعيل وضع الصيانة المؤقت أمام الطلاب." : "✅ تم إيقاف وضع الصيانة وفتح المنصة.");
+    };
+
+    window.bypassMaintenanceIfAdmin = function() {
+      if (currentUser && (currentUser.role === 'admin' || currentUser.universityId === '1461997')) {
+        document.getElementById('maintenanceOverlay').classList.remove('active');
+      } else {
+        showToast("⛔ الدخول متاح للمشرف العام فقط أثناء الصيانة.");
+      }
+    };
+
+    window.exportStudentPortfolioJSON = function(uid) {
+      const u = getLocalUsers().find(item => item.uid === uid);
+      if (!u) return;
+      const sProjs = getLocalProjects().filter(p => p.ownerId === uid || p.universityId === u.universityId);
+      const blob = new Blob([JSON.stringify({ student: u, projects: sProjs }, null, 2)], { type: 'application/json' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = `Portfolio_${u.universityId}_${Date.now()}.json`;
+      link.click();
+      showToast(`📦 تم تحميل أرشيف مشاريع الطالب (${u.fullName}) بالكامل!`);
+    };
+
   </script>
 </body>
 </html>
