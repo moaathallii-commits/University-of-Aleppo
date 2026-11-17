@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>جامعة حلب - الهندسة الإلكترونية | محاكي الدوائر v10.0 (Enterprise Ultimate Edition)</title>
+  <title>جامعة حلب - الهندسة الإلكترونية | محاكي الدوائر v9.0 (Auto-Sync & Full 40+ Catalog)</title>
   <meta name="theme-color" content="#0f172a">
   <link rel="manifest" href="./manifest.json">
   <link rel="apple-touch-icon" href="./1000233248.jpg">
   <style>
     :root {
       --bg-dark: #0f172a;
-      --bg-panel: rgba(30, 41, 59, 0.95);
+      --bg-panel: rgba(30, 41, 59, 0.94);
       --bg-card: #334155;
       --accent-green: #10b981;
       --accent-cyan: #06b6d4;
@@ -24,7 +24,7 @@
 
     body.solarpunk-light {
       --bg-dark: #f4fbf7;
-      --bg-panel: rgba(226, 242, 234, 0.96);
+      --bg-panel: rgba(226, 242, 234, 0.95);
       --bg-card: #ffffff;
       --accent-green: #059669;
       --accent-cyan: #0284c7;
@@ -54,6 +54,7 @@
       transition: background-color 0.25s, color 0.25s;
     }
 
+    /* شريط الإعلانات العامة المصنف حسب الأهمية (Admin #7) */
     #globalAnnouncementBanner {
       position: fixed;
       top: 0;
@@ -78,6 +79,7 @@
       50% { opacity: 0.82; }
     }
 
+    /* الشريط العلوي */
     .top-bar {
       position: fixed;
       top: 0;
@@ -174,6 +176,7 @@
       box-shadow: 0 0 12px rgba(245, 158, 11, 0.5);
     }
 
+    /* زر وضع التركيز الكامل + القائمة الجانبية القابلة للطي (Student #4 & #15) */
     .fab-container {
       position: fixed;
       top: 62px;
@@ -240,6 +243,7 @@
       color: var(--accent-green);
     }
 
+    /* مساحة العمل */
     #workspace-container {
       position: fixed;
       top: 54px;
@@ -258,6 +262,7 @@
       background-color: var(--bg-dark);
     }
 
+    /* الخريطة المصغرة للتنقل Mini-Map Radar (Student #8) */
     #miniMapCanvas {
       position: fixed;
       bottom: 118px;
@@ -273,6 +278,7 @@
     }
     body.zen-mode #miniMapCanvas { bottom: 14px; }
 
+    /* حلقة التحكم الدائرية السريعة حول العنصر Radial Context Menu (Student #7) */
     .radial-menu {
       position: fixed;
       width: 120px;
@@ -301,6 +307,7 @@
     }
     .radial-btn:active { transform: scale(0.9); }
 
+    /* راسم الإشارة ثنائي القنوات (Student #11: Dual-Channel Oscilloscope) */
     .scope-panel {
       position: fixed;
       top: 60px;
@@ -346,6 +353,7 @@
       color: var(--text-muted);
     }
 
+    /* المقياس المتعدد اللحظي */
     .multimeter-widget {
       position: fixed;
       top: 200px;
@@ -373,6 +381,7 @@
       line-height: 1.4;
     }
 
+    /* شريط الفحص مع محدد الوحدات الذكية SI Prefix (Student #3) */
     .inspector-bar {
       position: fixed;
       bottom: 114px;
@@ -440,6 +449,7 @@
       transform: scale(1.15);
     }
 
+    /* الدرج السفلي مع البحث الفوري عن القطع والقطع المستخدمة مؤخراً (Student #5 & #6) */
     .bottom-dock {
       position: fixed;
       bottom: 0;
@@ -534,6 +544,7 @@
       margin-bottom: 2px;
     }
 
+    /* النوافذ الزجاجية الموحدة (Admin #3 Glassmorphic Modals) */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -616,6 +627,7 @@
     .badge-private { background: rgba(148, 163, 184, 0.2); color: var(--text-muted); }
     .badge-featured { background: rgba(245, 158, 11, 0.25); color: #fbbf24; }
 
+    /* أيقونة الأحرف الأولى للطالب (Admin #4 Student Avatar) */
     .avatar-circle {
       width: 34px;
       height: 34px;
@@ -681,6 +693,7 @@
       height: 110px;
     }
 
+    /* التنبيه العائم مع زر التراجع الإداري (Admin #11 Undo Toast) */
     #toastBox {
       position: fixed;
       top: 62px;
@@ -702,18 +715,21 @@
 </head>
 <body>
 
+  <!-- شريط الإعلانات العامة السحابي المصنف -->
   <div id="globalAnnouncementBanner" class="sev-info"></div>
 
+  <!-- تنبيه عائم مع دعم التراجع الإداري -->
   <div id="toastBox">
     <span id="toastText"></span>
     <button id="toastUndoBtn" class="btn btn-amber" style="display:none; padding:2px 8px; font-size:10px;">تراجع ↶</button>
   </div>
 
+  <!-- الشريط العلوي -->
   <header class="top-bar" id="topBar">
     <div class="brand" onclick="openStudentProfileModal()" title="افتح ملفك الشخصي وأوسمتك">
       <img src="./1000233248.jpg" alt="شعار جامعة حلب" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%230f172a%22/><circle cx=%2250%22 cy=%2250%22 r=%2235%22 stroke=%22%2310b981%22 stroke-width=%224%22 fill=%22none%22/></svg>'">
       <div class="brand-title">
-        <h1>جامعة حلب - الهندسة الإلكترونية <span class='badge badge-featured' style='font-size:9px;'>v10.0</span></h1>
+        <h1>جامعة حلب - الهندسة الإلكترونية <span class='badge badge-featured' style='font-size:9px;'>v9.0</span></h1>
         <div class="meta-row">
           <span class="conn-dot" id="connDot"></span>
           <span id="connText">متصل</span>
@@ -735,6 +751,7 @@
     </div>
   </header>
 
+  <!-- راسم الإشارة ثنائي القنوات (Student #11: Dual-Channel Oscilloscope) -->
   <div class="scope-panel" id="scopePanel">
     <div class="scope-header">
       <span>راسم إشارة ثنائي القنوات (CH1 دخل / CH2 خرج)</span>
@@ -748,6 +765,7 @@
     </div>
   </div>
 
+  <!-- أداة المقياس المتعدد اللحظي و RMS -->
   <div class="multimeter-widget" id="multimeterWidget">
     <div style="display:flex; justify-content:space-between; align-items:center; font-size:11px; color:var(--accent-amber); font-weight:bold;">
       <span>📟 المقياس المتعدد اللحظي (DMM)</span>
@@ -759,6 +777,7 @@
     </div>
   </div>
 
+  <!-- القائمة العائمة القابلة للطي + وضع التركيز الكامل Zen Mode (Student #4 & #15) -->
   <div class="fab-container">
     <button class="fab-main" onclick="toggleQuickRibbonMenu()" title="أدوات التحكم السريع">⚙️</button>
     <aside class="quick-ribbon" id="quickRibbonMenu">
@@ -780,18 +799,22 @@
     </aside>
   </div>
 
+  <!-- حلقة التحكم الدائرية السريعة حول العنصر المحدد (Student #7 Radial Context Menu) -->
   <div class="radial-menu" id="radialContextMenu">
     <button class="radial-btn" style="top:0; left:44px;" title="تدوير 90°" onclick="rotateSelectedComponent()">↻</button>
     <button class="radial-btn" style="bottom:8px; right:4px;" title="تكرار العنصر (Duplicate)" onclick="duplicateSelectedComponent()">❐</button>
     <button class="radial-btn" style="bottom:8px; left:4px; border-color:var(--accent-red); color:var(--accent-red);" title="حذف العنصر" onclick="deleteSelectedComponent()">🗑️</button>
   </div>
 
+  <!-- مساحة العمل (Canvas) -->
   <main id="workspace-container">
     <canvas id="circuitCanvas"></canvas>
   </main>
 
+  <!-- الخريطة المصغرة للتنقل Mini-Map Radar (Student #8) -->
   <canvas id="miniMapCanvas" width="96" height="68"></canvas>
 
+  <!-- شريط فحص وتعديل العنصر مع الوحدات الهندسية الذكية SI Prefix (Student #3) -->
   <div class="inspector-bar" id="inspectorBar">
     <div class="inspector-row">
       <div style="display:flex; align-items:center; gap:8px;">
@@ -834,6 +857,7 @@
     </div>
   </div>
 
+  <!-- الدرج السفلي مع شريط البحث الفوري والقطع المستخدمة مؤخراً (Student #5 & #6) -->
   <footer class="bottom-dock">
     <div class="category-bar">
       <input type="text" id="compQuickSearch" class="comp-search-pill" placeholder="🔍 ابحث عن قطعة..." oninput="filterComponentsBySearch(this.value)">
@@ -847,6 +871,7 @@
     <div class="bottom-toolbar" id="dynamicToolbar"></div>
   </footer>
 
+  <!-- 1. نافذة تسجيل الدخول لأول مرة -->
   <div class="modal-overlay" id="onboardingModal">
     <div class="modal-card">
       <div class="modal-header">
@@ -870,6 +895,7 @@
     </div>
   </div>
 
+  <!-- 2. نافذة الملف الشخصي للطالب وأوسمته (Student #13 Profile Drawer) -->
   <div class="modal-overlay" id="studentProfileModal">
     <div class="modal-card">
       <div class="modal-header">
@@ -880,6 +906,7 @@
     </div>
   </div>
 
+  <!-- 3. نافذة مشاركة الدائرة عبر QR Code فوري (Student #14) -->
   <div class="modal-overlay" id="qrShareModal">
     <div class="modal-card" style="text-align:center;">
       <div class="modal-header">
@@ -895,6 +922,7 @@
     </div>
   </div>
 
+  <!-- 4. نافذة نماذج الدوائر الجاهزة + التحدي الأسبوعي من الإدارة (Admin #13) -->
   <div class="modal-overlay" id="templatesModal">
     <div class="modal-card">
       <div class="modal-header">
@@ -934,6 +962,7 @@
     </div>
   </div>
 
+  <!-- 5. نافذة حفظ المشروع -->
   <div class="modal-overlay" id="saveProjectModal">
     <div class="modal-card">
       <div class="modal-header">
@@ -954,6 +983,7 @@
     </div>
   </div>
 
+  <!-- 6. نافذة مستودع المشاريع والبحث الذكي -->
   <div class="modal-overlay" id="repoModal">
     <div class="modal-card">
       <div class="modal-header">
@@ -967,6 +997,7 @@
     </div>
   </div>
 
+  <!-- 7. نافذة الغرفة السرية بملء الشاشة (Admin Dashboard v8.0 - 15 تحسيناً إدارياً وبصرياً) -->
   <div class="modal-overlay" id="secretRoomModal">
     <div class="modal-card fullscreen-admin" style="border-color:var(--accent-amber);">
       <svg class="cyber-watermark" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
@@ -996,6 +1027,7 @@
         </div>
       </div>
 
+      <!-- لوحة الرسوم البيانية التحليلية (Admin #1 Visual Analytics Charts) -->
       <div class="stats-grid">
         <div class="stat-box">
           <div class="num" id="statTotalUsers">0</div>
@@ -1024,6 +1056,7 @@
         </div>
       </div>
 
+      <!-- نظام الإعلانات المصنفة بالألوان + نشر التحدي الأسبوعي (Admin #7 & #13) -->
       <div style="display:flex; gap:5px; margin-bottom:8px; flex-wrap:wrap;">
         <select id="adminAnnSeverity" class="form-control" style="width:130px; padding:5px; font-size:11px;">
           <option value="sev-info">🔵 إعلان معلوماتي</option>
@@ -1036,6 +1069,7 @@
         <button class="btn btn-danger" onclick="clearGlobalAnnouncement()">إخفاء</button>
       </div>
 
+      <!-- تبويبات الإدارة -->
       <div class="admin-tabs">
         <button class="btn btn-cyan" onclick="switchAdminTab('USERS')">👥 سجل الطلاب النشطين</button>
         <button class="btn" onclick="switchAdminTab('BANNED')">🚫 قائمة المحظورين</button>
@@ -1043,6 +1077,7 @@
         <button class="btn" onclick="switchAdminTab('REPORTS')">🚩 طابور التبليغات (<span id="tabReportBadge">0</span>)</button>
       </div>
 
+      <!-- أدوات البحث، فلتر الدفعة الجامعية، تحديد الكل، والفرز (Admin #5, #8, #12) -->
       <div style="display:flex; gap:5px; margin-bottom:8px; flex-wrap:wrap; align-items:center;">
         <label style="font-size:11px; display:flex; align-items:center; gap:4px; cursor:pointer; background:var(--bg-dark); padding:5px 8px; border-radius:8px; border:1px solid var(--border-soft);">
           <input type="checkbox" id="adminSelectAllToggle" onchange="toggleSelectAllAdminItems(this.checked)">
@@ -1068,8 +1103,10 @@
         <button class="btn btn-danger" onclick="executeBulkDeleteSelected()">حذف المحددين ☑</button>
       </div>
 
+      <!-- محتوى التبويب الإداري المتغير -->
       <div id="adminDynamicViewport" style="flex:1; overflow-y:auto; padding-right:4px;"></div>
 
+      <!-- شريط تقسيم الصفحات الذكي (Admin #8 Smart Pagination) -->
       <div style="display:flex; justify-content:space-between; align-items:center; padding-top:8px; border-top:1px solid var(--border-soft); font-size:11px;">
         <span id="adminPaginationInfo" style="color:var(--text-muted);">صفحة 1</span>
         <div style="display:flex; gap:5px;">
@@ -1080,6 +1117,7 @@
     </div>
   </div>
 
+  <!-- 8. نافذة معاينة الدائرة الحية بالكانفاس المصغر + ملف الطالب 360° (Admin #2 & #9) -->
   <div class="modal-overlay" id="adminPreviewModal">
     <div class="modal-card">
       <div class="modal-header">
@@ -1091,6 +1129,7 @@
     </div>
   </div>
 
+  <!-- 9. نافذة حوار زجاجية موحدة بدلاً من prompt/confirm (Admin #3 Custom Glassmorphic Dialog) -->
   <div class="modal-overlay" id="customDialogModal" style="z-index:260;">
     <div class="modal-card" style="max-width:400px;">
       <div class="modal-header">
@@ -1105,6 +1144,7 @@
     </div>
   </div>
 
+  <!-- محرك التطبيق الشامل v8.0 -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { 
@@ -1113,6 +1153,9 @@
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
     import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
+    // ============================================================================
+    // 1. نافذة الحوار الزجاجية الموحدة بدلاً من prompt/confirm (Admin #3)
+    // ============================================================================
     let dialogResolver = null;
 
     window.openCustomDialog = function({ title, message, fields = [], confirmText = 'تأكيد' }) {
@@ -1149,6 +1192,9 @@
       }
     };
 
+    // ============================================================================
+    // 2. محرك الصوتيات التفاعلي البرمجي (Web Audio API ASMR & Lab SFX Engine)
+    // ============================================================================
     let soundEnabled = true;
     let audioCtx = null;
 
@@ -1249,6 +1295,9 @@
       }
     };
 
+    // ============================================================================
+    // 3. موسوعة القطع الإلكترونية الشاملة (مع دعم البحث الفوري والقطع الأخيرة)
+    // ============================================================================
     const COMPONENT_CATALOG = {
       CAT_SOURCES: [
         { tool: 'SELECT', icon: '✥', label: 'تحريك/تحديد' },
@@ -1322,6 +1371,7 @@
       });
     });
 
+    // قائمة القطع المستخدمة مؤخراً (Student #6 Recently Used Dock)
     let recentTools = ['SELECT', 'WIRE', 'RESISTOR', 'LED_RED', 'DC_SOURCE', 'GND'];
     let activeCategory = 'CAT_SOURCES';
 
@@ -1388,6 +1438,9 @@
         .replace(/'/g, '&#039;');
     }
 
+    // ============================================================================
+    // 4. إعدادات Firebase والمزامنة السحابية
+    // ============================================================================
     const firebaseConfig = {
       apiKey: "AIzaSyAg9os96KdhaHveSpi5GmHFCOM_oo2s8h0",
       authDomain: "university-of-aleppo-76524.firebaseapp.com",
@@ -1524,6 +1577,7 @@
       updateConnectivityIndicator();
       loadGlobalAnnouncementBanner();
 
+      // فحص ما إذا كان الرابط يحتوي على دائرة مشاركة عبر QR Code (Student #14)
       const urlParams = new URLSearchParams(window.location.search);
       const sharedCircuitBase64 = urlParams.get('circuit');
       if (sharedCircuitBase64) {
@@ -1559,7 +1613,7 @@
       const errBox = document.getElementById('onboardingError');
       errBox.style.display = 'none';
 
-      const nameRegex = /^[ء-ي]+\s+[ء-ي]+\s+[ء-ي]+.*$/;
+      const nameRegex = /^[\u0621-\u064A]+\s+[\u0621-\u064A]+\s+[\u0621-\u064A]+.*$/;
       if (!nameRegex.test(fullName)) {
         playSFX('error');
         errBox.innerText = "يرجى إدخال الاسم الثلاثي باللغة العربية بشكل صحيح.";
@@ -1619,6 +1673,9 @@
       }
     }
 
+    // ============================================================================
+    // 5. محرك المحاكاة الفيزيائي في الـ Web Worker
+    // ============================================================================
     const workerCode = `
       let prevCapVoltages = {};
       let prevIndCurrents = {};
@@ -1941,6 +1998,9 @@
     const workerBlob = new Blob([workerCode], { type: 'application/javascript' });
     const solverWorker = new Worker(URL.createObjectURL(workerBlob));
 
+    // ============================================================================
+    // 6. محرر الدوائر البصري المتقدم (رموز هندسية حقيقية، نقاط التيار، الخريطة المصغرة، والملصقات)
+    // ============================================================================
     const canvas = document.getElementById('circuitCanvas');
     const ctx = canvas.getContext('2d');
     const miniMapCanvas = document.getElementById('miniMapCanvas');
@@ -1950,7 +2010,7 @@
     let currentTool = 'SELECT';
     let components = [];
     let wires = [];
-    let stickyNotes = [];
+    let stickyNotes = []; // ملصقات نصية لشرح الدائرة (Student #10)
     let selectedComponent = null;
     let draggingComponent = null;
     let wireStartPin = null;
@@ -1958,13 +2018,13 @@
     let pointerPos = { x: 0, y: 0 };
     let isSimulating = false;
     let simTime = 0;
-    let currentFlowOffset = 0;
+    let currentFlowOffset = 0; // لتحريك نقاط التيار المضيئة (Student #2)
     let showCurrentDots = true;
-    let useVoltageHeatmap = false;
+    let useVoltageHeatmap = false; // تلوين الأسلاك حسب الجهد (Student #9)
     let latestPinVoltages = {};
     let errorCulpritIds = [];
-    let scopeHistoryCH1 = new Array(115).fill(0);
-    let scopeHistoryCH2 = new Array(115).fill(0);
+    let scopeHistoryCH1 = new Array(115).fill(0); // موجة الدخل
+    let scopeHistoryCH2 = new Array(115).fill(0); // موجة الخرج
 
     let cameraZoom = 1.0;
     let cameraPan = { x: 0, y: 0 };
@@ -2017,6 +2077,7 @@
       showToast(useVoltageHeatmap ? "تم تفعيل التلوين الحراري للأسلاك حسب الجهد 🌡️" : "تمت استعادة ألوان الأسلاك المخصصة");
     };
 
+    // محاذاة وترتيب الدائرة تلقائياً (Student #12 Auto-Align & Tidy Up)
     window.autoAlignCircuit = function() {
       playSFX('wire');
       pushHistorySnapshot();
@@ -2040,6 +2101,7 @@
       showToast("📐 تمت محاذاة وترتيب عناصر الدائرة هندسياً!");
     };
 
+    // إضافة ملصق ملاحظة نصية فوق الدائرة (Student #10 Sticky Text Notes)
     window.addStickyNote = async function() {
       playSFX('tap');
       const res = await openCustomDialog({
@@ -2223,6 +2285,7 @@
       showToast("تم حفظ صورة الدائرة لإرفاقها في تقرير المختبر 📸");
     };
 
+    // تجاهل تغيير حجم الكانفاس عند ارتفاع لوحة مفاتيح الهاتف (PWA Fix)
     function resizeCanvas() {
       if (document.activeElement && ['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
       const container = document.getElementById('workspace-container');
@@ -2293,6 +2356,7 @@
           { id: 'GND1', type: 'GND', x: cx, y: cy + 72, value: 0, unit: '', rotation: 0, pins: [] }
         ];
       } else if (type === 'CHALLENGE') {
+        // دارة التحدي الأسبوعي (تحتوي على ديود معكوس ومفتاح مفصول ومقاومة عالية جداً لإصلاحها)
         const savedChallenge = localStorage.getItem('aleppo_ee_weekly_challenge');
         if (savedChallenge) {
           const parsed = JSON.parse(savedChallenge);
@@ -2381,6 +2445,7 @@
       playSFX('tap');
       currentTool = toolName;
       wireStartPin = null;
+      // حفظ الأداة في قائمة "المستخدمة مؤخراً" (Student #6)
       if (!['SELECT', 'PAN', 'CLEAR'].includes(toolName)) {
         recentTools = [toolName, ...recentTools.filter(t => t !== toolName)].slice(0, 8);
       }
@@ -2570,6 +2635,7 @@
       }
     });
 
+    // تحديث شريط الفحص مع محدد الوحدات الهندسية الذكية SI Prefix (Student #3)
     function updateInspectorUI() {
       const bar = document.getElementById('inspectorBar');
       if (!selectedComponent || selectedComponent.type === 'GND') {
@@ -2669,6 +2735,7 @@
       drawWorkspace();
     };
 
+    // دالة رسم الرموز الهندسية المعيارية داخل العنصر (Student #1 Vector Schematic Symbols)
     function drawSchematicVectorSymbol(ctx, c) {
       ctx.save();
       ctx.translate(c.x, c.y);
@@ -2677,6 +2744,7 @@
 
       ctx.beginPath();
       if (['RESISTOR', 'POT', 'LDR', 'THERMISTOR'].includes(c.type)) {
+        // خط متعرج قياسي للمقاومة (Zig-Zag IEEE Symbol)
         ctx.moveTo(-24, 0);
         ctx.lineTo(-18, 0);
         ctx.lineTo(-14, -8);
@@ -2691,17 +2759,20 @@
           ctx.moveTo(-10, 12); ctx.lineTo(10, -12);
         }
       } else if (['CAPACITOR', 'ELEC_CAP'].includes(c.type)) {
+        // لوحين متوازيين للمكثف
         ctx.moveTo(-24, 0); ctx.lineTo(-5, 0);
         ctx.moveTo(-5, -12); ctx.lineTo(-5, 12);
         ctx.moveTo(5, -12); ctx.lineTo(5, 12);
         ctx.moveTo(5, 0); ctx.lineTo(24, 0);
       } else if (c.type === 'INDUCTOR' || c.type === 'TRANSFORMER') {
+        // أقواس الملف اللولبي للوشيعة
         ctx.moveTo(-24, 0); ctx.lineTo(-16, 0);
         ctx.arc(-10, 0, 6, Math.PI, 0, false);
         ctx.arc(0, 0, 6, Math.PI, 0, false);
         ctx.arc(10, 0, 6, Math.PI, 0, false);
         ctx.moveTo(16, 0); ctx.lineTo(24, 0);
       } else if (['DIODE', 'SCHOTTKY', 'ZENER', 'PHOTO_DIODE'].includes(c.type) || c.type.startsWith('LED')) {
+        // مثلث الديود وخط المهبط
         ctx.moveTo(-24, 0); ctx.lineTo(-8, 0);
         ctx.moveTo(-8, -10); ctx.lineTo(-8, 10); ctx.lineTo(8, 0); ctx.closePath();
         ctx.moveTo(8, -10); ctx.lineTo(8, 10);
@@ -2711,6 +2782,7 @@
         }
         ctx.moveTo(8, 0); ctx.lineTo(24, 0);
       } else if (['SWITCH', 'PUSH_BUTTON', 'RELAY'].includes(c.type)) {
+        // قاطع مفتوح أو مغلق
         ctx.moveTo(-24, 0); ctx.lineTo(-10, 0);
         if (c.value === 1) {
           ctx.lineTo(10, 0);
@@ -2719,6 +2791,7 @@
         }
         ctx.moveTo(10, 0); ctx.lineTo(24, 0);
       } else {
+        // إطار دائري أو صندوقي للمنابع والبوابات والمحركات
         ctx.moveTo(-24, 0); ctx.lineTo(-15, 0);
         ctx.moveTo(15, 0); ctx.lineTo(24, 0);
         ctx.arc(0, 0, 15, 0, Math.PI * 2);
@@ -2727,6 +2800,7 @@
       ctx.restore();
     }
 
+    // الرسم الرئيسي مع نقاط التيار المضيئة، التلوين الحراري، والرادار المصغر
     function drawWorkspace() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.save();
@@ -2749,9 +2823,11 @@
         }
       }
 
+      // رسم الأسلاك مع دعم التلوين الحراري ونقاط التيار المضيئة (Student #2 & #9)
       wires.forEach(w => {
         let strokeCol = w.color || '#10b981';
         if (useVoltageHeatmap && isSimulating) {
+          // البحث عن الفولتية عند بداية السلك
           let wireV = 0;
           components.forEach(c => {
             c.pins.forEach((p, idx) => {
@@ -2771,6 +2847,7 @@
         ctx.lineTo(w.x2, w.y2);
         ctx.stroke();
 
+        // نقاط تدفق التيار المتحركة أثناء التشغيل (Animated Current Flow Dots)
         if (isSimulating && showCurrentDots) {
           ctx.save();
           ctx.strokeStyle = '#fde047';
@@ -2799,6 +2876,7 @@
         ctx.setLineDash([]);
       }
 
+      // رسم الملصقات النصية التوضيحية (Student #10 Sticky Notes)
       stickyNotes.forEach(n => {
         ctx.save();
         ctx.fillStyle = 'rgba(245, 158, 11, 0.16)';
@@ -2814,6 +2892,7 @@
         ctx.restore();
       });
 
+      // رسم العناصر الإلكترونية بالرموز الهندسية المعيارية والتوهج
       components.forEach(c => {
         ctx.save();
         const isSel = selectedComponent && selectedComponent.id === c.id;
@@ -2849,10 +2928,12 @@
           const bw = isVertical ? 32 : 50;
           const bh = isVertical ? 50 : 32;
 
+          // خلفية خفيفة تحت الرمز الهندسي لسهولة اللمس والتمييز
           ctx.fillStyle = isGlowing ? meta.glow : (document.body.classList.contains('solarpunk-light') ? 'rgba(255,255,255,0.88)' : 'rgba(30, 41, 59, 0.85)');
           ctx.fillRect(c.x - bw / 2, c.y - bh / 2, bw, bh);
           ctx.strokeRect(c.x - bw / 2, c.y - bh / 2, bw, bh);
 
+          // رسم الرمز الهندسي المعياري داخل الإطار
           drawSchematicVectorSymbol(ctx, c);
 
           ctx.shadowBlur = 0;
@@ -2911,6 +2992,7 @@
       drawMiniMapRadar();
     }
 
+    // رسم الخريطة المصغرة في الزاوية (Student #8 Mini-Map Radar)
     function drawMiniMapRadar() {
       miniCtx.clearRect(0, 0, miniMapCanvas.width, miniMapCanvas.height);
       const scale = 0.08;
@@ -2931,6 +3013,7 @@
         miniCtx.fillRect(ox + (c.x - 200) * scale - 2, oy + (c.y - 200) * scale - 2, 4, 4);
       });
 
+      // مستطيل الكاميرا الحالي
       miniCtx.strokeStyle = '#f59e0b';
       miniCtx.strokeRect(
         ox + (-cameraPan.x / cameraZoom - 200) * scale,
@@ -2959,7 +3042,7 @@
       }
 
       statusEl.style.color = '#10b981';
-      statusEl.innerText = 'مستقر (MNA v10)';
+      statusEl.innerText = 'مستقر (MNA v8)';
       latestPinVoltages = res.pinVoltages;
 
       if (isSimulating && res.activeBuzzers && res.activeBuzzers.length > 0) {
@@ -3022,6 +3105,7 @@
       setTimeout(() => requestAnimationFrame(simulationLoop), 60);
     }
 
+    // راسم إشارة ثنائي القنوات (Student #11 Dual-Channel Oscilloscope)
     function drawOscilloscope() {
       const sCanvas = document.getElementById('scopeCanvas');
       const sCtx = sCanvas.getContext('2d');
@@ -3033,6 +3117,7 @@
       sCtx.lineTo(sCanvas.width, sCanvas.height / 2);
       sCtx.stroke();
 
+      // القناة الأولى CH1 (المنبع - أزرق سماوي متقطع خفيف)
       sCtx.strokeStyle = 'rgba(56, 189, 248, 0.55)';
       sCtx.lineWidth = 1.5;
       sCtx.beginPath();
@@ -3045,6 +3130,7 @@
       });
       sCtx.stroke();
 
+      // القناة الثانية CH2 (الخرج المفحوص - أخضر فسفوري ساطع)
       sCtx.strokeStyle = '#00ff88';
       sCtx.lineWidth = 2.2;
       sCtx.beginPath();
@@ -3058,17 +3144,22 @@
       sCtx.stroke();
     }
 
+    // ============================================================================
+    // 7. مشاركة الدائرة بـ QR Code والملف الشخصي للطالب (Student #13 & #14)
+    // ============================================================================
     window.openQRShareModal = function() {
       const payload = btoa(unescape(encodeURIComponent(JSON.stringify({ components, wires }))));
       const shareUrl = `${window.location.origin}${window.location.pathname}?circuit=${encodeURIComponent(payload)}`;
       document.getElementById('shareableLinkInput').value = shareUrl;
 
+      // رسم مصفوفة QR بصرية أنيقة تحمل شعار الجامعة في المنتصف
       const qCanvas = document.getElementById('qrCodeCanvas');
       const qCtx = qCanvas.getContext('2d');
       qCtx.fillStyle = '#ffffff';
       qCtx.fillRect(0, 0, 200, 200);
       qCtx.fillStyle = '#0f172a';
 
+      // مربعات الزوايا القياسية لرمز QR
       const drawFinder = (fx, fy) => {
         qCtx.fillRect(fx, fy, 42, 42);
         qCtx.fillStyle = '#ffffff';
@@ -3081,6 +3172,7 @@
       drawFinder(144, 14);
       drawFinder(14, 144);
 
+      // توليد النقاط الرقمية الحتمية بناءً على محتوى الدائرة
       let hash = 2166136261;
       for (let i = 0; i < payload.length; i++) {
         hash ^= payload.charCodeAt(i);
@@ -3152,6 +3244,9 @@
       openModal('studentProfileModal');
     };
 
+    // ============================================================================
+    // 8. مستودع المشاريع والغرفة السرية المطورة بالكامل (Admin UX #1 -> #15)
+    // ============================================================================
     function getLocalProjects() {
       return JSON.parse(localStorage.getItem('aleppo_ee_projects') || '[]');
     }
@@ -3272,6 +3367,7 @@
       const queryText = (document.getElementById('smartSearchInput').value || '').trim().toLowerCase();
       const allProjects = getLocalProjects();
 
+      // ترتيب بحيث تظهر المشاريع المعتمدة الذهبية (Featured) في المقدمة دائماً (Admin #6)
       const visible = allProjects.filter(p => {
         const canSee = p.isPublic || (currentUser && (p.ownerId === currentUser.uid || p.universityId === currentUser.universityId));
         if (!canSee) return false;
@@ -3453,6 +3549,7 @@
       }
     };
 
+    // قفل الغرفة السرية برمز PIN رباعي سريع (Admin #15)
     window.requestOpenSecretRoom = async function() {
       const savedPin = localStorage.getItem('aleppo_ee_admin_pin');
       if (savedPin) {
@@ -3528,6 +3625,7 @@
       document.getElementById('tabReportBadge').innerText = reports.length;
       document.getElementById('statQuotaReads').innerText = ((firebaseOpsCount / 50000) * 100).toFixed(2) + '%';
 
+      // حساب المتصلين خلال آخر 15 دقيقة (Admin #10 Real-Time Active Now Pulse)
       const activeNowCount = Math.max(1, users.filter(u => (Date.now() - (u.lastLoginAt || 0)) < 900000).length);
       document.getElementById('activeNowPulse').innerText = `🟢 متصل الآن: ${activeNowCount}`;
 
@@ -3653,6 +3751,7 @@
       }
     };
 
+    // منح وسام المشروع المعتمد من الكلية (Admin #6 Featured Project)
     window.adminToggleFeatured = async function(projId) {
       const list = getLocalProjects();
       const p = list.find(item => item.id === projId);
@@ -3667,6 +3766,7 @@
       showToast(p.isFeatured ? "★ تم منح المشروع وسام الاعتماد الذهبي من الكلية!" : "تم إلغاء وسام الاعتماد.");
     };
 
+    // بطاقة الفحص الكامل للطالب 360 درجة (Admin #9 Student 360 Inspector)
     window.inspectStudent360 = function(uid) {
       const u = getLocalUsers().find(item => item.uid === uid);
       if (!u) return;
@@ -3688,6 +3788,7 @@
       openModal('adminPreviewModal');
     };
 
+    // معاينة بصرية حية للدائرة داخل كانفاس مصغر في الغرفة السرية (Admin #2 Live Mini-Canvas Preview)
     window.adminPreviewProject = function(projId) {
       const p = getLocalProjects().find(item => item.id === projId);
       if (!p) {
@@ -3702,6 +3803,7 @@
       const pCtx = pCanvas.getContext('2d');
       pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
 
+      // رسم مصغر للمخطط داخل نافذة المدير
       pCtx.save();
       pCtx.translate(60, -40);
       pCtx.scale(0.65, 0.65);
@@ -3828,7 +3930,7 @@
       const backupProjs = getLocalProjects();
 
       if (checkedUsers.length > 0) {
-        setLocalUsers(backupUsers.filter(u => !checkedUsers.includes(u.uid) || u.universityId !== "1461997"));
+        setLocalUsers(backupUsers.filter(u => !checkedUsers.includes(u.uid) || u.universityId === "1461997"));
         setLocalProjects(backupProjs.filter(p => !checkedUsers.includes(p.ownerId)));
       }
       if (checkedProjs.length > 0) {
@@ -3837,6 +3939,7 @@
       playSFX('delete');
       renderSecretRoomDashboard();
 
+      // إتاحة التراجع الإداري لمدة 5 ثوانٍ (Admin #11 Undo Toast)
       showToast("تم تنفيذ الحذف الجماعي.", () => {
         setLocalUsers(backupUsers);
         setLocalProjects(backupProjs);
@@ -3890,6 +3993,7 @@
       }
     }
 
+    // طباعة تقرير رسمي بشعار جامعة حلب (Admin #14 Official PDF Report)
     window.printOfficialUniversityReport = function() {
       const users = getLocalUsers();
       const projects = getLocalProjects();
@@ -3935,12 +4039,10 @@
 
     window.exportStudentsToCSV = function() {
       const users = getLocalUsers();
-      let csvContent = "﻿الاسم الثلاثي,الرقم الجامعي,الدور,حالة الحظر,آخر دخول
-";
+      let csvContent = "\uFEFFالاسم الثلاثي,الرقم الجامعي,الدور,حالة الحظر,آخر دخول\n";
       users.forEach(u => {
         const lastDate = u.lastLoginAt ? new Date(u.lastLoginAt).toISOString() : '';
-        csvContent += `"${u.fullName}","${u.universityId}","${u.role}","${u.isBanned ? 'محظور' : 'نشط'}","${lastDate}"
-`;
+        csvContent += `"${u.fullName}","${u.universityId}","${u.role}","${u.isBanned ? 'محظور' : 'نشط'}","${lastDate}"\n`;
       });
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
       const link = document.createElement('a');
@@ -4054,6 +4156,7 @@
       document.getElementById(id).classList.remove('active');
     };
 
+    // نظام التنبيهات مع دعم زر التراجع الإداري (Admin #11 Undo Toast)
     window.showToast = function(msg, undoCallback = null) {
       const box = document.getElementById('toastBox');
       const txt = document.getElementById('toastText');
@@ -4073,6 +4176,7 @@
       window._toastTimer = setTimeout(() => { box.style.display = 'none'; }, 4800);
     };
 
+    // كاسر الكاش الذاتي (Auto-Cache Buster v9.0): يمسح الكاش القديم تلقائياً فور فتح الصفحة لضمان ظهور التحديثات فوراً
     async function enforceLatestVersion() {
       const CURRENT_VER = 'v9.0_enterprise';
       const savedVer = localStorage.getItem('aleppo_ee_app_version');
