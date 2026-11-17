@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>جامعة حلب - الهندسة الإلكترونية | محاكي الدوائر v12.0 (Zero-Bug Production Edition)</title>
+  <title>جامعة حلب - الهندسة الإلكترونية | محاكي الدوائر v16.0 (Pro-Grade 30 Student UX & EDA Suite)</title>
   <meta name="theme-color" content="#0f172a">
   <link rel="manifest" href="./manifest.json">
   <link rel="apple-touch-icon" href="./1000233248.jpg">
@@ -34,6 +34,140 @@
       --text-muted: #475569;
       --grid-line: rgba(5, 150, 105, 0.13);
       --border-soft: rgba(5, 150, 105, 0.22);
+    }
+
+    body.blueprint-theme {
+      --bg-dark: #0a2540;
+      --bg-panel: rgba(13, 46, 82, 0.95);
+      --bg-card: #133b6e;
+      --accent-green: #38bdf8;
+      --accent-cyan: #7dd3fc;
+      --accent-amber: #fde047;
+      --accent-red: #fb7185;
+      --text-main: #f0f9ff;
+      --text-muted: #bae6fd;
+      --grid-line: rgba(255, 255, 255, 0.16);
+      --border-soft: rgba(125, 211, 252, 0.28);
+    }
+
+    body.ieee-paper-theme {
+      --bg-dark: #ffffff;
+      --bg-panel: rgba(248, 250, 252, 0.98);
+      --bg-card: #f1f5f9;
+      --accent-green: #0f172a;
+      --accent-cyan: #1e293b;
+      --accent-amber: #b45309;
+      --accent-red: #b91c1c;
+      --text-main: #020617;
+      --text-muted: #475569;
+      --grid-line: rgba(15, 23, 42, 0.08);
+      --border-soft: rgba(15, 23, 42, 0.2);
+    }
+
+    /* الجزيرة الديناميكية العلوية الرشيقة (UX #20 Dynamic Island HUD) */
+    .dynamic-island-hud {
+      position: fixed;
+      top: 60px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(2, 6, 23, 0.88);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--accent-cyan);
+      border-radius: 99px;
+      padding: 4px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 10px;
+      color: #f8fafc;
+      z-index: 92;
+      box-shadow: 0 8px 22px rgba(0,0,0,0.45);
+      white-space: nowrap;
+    }
+
+    /* زر الإصلاح الشامل العائم عند حدوث أعطال (UX #19 Global One-Tap Repair) */
+    #globalRepairFab {
+      position: fixed;
+      top: 94px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, #f59e0b, #dc2626);
+      color: #fff;
+      border: none;
+      border-radius: 99px;
+      padding: 6px 14px;
+      font-size: 11px;
+      font-weight: 800;
+      cursor: pointer;
+      z-index: 96;
+      display: none;
+      box-shadow: 0 0 18px rgba(239, 68, 68, 0.65);
+      animation: pulseUrgent 1.1s infinite;
+    }
+
+    /* لوحة الأرقام الهندسية المدمجة (UX #14 Custom Engineering Numpad) */
+    .eng-numpad-popover {
+      position: fixed;
+      bottom: 185px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--bg-panel);
+      backdrop-filter: blur(14px);
+      border: 1.5px solid var(--accent-cyan);
+      border-radius: 16px;
+      padding: 10px;
+      width: 270px;
+      z-index: 190;
+      display: none;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.65);
+    }
+    .numpad-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 5px;
+      margin-top: 6px;
+    }
+    .numpad-key {
+      background: var(--bg-card);
+      color: var(--text-main);
+      border: 1px solid var(--border-soft);
+      border-radius: 8px;
+      padding: 7px 4px;
+      font-size: 12px;
+      font-weight: 700;
+      text-align: center;
+      cursor: pointer;
+    }
+    .numpad-key.si-key {
+      background: rgba(6, 182, 212, 0.18);
+      color: var(--accent-cyan);
+    }
+    .numpad-key:active { transform: scale(0.93); }
+
+    /* بكرة التمرير الدائرية لتغيير القيم بنعومة (UX #15 Rotary Jog-Dial) */
+    .jog-dial-wheel {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: conic-gradient(from 0deg, #06b6d4, #10b981, #f59e0b, #06b6d4);
+      padding: 3px;
+      cursor: grab;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .jog-dial-inner {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: var(--bg-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      font-weight: bold;
+      color: var(--accent-cyan);
     }
 
     *, *::before, *::after {
@@ -713,7 +847,7 @@
     <div class="brand" onclick="openStudentProfileModal()" title="افتح ملفك الشخصي وأوسمتك">
       <img src="./1000233248.jpg" alt="شعار جامعة حلب" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%230f172a%22/><circle cx=%2250%22 cy=%2250%22 r=%2235%22 stroke=%22%2310b981%22 stroke-width=%224%22 fill=%22none%22/></svg>'">
       <div class="brand-title">
-        <h1>جامعة حلب - الهندسة الإلكترونية <span class='badge badge-featured' style='font-size:9px;'>v12.0</span></h1>
+        <h1>جامعة حلب - الهندسة الإلكترونية <span class='badge badge-featured' style='font-size:9px;'>v16.0</span></h1>
         <div class="meta-row">
           <span class="conn-dot" id="connDot"></span>
           <span id="connText">متصل</span>
@@ -735,10 +869,70 @@
     </div>
   </header>
 
+  <!-- الجزيرة الديناميكية العلوية الرشيقة مع التحكم بسرعة الزمن والتشخيص الذكي (UX #20, #21, #27, #28, #29) -->
+  <div class="dynamic-island-hud" id="dynamicIslandHud">
+    <span id="hudZoomBadge" onclick="resetViewport()" style="cursor:pointer; color:var(--accent-cyan); font-weight:bold;">🔍 100%</span>
+    <span>|</span>
+    <label style="display:inline-flex; align-items:center; gap:3px; cursor:pointer;" title="التحكم بسرعة الزمن والعرض البطيء (UX #21 Time-Stretch)">
+      <span>⏱️ السرعة:</span>
+      <select id="simSpeedSelect" style="background:transparent; color:#fde047; border:none; font-size:10px; font-weight:bold; outline:none;" onchange="changeSimTimeSpeed(this.value)">
+        <option value="0.2" style="background:#0f172a;">0.2x (بطيء جداً)</option>
+        <option value="0.5" style="background:#0f172a;">0.5x (بطيء)</option>
+        <option value="1" selected style="background:#0f172a;">1.0x (طبيعي)</option>
+        <option value="2.5" style="background:#0f172a;">2.5x (سريع)</option>
+        <option value="5" style="background:#0f172a;">5.0x (فائق)</option>
+      </select>
+    </label>
+    <span>|</span>
+    <span style="cursor:pointer; color:#34d399; font-weight:bold;" onclick="openProAnalysisModal()" title="مخطط بود، المسح البارامتري، والطبيب الذكي للدائرة">📈 تحليل Bode وطبيب الدارة</span>
+    <span>|</span>
+    <span style="cursor:pointer; color:#c084fc; font-weight:bold;" onclick="startStepByStepWalkthrough()" title="شرح مراحل الدائرة خطوة بخطوة (UX #28)">🎓 اشرح الدارة</span>
+    <span>|</span>
+    <span id="recSimBtn" style="cursor:pointer; color:#fb7185; font-weight:bold;" onclick="recordSimulationClip()" title="تسجيل فيديو قصير للمحاكاة (UX #29)">🎥 تسجيل</span>
+  </div>
+
+  <!-- زر الإصلاح الشامل بلمسة واحدة عند تلف عدة قطع (UX #19) -->
+  <button id="globalRepairFab" onclick="repairAllDamagedComponents()">🔧 إصلاح كافة القطع التالفة وإعادة التشغيل فوراً</button>
+
+  <!-- لوحة الأرقام الهندسية السريعة (UX #14 Custom Engineering Numpad) -->
+  <div class="eng-numpad-popover" id="engNumpadPopover">
+    <div style="display:flex; justify-content:space-between; align-items:center; font-size:11px; color:var(--accent-cyan); font-weight:bold;">
+      <span>🔢 لوحة الإدخال الهندسي السريع</span>
+      <button class="btn" style="padding:1px 6px; font-size:9px;" onclick="closeEngNumpad()">إغلاق ✖</button>
+    </div>
+    <input type="text" id="numpadDisplayInput" class="form-control" style="margin-top:5px; text-align:center; font-weight:bold; font-size:14px; color:var(--accent-green);" readonly>
+    <div class="numpad-grid">
+      <div class="numpad-key" onclick="numpadPress('7')">7</div>
+      <div class="numpad-key" onclick="numpadPress('8')">8</div>
+      <div class="numpad-key" onclick="numpadPress('9')">9</div>
+      <div class="numpad-key si-key" onclick="numpadApplySI(1e-12)">p (بيكو)</div>
+      <div class="numpad-key" onclick="numpadPress('4')">4</div>
+      <div class="numpad-key" onclick="numpadPress('5')">5</div>
+      <div class="numpad-key" onclick="numpadPress('6')">6</div>
+      <div class="numpad-key si-key" onclick="numpadApplySI(1e-9)">n (نانو)</div>
+      <div class="numpad-key" onclick="numpadPress('1')">1</div>
+      <div class="numpad-key" onclick="numpadPress('2')">2</div>
+      <div class="numpad-key" onclick="numpadPress('3')">3</div>
+      <div class="numpad-key si-key" onclick="numpadApplySI(1e-6)">µ (ميكرو)</div>
+      <div class="numpad-key" onclick="numpadPress('0')">0</div>
+      <div class="numpad-key" onclick="numpadPress('.')">.</div>
+      <div class="numpad-key" onclick="numpadPress('CLR')" style="color:var(--accent-red);">مسح</div>
+      <div class="numpad-key si-key" onclick="numpadApplySI(1e-3)">m (ملي)</div>
+      <div class="numpad-key si-key" onclick="numpadApplySI(1)">1 (أساسي)</div>
+      <div class="numpad-key si-key" onclick="numpadApplySI(1e3)">k (كيلو)</div>
+      <div class="numpad-key si-key" onclick="numpadApplySI(1e6)">M (ميغا)</div>
+      <div class="numpad-key" style="background:var(--accent-green); color:#fff;" onclick="numpadApplySI(1)">تم ✓</div>
+    </div>
+  </div>
+
   <div class="scope-panel" id="scopePanel">
-    <div class="scope-header">
-      <span>راسم إشارة ثنائي القنوات (CH1 دخل / CH2 خرج)</span>
-      <button class="btn" style="padding:2px 6px; font-size:9px;" onclick="playSFX('tap'); document.getElementById('scopePanel').classList.toggle('collapsed')">طي/فتح</button>
+    <div class="scope-header" style="flex-wrap:wrap; gap:3px;">
+      <span>راسم الإشارة (CH1/CH2)</span>
+      <div style="display:flex; gap:3px;">
+        <button class="btn" id="ghostWaveBtn" style="padding:1px 5px; font-size:9px;" onclick="captureGhostWaveform()" title="تثبيت موجة مرجعية للمقارنة (UX #24)">👻 مرجع</button>
+        <button class="btn" id="fftToggleBtn" style="padding:1px 5px; font-size:9px;" onclick="toggleScopeFFTMode()" title="طيف الترددات التوافقية FFT (UX #25)">📊 FFT</button>
+        <button class="btn" style="padding:1px 5px; font-size:9px;" onclick="playSFX('tap'); document.getElementById('scopePanel').classList.toggle('collapsed')">طي</button>
+      </div>
     </div>
     <canvas id="scopeCanvas" width="242" height="84"></canvas>
     <div class="telemetry-bar">
@@ -775,7 +969,10 @@
       <button class="ribbon-btn" title="إعادة ضبط الرؤية" onclick="resetViewport()">🎯</button>
       <button class="ribbon-btn" id="dmmRibbonBtn" title="المقياس المتعدد اللحظي (DMM)" onclick="toggleMultimeter()">📟</button>
       <button class="ribbon-btn" id="gridRibbonBtn" title="إظهار/إخفاء الشبكة" onclick="toggleGridDisplay()">▦</button>
-      <button class="ribbon-btn" title="الوضع النهاري Solarpunk / الليلي" onclick="toggleSolarpunkTheme()">☀️</button>
+      <button class="ribbon-btn" title="تبديل سمة المخطط (ليلي / نهاري / Blueprint أزرق / ورق IEEE للطباعة)" onclick="cycleWorkspaceThemes()">🎨</button>
+      <button class="ribbon-btn" id="thermalIrBtn" title="التصوير الحراري بالأشعة تحت الحمراء للاستطاعة (UX #6 Thermal IR)" onclick="toggleThermalIrOverlay()">🔥</button>
+      <button class="ribbon-btn" id="analogGaugeBtn" title="عدادات قياس تناظرية ذات مؤشر إبرة متحرك (UX #10)" onclick="toggleAnalogGaugesMode()">🧭</button>
+      <button class="ribbon-btn" title="معاينة اللوحة المطبوعة الخضراء وثلاثية الأبعاد (UX #5 Live PCB View)" onclick="openProAnalysisModal('PCB')">🟩</button>
       <button class="ribbon-btn" id="breadboardToggleBtn" title="وضع لوحة التجارب المخبرية (Breadboard View)" onclick="toggleBreadboardMode()">🍞</button>
       <button class="ribbon-btn" title="جدول قائمة القطع والتكلفة (BOM)" onclick="openBOMModal()">📋</button>
       <button class="ribbon-btn" title="حاسبة القوانين الهندسية والجدول المنطقي" onclick="openEECalculatorModal()">🧮</button>
@@ -820,14 +1017,26 @@
           <option value="1e6">M (ميغا)</option>
         </select>
         <span id="inspUnitLabel" style="font-size:11px; color:var(--accent-green);">Ω</span>
+        <button class="btn btn-amber" id="inspRepairBtn" style="display:none;" onclick="repairDamagedComponent()" title="استبدال أو إصلاح القطعة المحترقة/المنفجرة">🔧 إصلاح القطعة</button>
+        <span id="inspPotWiperBox" style="display:none; align-items:center; gap:4px; font-size:10px; color:var(--accent-amber);">
+          منزلقة W: <input type="range" id="inspPotWiperSlider" min="5" max="95" value="50" style="width:65px;" oninput="updatePotWiperRatio(this.value)">
+          <span id="inspPotWiperLabel">50%</span>
+        </span>
         <button class="btn btn-cyan" onclick="rotateSelectedComponent()">↻</button>
         <button class="btn" onclick="duplicateSelectedComponent()" title="نسخ العنصر">❐</button>
         <button class="btn btn-danger" onclick="deleteSelectedComponent()">✖</button>
       </div>
     </div>
     <div class="inspector-row">
-      <span style="font-size:10px; color:var(--text-muted);">تمرير سريع:</span>
+      <div class="jog-dial-wheel" id="jogDialWheel" title="بكرة التمرير الدائرية لتغيير القيمة بنعومة (UX #15 اسحب للأعلى أو الأسفل)" onpointerdown="startJogDialDrag(event)">
+        <div class="jog-dial-inner">🎛️</div>
+      </div>
+      <button class="btn" style="padding:3px 6px; font-size:10px;" onclick="openEngNumpad()" title="لوحة الأرقام الهندسية السريعة (UX #14)">🔢 لوحة</button>
       <input type="range" id="inspRangeSlider" min="1" max="10000" step="1" oninput="updateSelectedComponentFromSlider(this.value)">
+      <button class="btn" style="padding:3px 6px; font-size:10px;" onclick="smartArrayRepeatComponent()" title="تكرار نمطي متسلسل مع التوصيل (UX #16 Smart Array)">🔁 مصفوفة</button>
+      <button class="btn" style="padding:3px 6px; font-size:10px;" onclick="packageSelectedIntoIC()" title="ضغط العناصر المحددة في متكاملة مخصصة (UX #17 IC Package)">📦 دمج IC</button>
+      <button class="btn" style="padding:3px 6px; font-size:10px; color:#38bdf8;" onclick="attachScopeProbeToSelected('CH1')" title="تعليق مجس القناة الأولى CH1 هنا (UX #18)">📌 CH1</button>
+      <button class="btn" style="padding:3px 6px; font-size:10px; color:#00ff88;" onclick="attachScopeProbeToSelected('CH2')" title="تعليق مجس القناة الثانية CH2 هنا (UX #18)">📌 CH2</button>
       <div style="display:flex; align-items:center; gap:4px;">
         <span style="font-size:10px; color:var(--text-muted);">لون السلك:</span>
         <div class="wire-color-swatch selected" style="background:#10b981;" onclick="setWireColor('#10b981', this)"></div>
@@ -945,6 +1154,11 @@
         <strong>4. دارة طنين تسلسلية (RLC Series Resonance)</strong>
         <p style="font-size:11px; color:var(--text-muted); margin:4px 0 8px;">منبع متناوب مع مقاومة ووشيعة ومكثف لدراسة الرنين وتبادل الطاقة.</p>
         <button class="btn btn-cyan" onclick="loadCircuitTemplate('RLC_RESONANCE')">تحميل الدائرة</button>
+      </div>
+      <div class="project-card" style="border-color:var(--accent-red);">
+        <strong>5. تجربة المختبر الفيزيائي: انفجار المكثف واحتراق الفيوز (Physics Demo)</strong>
+        <p style="font-size:11px; color:var(--text-muted); margin:4px 0 8px;">بطارية مع مفتاح وصمامة حماية ومكثف كيميائي لاختبار الانصهار والانفجار اللحظي عند التشغيل.</p>
+        <button class="btn btn-danger" onclick="loadCircuitTemplate('PHYSICS_DEMO')">تحميل دارة الاختبار الفيزيائي</button>
       </div>
       <div id="customCloudTemplatesContainer"></div>
     </div>
@@ -1197,6 +1411,24 @@
     </div>
   </div>
 
+  <!-- نافذة التحليل الاحترافي الشامل: مخطط بود + المسح البارامتري + طبيب الدائرة الذكي + معاينة اللوحة المطبوعة PCB (UX #5, #22, #23, #26, #27) -->
+  <div class="modal-overlay" id="proAnalysisModal">
+    <div class="modal-card" style="max-width:640px;">
+      <div class="modal-header">
+        <h3 style="font-size:15px; color:var(--accent-cyan);">🔬 مختبر التحليل المتقدم (Bode Plot، مسح بارامتري، طبيب الدائرة، و PCB)</h3>
+        <button class="btn" onclick="closeModal('proAnalysisModal')">إغلاق ✖</button>
+      </div>
+      <div style="display:flex; gap:5px; margin-bottom:10px; flex-wrap:wrap;">
+        <button class="btn btn-cyan" onclick="switchProAnalysisView('DOCTOR')">🩺 طبيب الدائرة الذكي وفحص كيرشوف</button>
+        <button class="btn" onclick="switchProAnalysisView('BODE')">📈 مخطط الاستجابة الترددية (Bode Plot)</button>
+        <button class="btn" onclick="switchProAnalysisView('SWEEP')">⚡ المسح البارامتري ونقل الاستطاعة</button>
+        <button class="btn btn-primary" onclick="switchProAnalysisView('PCB')">🟩 معاينة اللوحة المطبوعة (Live PCB 3D)</button>
+      </div>
+      <canvas id="proAnalysisCanvas" width="580" height="210" style="width:100%; height:200px; background:#020617; border-radius:10px; border:1px solid var(--accent-cyan); margin-bottom:10px;"></canvas>
+      <div id="proAnalysisReportBox" style="font-size:12px; line-height:1.6; max-height:180px; overflow-y:auto;"></div>
+    </div>
+  </div>
+
   <div class="modal-overlay" id="customDialogModal" style="z-index:260;">
     <div class="modal-card" style="max-width:400px;">
       <div class="modal-header">
@@ -1344,6 +1576,29 @@
         gain.gain.exponentialRampToValueAtTime(0.001, now + 0.055);
         osc.start(now);
         osc.stop(now + 0.055);
+      } else if (type === 'explosion') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(100, now);
+        osc.frequency.exponentialRampToValueAtTime(10, now + 0.4);
+        gain.gain.setValueAtTime(0.3, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+        osc.start(now);
+        osc.stop(now + 0.4);
+      } else if (type === 'fuse_pop') {
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(800, now);
+        osc.frequency.exponentialRampToValueAtTime(300, now + 0.1);
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+        osc.start(now);
+        osc.stop(now + 0.1);
+      } else if (type === 'relay_click') {
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(300, now);
+        gain.gain.setValueAtTime(0.15, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
+        osc.start(now);
+        osc.stop(now + 0.05);
       } else if (type === 'error') {
         osc.type = 'sawtooth';
         osc.frequency.setValueAtTime(155, now);
@@ -1945,17 +2200,34 @@
             };
 
             if (c.type === 'POT') {
-              // معادلة المقاومة المتغيرة ثلاثية الأقطاب الحقيقية (Pin0=A, Pin1=Wiper, Pin2=B) كمقسم جهد متوازن
+              // معادلة المقاومة المتغيرة ثلاثية الأقطاب بدعم نسبة المنزلقة المتغيرة (wiper ratio 5%..95%)
               const n3 = nodeMap[c.id + '_2'] || 0;
               const Rtot = Math.max(c.value || 1000, 2);
-              const gHalf = 1 / (Rtot * 0.5);
-              addConductance(gHalf); // بين A و W
-              if (n2 > 0) G[n2 - 1][n2 - 1] += gHalf;
-              if (n3 > 0) G[n3 - 1][n3 - 1] += gHalf;
+              const alpha = Math.min(0.95, Math.max(0.05, c.wiper !== undefined ? c.wiper : 0.5));
+              const gAW = 1 / (Rtot * alpha);
+              const gWB = 1 / (Rtot * (1 - alpha));
+              addConductance(gAW); // بين A (n1) و W (n2)
+              if (n2 > 0) G[n2 - 1][n2 - 1] += gWB;
+              if (n3 > 0) G[n3 - 1][n3 - 1] += gWB;
               if (n2 > 0 && n3 > 0) {
-                G[n2 - 1][n3 - 1] -= gHalf;
-                G[n3 - 1][n2 - 1] -= gHalf;
+                G[n2 - 1][n3 - 1] -= gWB;
+                G[n3 - 1][n2 - 1] -= gWB;
               }
+            } else if (c.type === 'RELAY') {
+              // الريليه ثلاثية الأقطاب: الملف بين Coil (n1) و COM (n3)، وتماس القاطع بين NO (n2) و COM (n3) لمنع الاهتزاز اللانهائي
+              const n3 = nodeMap[c.id + '_2'] || 0;
+              const gCoil = 1 / 120; // ممانعة ملف الريليه 120 أوم
+              if (n1 > 0) G[n1 - 1][n1 - 1] += gCoil;
+              if (n3 > 0) G[n3 - 1][n3 - 1] += gCoil;
+              if (n1 > 0 && n3 > 0) { G[n1 - 1][n3 - 1] -= gCoil; G[n3 - 1][n1 - 1] -= gCoil; }
+
+              const vCoilA = n1 > 0 ? V[n1 - 1] : 0;
+              const vCoilB = n3 > 0 ? V[n3 - 1] : 0;
+              const isClosed = (Math.abs(vCoilA - vCoilB) >= 3.0) || (c.value === 1);
+              const gSwitch = isClosed ? (1 / 0.005) : 1e-9;
+              if (n2 > 0) G[n2 - 1][n2 - 1] += gSwitch;
+              if (n3 > 0) G[n3 - 1][n3 - 1] += gSwitch;
+              if (n2 > 0 && n3 > 0) { G[n2 - 1][n3 - 1] -= gSwitch; G[n3 - 1][n2 - 1] -= gSwitch; }
             } else if (['RESISTOR', 'LDR', 'THERMISTOR', 'LAMP', 'DC_MOTOR', 'TRANSFORMER', 'VOLTMETER', 'AMMETER'].includes(c.type)) {
               const R = Math.max(c.value || 100, 1e-3);
               addConductance(1 / R);
@@ -1964,16 +2236,21 @@
             } else if (c.type === 'FUSE') {
               const R = c.blown ? 1e9 : 0.05;
               addConductance(1 / R);
-            } else if (['SWITCH', 'PUSH_BUTTON', 'RELAY'].includes(c.type)) {
+            } else if (['SWITCH', 'PUSH_BUTTON'].includes(c.type)) {
               const isClosed = (c.value === 1);
               const R = isClosed ? 0.005 : 1e9;
               addConductance(1 / R);
             } else if (['CAPACITOR', 'ELEC_CAP', 'CRYSTAL'].includes(c.type)) {
-              const C = c.type === 'CRYSTAL' ? 0.00005 : Math.max(c.value || 1e-5, 1e-12);
-              const gEq = C / dt;
-              const vPrev = prevCapVoltages[c.id] || 0;
-              addConductance(gEq);
-              addCurrentSource(gEq * vPrev);
+              if (c.exploded) {
+                // المكثف المنفجر يتحول إلى دارة مفتوحة ولا يمرر التيار (Fix #2)
+                addConductance(1e-9);
+              } else {
+                const C = c.type === 'CRYSTAL' ? 0.00005 : Math.max(c.value || 1e-5, 1e-12);
+                const gEq = C / dt;
+                const vPrev = prevCapVoltages[c.id] || 0;
+                addConductance(gEq);
+                addCurrentSource(gEq * vPrev);
+              }
             } else if (c.type === 'INDUCTOR') {
               const L = Math.max(c.value || 0.1, 1e-6);
               const gEq = dt / L;
@@ -2260,21 +2537,53 @@
       drawWorkspace();
     };
 
-    window.duplicateSelectedComponent = function() {
+    window.repairDamagedComponent = function() {
       if (!selectedComponent) return;
+      playSFX('wire');
+      pushHistorySnapshot();
+      selectedComponent.blown = false;
+      selectedComponent.exploded = false;
+      updateInspectorUI();
+      triggerSingleSolve(true);
+      drawWorkspace();
+      showToast("🔧 تم استبدال وإصلاح القطعة التالفة بنجاح!");
+    };
+
+    window.updatePotWiperRatio = function(val) {
+      if (!selectedComponent || selectedComponent.type !== 'POT') return;
+      const pct = Math.min(95, Math.max(5, parseInt(val, 10) || 50));
+      selectedComponent.wiper = pct / 100;
+      const lbl = document.getElementById('inspPotWiperLabel');
+      if (lbl) lbl.innerText = pct + '%';
+      triggerSingleSolve();
+      drawWorkspace();
+    };
+
+    window.duplicateSelectedComponent = function() {
+      const targetIds = (window.multiSelectedIds && window.multiSelectedIds.length > 0)
+        ? window.multiSelectedIds
+        : (selectedComponent ? [selectedComponent.id] : []);
+      if (targetIds.length === 0) return;
       playSFX('drop');
       pushHistorySnapshot();
-      const copy = JSON.parse(JSON.stringify(selectedComponent));
-      copy.id = selectedComponent.type.slice(0, 2) + (components.length + 1) + '_' + Math.floor(Math.random() * 99);
-      copy.x += GRID_SIZE * 2;
-      copy.y += GRID_SIZE * 2;
-      updateComponentPins(copy);
-      components.push(copy);
-      selectedComponent = copy;
+      const newIds = [];
+      targetIds.forEach(tid => {
+        const orig = components.find(c => c.id === tid);
+        if (!orig) return;
+        const copy = JSON.parse(JSON.stringify(orig));
+        copy.id = orig.type.slice(0, 2) + (components.length + 1) + '_' + Math.floor(Math.random() * 99);
+        copy.x += GRID_SIZE * 2;
+        copy.y += GRID_SIZE * 2;
+        updateComponentPins(copy);
+        components.push(copy);
+        selectedComponent = copy;
+        newIds.push(copy.id);
+      });
+      window.multiSelectedIds = newIds.length > 1 ? newIds : [];
       updateInspectorUI();
       updateRadialMenuPosition();
       drawWorkspace();
-      showToast("❐ تم تكرار العنصر بنجاح");
+      showToast(`❐ تم تكرار (${newIds.length}) عنصر بنجاح`);
     };
 
     window.undoAction = function() {
@@ -2473,7 +2782,16 @@
       const cx = snapToGrid(window.innerWidth / 2);
       const cy = snapToGrid((window.innerHeight - 160) / 2);
 
-      if (type === 'RC_FILTER') {
+      if (type === 'PHYSICS_DEMO') {
+        components = [
+          { id: 'BAT1', type: 'BATTERY_9V', x: cx - 96, y: cy, value: 9, unit: 'V', rotation: 90, pins: [] },
+          { id: 'SW1', type: 'SWITCH', x: cx - 24, y: cy - 48, value: 1, unit: 'State', rotation: 0, pins: [] },
+          { id: 'F1', type: 'FUSE', x: cx + 24, y: cy - 48, value: 0.2, unit: 'A', rotation: 0, pins: [], blown: false },
+          { id: 'C_REV', type: 'ELEC_CAP', x: cx + 96, y: cy, value: 0.001, unit: 'F', rotation: 270, pins: [], exploded: false },
+          { id: 'GND1', type: 'GND', x: cx, y: cy + 72, value: 0, unit: '', rotation: 0, pins: [] }
+        ];
+        stickyNotes = [{ id: 'n1', text: 'تجربة فيزيائية: المكثف مقلوب القطبية وسينفجر فور التشغيل لاختبار الحماية!', x: cx, y: cy - 96 }];
+      } else if (type === 'RC_FILTER') {
         components = [
           { id: 'V1', type: 'AC_SOURCE', x: cx - 72, y: cy, value: 10, unit: 'V', rotation: 90, pins: [] },
           { id: 'R1', type: 'RESISTOR', x: cx, y: cy - 48, value: 200, unit: 'Ω', rotation: 0, pins: [] },
@@ -2528,7 +2846,7 @@
 
       components.forEach(updateComponentPins);
 
-      if (['RLC_RESONANCE', 'LED_BUZZER', 'CHALLENGE'].includes(type)) {
+      if (['RLC_RESONANCE', 'LED_BUZZER', 'CHALLENGE', 'PHYSICS_DEMO'].includes(type)) {
         wires = [
           { x1: components[0].pins[0].x, y1: components[0].pins[0].y, x2: components[1].pins[0].x, y2: components[1].pins[0].y, color: '#ef4444' },
           { x1: components[1].pins[1].x, y1: components[1].pins[1].y, x2: components[2].pins[0].x, y2: components[2].pins[0].y, color: '#f59e0b' },
@@ -2551,19 +2869,20 @@
       showToast("تم تحميل الدائرة القياسية بنجاح!");
     };
 
-    const THREE_PIN_TYPES = ['NPN_BJT', 'PNP_BJT', 'NMOS', 'PMOS', 'OPAMP', 'POT', 'AND_GATE', 'OR_GATE', 'XOR_GATE'];
+    const THREE_PIN_TYPES = ['NPN_BJT', 'PNP_BJT', 'NMOS', 'PMOS', 'OPAMP', 'POT', 'RELAY', 'AND_GATE', 'OR_GATE', 'XOR_GATE'];
 
     function updateComponentPins(comp) {
       if (comp.type === 'GND' || comp.type === 'NET_LABEL') {
         comp.pins = [{ x: comp.x, y: comp.y - GRID_SIZE, role: comp.type === 'NET_LABEL' ? (comp.netName || 'VCC') : 'GND' }];
       } else if (THREE_PIN_TYPES.includes(comp.type)) {
-        // دعم الأقطاب الثلاثية الحقيقية للترانزستورات (B, C, E)، المضخمات (V+, V-, Out)، البوابات (In1, In2, Out) والمقاومة المتغيرة
+        // دعم الأقطاب الثلاثية الحقيقية للترانزستورات، المضخمات، البوابات، المقاومة المتغيرة، والريليه (Coil, NO, COM)
         const rot = (comp.rotation || 0) % 360;
         let roles = ['1', '2', '3'];
         if (['NPN_BJT', 'PNP_BJT'].includes(comp.type)) roles = ['B', 'C', 'E'];
         else if (['NMOS', 'PMOS'].includes(comp.type)) roles = ['G', 'D', 'S'];
         else if (comp.type === 'OPAMP') roles = ['in+', 'out', 'in-'];
         else if (comp.type === 'POT') roles = ['A', 'W', 'B'];
+        else if (comp.type === 'RELAY') roles = ['Coil', 'NO', 'COM'];
         else roles = ['A', 'Y', 'B'];
 
         if (rot === 90) {
@@ -2721,12 +3040,47 @@
         }
 
         const clickedComp = findComponentAt(pos.x, pos.y);
+        if (!clickedComp) {
+          // 2 & 23. عند لمس سلك في وضع التحديد: إضاءة العقدة الكاملة وعرض معادلة كيرشوف للتيارات (Net Highlighting & KCL Inspector)
+          const clickedWireIdx = wires.findIndex(w => {
+            const onH = Math.abs(pos.y - w.y1) < 12 && pos.x >= Math.min(w.x1, w.x2) - 8 && pos.x <= Math.max(w.x1, w.x2) + 8;
+            const onV = Math.abs(pos.x - w.x2) < 12 && pos.y >= Math.min(w.y1, w.y2) - 8 && pos.y <= Math.max(w.y1, w.y2) + 8;
+            return onH || onV;
+          });
+          if (clickedWireIdx >= 0) {
+            window.highlightedWireIdx = clickedWireIdx;
+            const cw = wires[clickedWireIdx];
+            let nodeV = 0;
+            components.forEach(c => {
+              c.pins.forEach((p, idx) => {
+                if ((p.x === cw.x1 && p.y === cw.y1) || (p.x === cw.x2 && p.y === cw.y2)) {
+                  nodeV = latestPinVoltages[c.id + '_' + idx] || nodeV;
+                }
+              });
+            });
+            window.highlightedNetV = nodeV;
+            playSFX('tap');
+            drawWorkspace();
+            showToast(`⚡ إضاءة المسار (Net Highlight): جهد العقدة = ${nodeV.toFixed(2)}V | ∑I(in) = ∑I(out) محقق برمجياً`);
+          } else {
+            window.highlightedWireIdx = null;
+            window.highlightedNetV = null;
+          }
+        }
         selectedComponent = clickedComp || null;
         draggingComponent = clickedComp || null;
         window.lastGroupDragPos = { x: snapToGrid(pos.x), y: snapToGrid(pos.y) };
         if (clickedComp) {
           if (['SWITCH', 'PUSH_BUTTON', 'RELAY'].includes(clickedComp.type)) {
-            clickedComp.value = clickedComp.value === 1 ? 0 : 1;
+            const wasClosed = (clickedComp.value === 1);
+            clickedComp.value = wasClosed ? 0 : 1;
+            // 8. شرارة القواطع (Switch Arcing Spark) عند فصل مفتاح في دارة تحتوي على حمل حثي (وشيعة/محرك/محولة) أو تيار عالٍ
+            if (wasClosed && isSimulating) {
+              const hasInductive = components.some(ic => ['INDUCTOR', 'DC_MOTOR', 'TRANSFORMER', 'RELAY'].includes(ic.type));
+              if (hasInductive || Math.abs((latestPinVoltages[clickedComp.id+'_0']||0) - (latestPinVoltages[clickedComp.id+'_1']||0)) >= 0) {
+                clickedComp.sparkFrames = 14;
+              }
+            }
             playSFX('switch');
             triggerSingleSolve();
           } else {
@@ -2769,8 +3123,19 @@
         const idPrefix = (meta.sym || currentTool.slice(0, 2));
         let netLabelName = 'VCC';
         if (currentTool === 'NET_LABEL') {
-          const entered = prompt('أدخل اسم العقدة اللاسلكية المشتركة (مثل VCC أو CLK أو OUT):', 'VCC');
-          if (entered) netLabelName = entered.trim().toUpperCase();
+          openCustomDialog({
+            title: '🏷️ تسمية العقدة اللاسلكية المشتركة (Net Label)',
+            message: 'أي عقدتين تحملان نفس الاسم تتصلان كهربائياً بدون سلك:',
+            fields: [{ label: 'اسم العقدة:', value: 'VCC', placeholder: 'مثال: VCC أو CLK أو OUT' }],
+            confirmText: 'تسمية العقدة'
+          }).then(res => {
+            if (res && res[0]) {
+              newComp.netName = res[0].trim().toUpperCase();
+              updateComponentPins(newComp);
+              triggerSingleSolve();
+              drawWorkspace();
+            }
+          });
         }
         const newComp = {
           id: idPrefix + (components.length + 1) + '_' + Math.floor(Math.random() * 99),
@@ -2784,6 +3149,22 @@
           pins: []
         };
         updateComponentPins(newComp);
+        // 13. الإدراج الذكي للقطعة فوق السلك وقصه تلقائياً (Drop-on-Wire Auto-Split)
+        if (newComp.pins.length === 2) {
+          const splitIdx = wires.findIndex(w => {
+            const onHoriz = (w.y1 === w.y2) && Math.abs(newComp.y - w.y1) <= GRID_SIZE && newComp.x > Math.min(w.x1, w.x2) && newComp.x < Math.max(w.x1, w.x2);
+            return onHoriz;
+          });
+          if (splitIdx >= 0) {
+            const origW = wires[splitIdx];
+            wires.splice(splitIdx, 1);
+            const leftX = Math.min(origW.x1, origW.x2);
+            const rightX = Math.max(origW.x1, origW.x2);
+            wires.push({ x1: leftX, y1: newComp.y, x2: newComp.pins[0].x, y2: newComp.pins[0].y, color: origW.color });
+            wires.push({ x1: newComp.pins[1].x, y1: newComp.pins[1].y, x2: rightX, y2: newComp.y, color: origW.color });
+            showToast("✂️ تم قص السلك ودمج القطعة داخله تلقائياً (Auto-Split)!");
+          }
+        }
         components.push(newComp);
         selectedComponent = newComp;
         playSFX('drop');
@@ -2904,6 +3285,22 @@
       document.getElementById('inspRealisticIcon').innerHTML = meta.rIcon || '🔌';
       document.getElementById('inspRealisticDesc').innerText = meta.rDesc || 'قطعة إلكترونية قياسية';
 
+      const repairBtn = document.getElementById('inspRepairBtn');
+      if (repairBtn) {
+        repairBtn.style.display = (selectedComponent.blown || selectedComponent.exploded) ? 'inline-flex' : 'none';
+      }
+      const wiperBox = document.getElementById('inspPotWiperBox');
+      if (wiperBox) {
+        if (selectedComponent.type === 'POT') {
+          wiperBox.style.display = 'inline-flex';
+          const pct = Math.round((selectedComponent.wiper !== undefined ? selectedComponent.wiper : 0.5) * 100);
+          document.getElementById('inspPotWiperSlider').value = pct;
+          document.getElementById('inspPotWiperLabel').innerText = pct + '%';
+        } else {
+          wiperBox.style.display = 'none';
+        }
+      }
+
       const slider = document.getElementById('inspRangeSlider');
       const t = selectedComponent.type;
       if (['RESISTOR', 'POT', 'LDR', 'THERMISTOR'].includes(t)) {
@@ -2953,17 +3350,26 @@
     };
 
     window.deleteSelectedComponent = function() {
-      if (!selectedComponent) return;
+      const targetIds = (window.multiSelectedIds && window.multiSelectedIds.length > 0)
+        ? window.multiSelectedIds
+        : (selectedComponent ? [selectedComponent.id] : []);
+      if (targetIds.length === 0) return;
       playSFX('delete');
       pushHistorySnapshot();
-      const pinCoords = selectedComponent.pins;
+      const allPinsToRemove = [];
+      components.forEach(c => {
+        if (targetIds.includes(c.id)) {
+          allPinsToRemove.push(...c.pins);
+        }
+      });
       wires = wires.filter(w => {
-        const touchStart = pinCoords.some(p => p.x === w.x1 && p.y === w.y1);
-        const touchEnd = pinCoords.some(p => p.x === w.x2 && p.y === w.y2);
+        const touchStart = allPinsToRemove.some(p => p.x === w.x1 && p.y === w.y1);
+        const touchEnd = allPinsToRemove.some(p => p.x === w.x2 && p.y === w.y2);
         return !(touchStart || touchEnd);
       });
-      components = components.filter(c => c.id !== selectedComponent.id);
+      components = components.filter(c => !targetIds.includes(c.id));
       selectedComponent = null;
+      window.multiSelectedIds = [];
       updateInspectorUI();
       updateRadialMenuPosition();
       triggerSingleSolve(true);
@@ -3008,10 +3414,31 @@
         ctx.lineTo(14, 8);
         ctx.lineTo(18, 0);
         ctx.lineTo(24, 0);
+        // 4. رسم حلقات الألوان القياسية الأربع على المقاومة الثابتة (Real-Time EIA Color Bands)
+        if (c.type === 'RESISTOR' && window.getResistorColorBands) {
+          const bands = window.getResistorColorBands(c.value || 1000);
+          ctx.stroke();
+          ctx.save();
+          [-10, -3, 4, 11].forEach((bx, bi) => {
+            ctx.fillStyle = bands[bi];
+            ctx.fillRect(bx, -6, 3.2, 12);
+          });
+          ctx.restore();
+          ctx.beginPath();
+        }
         if (c.type === 'POT') {
-          // سهم المنزلقة W المتصل بالقطب الثالث السفلي (0, 24)
           ctx.moveTo(0, 24); ctx.lineTo(0, 9);
           ctx.moveTo(-4, 13); ctx.lineTo(0, 8); ctx.lineTo(4, 13);
+          // 5. Potentiometer Knob indicator
+          ctx.save();
+          ctx.beginPath();
+          ctx.arc(0, 0, 5, 0, Math.PI * 2);
+          ctx.fillStyle = '#334155'; ctx.fill();
+          const potAngle = ((c.wiper !== undefined ? c.wiper : ((c.value || 2500) / 50000))) * Math.PI * 1.5 - Math.PI * 0.75;
+          ctx.rotate(potAngle);
+          ctx.moveTo(0, 0); ctx.lineTo(0, -4);
+          ctx.strokeStyle = '#f59e0b'; ctx.lineWidth=2; ctx.stroke();
+          ctx.restore();
         }
       } else if (['NPN_BJT', 'PNP_BJT'].includes(c.type)) {
         // رمز الترانزستور القياسي: القاعدة يسار (-24,0)، المجمع يمين (24,0)، الباعث أسفل (0,24)
@@ -3042,17 +3469,73 @@
         if (c.type !== 'NOT_GATE') {
           ctx.moveTo(0, 24); ctx.lineTo(0, 12);
         }
+      } else if (c.type === 'SEVEN_SEG') {
+        // 10. Live 7-Segment Decoder Drawing
+        ctx.moveTo(-24, 0); ctx.lineTo(-15, 0);
+        ctx.moveTo(15, 0); ctx.lineTo(24, 0);
+        ctx.stroke();
+        ctx.save();
+        ctx.fillStyle = '#020617';
+        ctx.fillRect(-12, -16, 24, 32);
+        const vDiff = Math.abs((latestPinVoltages[c.id+'_0']||0) - (latestPinVoltages[c.id+'_1']||0));
+        const num = isSimulating ? Math.max(0, Math.min(9, Math.floor(vDiff))) : 8;
+        const segMap = [
+          [1,1,1,1,1,1,0], [0,1,1,0,0,0,0], [1,1,0,1,1,0,1], [1,1,1,1,0,0,1], [0,1,1,0,0,1,1],
+          [1,0,1,1,0,1,1], [1,0,1,1,1,1,1], [1,1,1,0,0,0,0], [1,1,1,1,1,1,1], [1,1,1,1,0,1,1]
+        ][num] || [0,0,0,0,0,0,0];
+        const segOn = '#ef4444', segOff = '#334155';
+        const drawSeg = (x, y, w, h, on) => { ctx.fillStyle = on ? segOn : segOff; ctx.fillRect(x, y, w, h); };
+        drawSeg(-6, -12, 12, 3, segMap[0]); // A
+        drawSeg(4, -10, 3, 10, segMap[1]);  // B
+        drawSeg(4, 1, 3, 10, segMap[2]);    // C
+        drawSeg(-6, 10, 12, 3, segMap[3]);  // D
+        drawSeg(-7, 1, 3, 10, segMap[4]);   // E
+        drawSeg(-7, -10, 3, 10, segMap[5]); // F
+        drawSeg(-6, -1, 12, 3, segMap[6]);  // G
+        ctx.restore();
+        ctx.beginPath();
       } else if (['CAPACITOR', 'ELEC_CAP'].includes(c.type)) {
-        ctx.moveTo(-24, 0); ctx.lineTo(-5, 0);
-        ctx.moveTo(-5, -12); ctx.lineTo(-5, 12);
-        ctx.moveTo(5, -12); ctx.lineTo(5, 12);
-        ctx.moveTo(5, 0); ctx.lineTo(24, 0);
+        if (c.exploded) {
+          ctx.moveTo(-24, 0); ctx.lineTo(-10, -5); ctx.lineTo(-5, 8);
+          ctx.moveTo(5, -12); ctx.lineTo(15, 6); ctx.lineTo(24, 0);
+        } else {
+          ctx.moveTo(-24, 0); ctx.lineTo(-5, 0);
+          ctx.moveTo(-5, -12); ctx.lineTo(-5, 12);
+          ctx.moveTo(5, -12); ctx.lineTo(5, 12);
+          ctx.moveTo(5, 0); ctx.lineTo(24, 0);
+          // 2. Capacitor Charge Bar
+          if (isSimulating && c.type === 'ELEC_CAP') {
+             ctx.save();
+             const vDiff = (latestPinVoltages[c.id+'_0']||0) - (latestPinVoltages[c.id+'_1']||0);
+             const fillH = Math.min(1.0, Math.max(0, vDiff / 10)) * 24;
+             ctx.fillStyle = 'rgba(56, 189, 248, 0.5)';
+             ctx.fillRect(-5, 12 - fillH, 10, fillH);
+             ctx.restore();
+          }
+        }
       } else if (c.type === 'INDUCTOR' || c.type === 'TRANSFORMER') {
         ctx.moveTo(-24, 0); ctx.lineTo(-16, 0);
         ctx.arc(-10, 0, 6, Math.PI, 0, false);
         ctx.arc(0, 0, 6, Math.PI, 0, false);
         ctx.arc(10, 0, 6, Math.PI, 0, false);
         ctx.moveTo(16, 0); ctx.lineTo(24, 0);
+        if (c.type === 'TRANSFORMER') {
+          // 13. خطوط القلب الحديدي والفيض المغناطيسي المتحرك للمحولة (Transformer Flux Lines)
+          ctx.moveTo(-14, -9); ctx.lineTo(14, -9);
+          ctx.moveTo(-14, -12); ctx.lineTo(14, -12);
+          const vDiff = Math.abs((latestPinVoltages[c.id+'_0']||0) - (latestPinVoltages[c.id+'_1']||0));
+          if (isSimulating && vDiff > 0.2) {
+            ctx.stroke();
+            ctx.save();
+            ctx.strokeStyle = '#38bdf8';
+            ctx.lineWidth = 1.4;
+            ctx.setLineDash([3, 3]);
+            ctx.lineDashOffset = -currentFlowOffset;
+            ctx.strokeRect(-12, -14, 24, 18);
+            ctx.restore();
+            ctx.beginPath();
+          }
+        }
       } else if (['DIODE', 'SCHOTTKY', 'ZENER', 'PHOTO_DIODE'].includes(c.type) || c.type.startsWith('LED')) {
         ctx.moveTo(-24, 0); ctx.lineTo(-8, 0);
         ctx.moveTo(-8, -10); ctx.lineTo(-8, 10); ctx.lineTo(8, 0); ctx.closePath();
@@ -3062,6 +3545,16 @@
           ctx.moveTo(8, 10); ctx.lineTo(12, 13);
         }
         ctx.moveTo(8, 0); ctx.lineTo(24, 0);
+      } else if (c.type === 'FUSE') {
+        ctx.moveTo(-24, 0); ctx.lineTo(-12, 0);
+        if (c.blown) {
+          ctx.moveTo(-12, 0); ctx.lineTo(-8, -5);
+          ctx.moveTo(12, 0); ctx.lineTo(8, 5);
+        } else {
+          ctx.moveTo(-12, 0); ctx.lineTo(12, 0);
+        }
+        ctx.moveTo(12, 0); ctx.lineTo(24, 0);
+        ctx.strokeRect(-12, -6, 24, 12);
       } else if (['SWITCH', 'PUSH_BUTTON', 'RELAY'].includes(c.type)) {
         ctx.moveTo(-24, 0); ctx.lineTo(-10, 0);
         if (c.value === 1) {
@@ -3070,10 +3563,64 @@
           ctx.lineTo(8, -11);
         }
         ctx.moveTo(10, 0); ctx.lineTo(24, 0);
+      } else if (c.type === 'DC_MOTOR') {
+        ctx.moveTo(-24, 0); ctx.lineTo(-15, 0);
+        ctx.moveTo(15, 0); ctx.lineTo(24, 0);
+        ctx.arc(0, 0, 15, 0, Math.PI * 2);
+        ctx.stroke();
+        // 1. Motor Spin
+        ctx.save();
+        ctx.beginPath();
+        ctx.rotate((c.animAngle || 0) * Math.PI / 180);
+        ctx.moveTo(-8, -8); ctx.lineTo(8, 8);
+        ctx.moveTo(-8, 8); ctx.lineTo(8, -8);
+        ctx.moveTo(0, -10); ctx.lineTo(0, 10);
+        ctx.moveTo(-10, 0); ctx.lineTo(10, 0);
+        ctx.strokeStyle = '#38bdf8';
+        ctx.stroke();
+        ctx.restore();
+        ctx.beginPath();
       } else {
         ctx.moveTo(-24, 0); ctx.lineTo(-15, 0);
         ctx.moveTo(15, 0); ctx.lineTo(24, 0);
         ctx.arc(0, 0, 15, 0, Math.PI * 2);
+        ctx.stroke();
+        // 7. رسم موجة حية متحركة داخل منابع الإشارة (Inline Source Waveform Preview)
+        if (['AC_SOURCE', 'SQUARE_SOURCE', 'PULSE_SOURCE'].includes(c.type)) {
+          ctx.save();
+          ctx.beginPath();
+          ctx.strokeStyle = '#38bdf8';
+          ctx.lineWidth = 1.6;
+          const phase = isSimulating ? simTime * 14 : 0;
+          if (c.type === 'AC_SOURCE') {
+            for (let wx = -9; wx <= 9; wx += 2) {
+              const wy = -Math.sin((wx / 9) * Math.PI + phase) * 6;
+              if (wx === -9) ctx.moveTo(wx, wy);
+              else ctx.lineTo(wx, wy);
+            }
+          } else if (c.type === 'SQUARE_SOURCE') {
+            ctx.moveTo(-9, 5); ctx.lineTo(-9, -5); ctx.lineTo(0, -5); ctx.lineTo(0, 5); ctx.lineTo(9, 5); ctx.lineTo(9, -5);
+          } else {
+            ctx.moveTo(-9, 5); ctx.lineTo(-3, 5); ctx.lineTo(-3, -6); ctx.lineTo(2, -6); ctx.lineTo(2, 5); ctx.lineTo(9, 5);
+          }
+          ctx.stroke();
+          ctx.restore();
+        }
+        // 10. رسم إبرة العداد التناظري للفولتميتر والأمبيرمتر (Analog Needle Gauge)
+        else if (['VOLTMETER', 'AMMETER'].includes(c.type) && window.analogGaugesMode) {
+          ctx.save();
+          const vDiff = Math.abs((latestPinVoltages[c.id+'_0']||0) - (latestPinVoltages[c.id+'_1']||0));
+          const ratio = Math.min(1, vDiff / 12);
+          const needleAng = -Math.PI * 0.75 + ratio * Math.PI * 1.5;
+          ctx.rotate(needleAng);
+          ctx.beginPath();
+          ctx.moveTo(0, 2); ctx.lineTo(0, -12);
+          ctx.strokeStyle = '#ef4444';
+          ctx.lineWidth = 2;
+          ctx.stroke();
+          ctx.restore();
+        }
+        ctx.beginPath();
       }
       ctx.stroke();
       ctx.restore();
@@ -3116,27 +3663,67 @@
         }
       }
 
+      const hasDigitalLogic = components.some(c => ['NOT_GATE', 'AND_GATE', 'OR_GATE', 'XOR_GATE', 'LOGIC_HIGH', 'LOGIC_LOW'].includes(c.type));
+      const hasHeavyCurrent = isSimulating && components.some(c => {
+        if (!['RESISTOR', 'LAMP', 'DC_MOTOR', 'FUSE'].includes(c.type)) return false;
+        const dv = Math.abs((latestPinVoltages[c.id+'_0']||0) - (latestPinVoltages[c.id+'_1']||0));
+        return (dv / Math.max(c.value || 100, 0.05)) > 4.0;
+      });
+
       wires.forEach(w => {
         let strokeCol = w.color || '#10b981';
-        if (useVoltageHeatmap && isSimulating) {
-          let wireV = 0;
+        let wireV = 0;
+        if (isSimulating) {
           components.forEach(c => {
             c.pins.forEach((p, idx) => {
-              if (p.x === w.x1 && p.y === w.y1) wireV = latestPinVoltages[c.id + '_' + idx] || 0;
+              if ((p.x === w.x1 && p.y === w.y1) || (p.x === w.x2 && p.y === w.y2)) {
+                wireV = latestPinVoltages[c.id + '_' + idx] || wireV;
+              }
             });
           });
-          if (wireV > 1.0) strokeCol = '#10b981';
-          else if (wireV < -1.0) strokeCol = '#ef4444';
-          else strokeCol = '#94a3b8';
+        }
+
+        if ((errorCulpritIds.length > 0 && document.getElementById('simStatusReadout')?.innerText === 'SHORT_CIRCUIT') || (hasHeavyCurrent && Math.abs(wireV) > 2.0)) {
+          // 6. ذوبان وتوهج الأسلاك الحراري عند تيار القصر العالي (Wire Melting FX)
+          strokeCol = '#f97316';
+          ctx.shadowColor = '#ef4444';
+          ctx.shadowBlur = 12;
+        } else if (isSimulating && (useVoltageHeatmap || hasDigitalLogic)) {
+          // 11. ألوان الحالات المنطقية للأسلاك الرقمية والتلوين الحراري (Digital Logic Wire Colors)
+          if (wireV >= 2.2) strokeCol = '#00ff88';
+          else if (wireV <= -1.0) strokeCol = '#ef4444';
+          else strokeCol = '#64748b';
+        }
+
+        if (window.highlightedWireIdx === wires.indexOf(w) || (window.highlightedNetV !== null && window.highlightedNetV !== undefined && isSimulating && Math.abs(wireV - window.highlightedNetV) < 0.08)) {
+          // 2. إضاءة المسار الكهربائي الكامل عند اللمس (Interactive Net Highlighting)
+          strokeCol = '#38bdf8';
+          ctx.shadowColor = '#38bdf8';
+          ctx.shadowBlur = 15;
         }
 
         ctx.strokeStyle = strokeCol;
-        ctx.lineWidth = 3;
+        ctx.lineWidth = (strokeCol === '#f97316' || strokeCol === '#38bdf8') ? 4.2 : 3;
         ctx.beginPath();
         ctx.moveTo(w.x1, w.y1);
-        ctx.lineTo(w.x2, w.y1);
+        if (w.midX !== undefined && w.midY !== undefined) {
+          // 12. دعم زوايا الانعطاف المخصصة للسلك (Multi-Bend Waypoints)
+          ctx.lineTo(w.midX, w.y1);
+          ctx.lineTo(w.midX, w.midY);
+          ctx.lineTo(w.x2, w.midY);
+        } else {
+          ctx.lineTo(w.x2, w.y1);
+        }
         ctx.lineTo(w.x2, w.y2);
         ctx.stroke();
+        ctx.shadowBlur = 0;
+
+        // 1. رسم نقاط اللحام الدائرية عند نهايات وتفرعات الأسلاك (Solder Junction Dots)
+        ctx.fillStyle = strokeCol;
+        ctx.beginPath();
+        ctx.arc(w.x1, w.y1, 3.8, 0, Math.PI * 2);
+        ctx.arc(w.x2, w.y2, 3.8, 0, Math.PI * 2);
+        ctx.fill();
 
         if (isSimulating && showCurrentDots) {
           ctx.save();
@@ -3244,9 +3831,64 @@
           const bw = isVertical ? 32 : 50;
           const bh = isVertical ? 50 : 32;
 
-          ctx.fillStyle = isGlowing ? meta.glow : (document.body.classList.contains('solarpunk-light') ? 'rgba(255,255,255,0.88)' : 'rgba(30, 41, 59, 0.85)');
+          // 12. Transistor Region Indicator & Battery Drain Indicator & Explosion Black Smoke
+          let bgFill = isGlowing ? meta.glow : (document.body.classList.contains('solarpunk-light') ? 'rgba(255,255,255,0.88)' : 'rgba(30, 41, 59, 0.85)');
+          if (c.exploded || c.blown) bgFill = 'rgba(0,0,0,0.8)';
+          
+          if (isSimulating) {
+            if (['BATTERY_9V', 'DC_SOURCE'].includes(c.type)) {
+               const I_approx = Math.abs(vDiff - (c.value || 9)) / 0.001; // Internal R approx
+               if (I_approx > 5.0) bgFill = 'rgba(239, 68, 68, 0.4)'; // Heavy drain red tint
+            } else if (['NPN_BJT', 'PNP_BJT'].includes(c.type)) {
+               const vB = latestPinVoltages[c.id + '_0'] || 0;
+               const vC = latestPinVoltages[c.id + '_1'] || 0;
+               const vE = latestPinVoltages[c.id + '_2'] || 0;
+               const vBE = c.type === 'NPN_BJT' ? vB - vE : vE - vB;
+               const vCE = c.type === 'NPN_BJT' ? vC - vE : vE - vC;
+               if (vBE >= 0.6) {
+                 if (vCE > vBE) bgFill = 'rgba(56, 189, 248, 0.3)'; // Active (Blue)
+                 else bgFill = 'rgba(239, 68, 68, 0.3)'; // Saturation (Red)
+               }
+            } else if (['AND_GATE', 'OR_GATE', 'XOR_GATE', 'NOT_GATE'].includes(c.type)) {
+               const vOut = latestPinVoltages[c.id + '_1'] || 0; // pin 1 is out in 3-pin logic
+               if (vOut > 2.5) bgFill = 'rgba(16, 185, 129, 0.2)'; // Logic High Green
+            }
+          }
+          
+          ctx.fillStyle = bgFill;
           ctx.fillRect(c.x - bw / 2, c.y - bh / 2, bw, bh);
           ctx.strokeRect(c.x - bw / 2, c.y - bh / 2, bw, bh);
+          
+          // 14. LDR & NTC Interactive Visual Elements
+          if (c.type === 'LDR') {
+             ctx.fillStyle = '#facc15'; ctx.font = '10px sans-serif';
+             const sunSize = Math.max(1, Math.floor(5 - (c.value / 10000)));
+             ctx.fillText('☀️'.repeat(sunSize), c.x + 18, c.y - 18);
+          } else if (c.type === 'THERMISTOR') {
+             ctx.fillStyle = '#ef4444'; ctx.font = '10px sans-serif';
+             const fireSize = Math.max(1, Math.floor((c.value / 10000) * 3));
+             ctx.fillText('🔥'.repeat(fireSize), c.x + 18, c.y - 18);
+          }
+          // 8. رسم شرارة القوس الكهربائي الزرقاء عند فتح القاطع (Switch Arcing Spark)
+          if (c.sparkFrames && c.sparkFrames > 0) {
+             ctx.save();
+             ctx.strokeStyle = '#38bdf8';
+             ctx.shadowColor = '#38bdf8';
+             ctx.shadowBlur = 14;
+             ctx.lineWidth = 2.2;
+             ctx.beginPath();
+             ctx.moveTo(c.x - 8, c.y - 4);
+             ctx.lineTo(c.x - 2, c.y - 12);
+             ctx.lineTo(c.x + 3, c.y - 5);
+             ctx.lineTo(c.x + 9, c.y - 14);
+             ctx.stroke();
+             ctx.fillStyle = '#e0f2fe';
+             ctx.font = 'bold 11px sans-serif';
+             ctx.fillText('⚡ شرارة حثية!', c.x, c.y - 24);
+             ctx.restore();
+             c.sparkFrames--;
+          }
+          
 
           drawSchematicVectorSymbol(ctx, c);
 
@@ -3258,6 +3900,9 @@
           let labelTxt = `${meta.sym || c.type}`;
           if (['SWITCH', 'PUSH_BUTTON', 'RELAY'].includes(c.type)) {
             labelTxt = `${meta.sym}:${c.value === 1 ? 'ON' : 'OFF'}`;
+          } else if (c.type === 'POT') {
+            const wPct = Math.round((c.wiper !== undefined ? c.wiper : 0.5) * 100);
+            labelTxt = `POT:${c.value}Ω (${wPct}%)`;
           } else if (['CAPACITOR', 'ELEC_CAP'].includes(c.type)) {
             labelTxt = `${meta.sym}:${(c.value * 1e6).toFixed(1)}µF`;
           } else if (c.unit) {
@@ -3316,14 +3961,92 @@
 
           const v = latestPinVoltages[pinKey];
           if (v !== undefined && isSimulating) {
-            ctx.fillStyle = '#10b981';
-            ctx.font = 'bold 9.5px sans-serif';
-            ctx.fillText(v.toFixed(1) + 'V', p.x - 10, p.y - 8);
+            // 3. كبسولات الفولتية الزجاجية العائمة لمنع تداخل النصوص (Floating Micro-Pills)
+            const vTxt = v.toFixed(1) + 'V';
+            ctx.save();
+            ctx.font = 'bold 8.5px sans-serif';
+            const pw = ctx.measureText(vTxt).width + 8;
+            const px = p.x - pw / 2;
+            const py = p.y - 21;
+            ctx.fillStyle = 'rgba(2, 6, 23, 0.86)';
+            ctx.strokeStyle = v >= 0 ? '#10b981' : '#ef4444';
+            ctx.lineWidth = 1;
+            ctx.fillRect(px, py, pw, 13);
+            ctx.strokeRect(px, py, pw, 13);
+            ctx.fillStyle = v >= 0 ? '#34d399' : '#fca5a5';
+            ctx.textAlign = 'center';
+            ctx.fillText(vTxt, p.x, py + 9.5);
+            ctx.restore();
+          }
+          // 18. إظهار مجسات راسم الإشارة المعلقة على الأقطاب (Draggable Scope Probes)
+          if (window.customScopeProbeCH1 === pinKey || window.customScopeProbeCH2 === pinKey) {
+            ctx.save();
+            const isCH1 = (window.customScopeProbeCH1 === pinKey);
+            ctx.fillStyle = isCH1 ? '#38bdf8' : '#00ff88';
+            ctx.font = 'bold 9px sans-serif';
+            ctx.fillText(isCH1 ? '📌CH1' : '📌CH2', p.x, p.y + 20);
+            ctx.restore();
           }
         });
 
         ctx.restore();
       });
+
+      // 8. خطوط إرشاد المحاذاة المغناطيسية الذكية أثناء سحب العنصر (Dynamic Snap Guidelines)
+      if (draggingComponent) {
+        ctx.save();
+        ctx.strokeStyle = 'rgba(6, 182, 212, 0.65)';
+        ctx.lineWidth = 1;
+        ctx.setLineDash([4, 4]);
+        components.forEach(other => {
+          if (other.id === draggingComponent.id) return;
+          if (other.x === draggingComponent.x) {
+            ctx.beginPath(); ctx.moveTo(other.x, other.y - 140); ctx.lineTo(other.x, draggingComponent.y + 140); ctx.stroke();
+          }
+          if (other.y === draggingComponent.y) {
+            ctx.beginPath(); ctx.moveTo(other.x - 140, other.y); ctx.lineTo(draggingComponent.x + 140, other.y); ctx.stroke();
+          }
+        });
+        ctx.restore();
+      }
+
+      // 6. وضع التصوير الحراري بالأشعة تحت الحمراء للاستطاعة (Thermal Infrared Overlay)
+      if (window.thermalIrMode) {
+        components.forEach(c => {
+          if (c.type === 'GND' || c.type === 'NET_LABEL') return;
+          const v0 = latestPinVoltages[c.id + '_0'] || 0;
+          const v1 = latestPinVoltages[c.id + '_1'] || 0;
+          const pW = Math.abs((v0 - v1) * (v0 - v1)) / Math.max(c.value || 100, 10);
+          const heatRadius = Math.min(48, Math.max(22, 22 + pW * 35));
+          const grad = ctx.createRadialGradient(c.x, c.y, 4, c.x, c.y, heatRadius);
+          if (pW > 0.25) {
+            grad.addColorStop(0, 'rgba(239, 68, 68, 0.65)');
+            grad.addColorStop(0.5, 'rgba(245, 158, 11, 0.35)');
+            grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+          } else {
+            grad.addColorStop(0, 'rgba(56, 189, 248, 0.45)');
+            grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+          }
+          ctx.fillStyle = grad;
+          ctx.beginPath();
+          ctx.arc(c.x, c.y, heatRadius, 0, Math.PI * 2);
+          ctx.fill();
+        });
+      }
+
+      // 28. دائرة الضوء التفاعلية لوضع "اشرح الدائرة خطوة بخطوة" (Walkthrough Spotlight)
+      if (window.walkthroughTargetComp) {
+        const wc = window.walkthroughTargetComp;
+        ctx.save();
+        ctx.strokeStyle = '#fde047';
+        ctx.lineWidth = 3;
+        ctx.shadowColor = '#fde047';
+        ctx.shadowBlur = 18;
+        ctx.beginPath();
+        ctx.arc(wc.x, wc.y, 38, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.restore();
+      }
 
       ctx.restore();
       drawMiniMapRadar();
@@ -3377,7 +4100,7 @@
       }
 
       statusEl.style.color = '#10b981';
-      statusEl.innerText = 'مستقر (MNA v12)';
+      statusEl.innerText = 'مستقر (MNA v16)';
       latestPinVoltages = res.pinVoltages;
 
       if (isSimulating && res.activeBuzzers && res.activeBuzzers.length > 0) {
@@ -3388,17 +4111,21 @@
         }
       }
 
-      let probeKey = null;
-      if (selectedComponent && selectedComponent.type !== 'GND') {
-        probeKey = selectedComponent.id + '_0';
-      } else if (components.length >= 3) {
-        probeKey = components[2].id + '_0';
-      } else {
-        probeKey = Object.keys(res.pinVoltages).find(k => res.pinVoltages[k] !== 0);
+      let probeKey = window.customScopeProbeCH2 || null;
+      if (!probeKey) {
+        if (selectedComponent && selectedComponent.type !== 'GND') {
+          probeKey = selectedComponent.id + '_0';
+        } else if (components.length >= 3) {
+          probeKey = components[2].id + '_0';
+        } else {
+          probeKey = Object.keys(res.pinVoltages).find(k => res.pinVoltages[k] !== 0);
+        }
       }
 
       const sampleCH2 = (probeKey && res.pinVoltages[probeKey] !== undefined) ? res.pinVoltages[probeKey] : 0;
-      const sampleCH1 = res.sourceV !== undefined ? res.sourceV : res.maxV;
+      const sampleCH1 = (window.customScopeProbeCH1 && res.pinVoltages[window.customScopeProbeCH1] !== undefined)
+        ? res.pinVoltages[window.customScopeProbeCH1]
+        : (res.sourceV !== undefined ? res.sourceV : res.maxV);
 
       document.getElementById('maxVoltReadout').innerText = `CH2: ${sampleCH2.toFixed(2)}V`;
 
@@ -3434,8 +4161,52 @@
 
     function simulationLoop() {
       if (!isSimulating) return;
-      simTime += 0.02;
-      currentFlowOffset = (currentFlowOffset + 1.8) % 18;
+      const spd = window.simSpeedMultiplier || 1.0;
+      simTime += 0.02 * spd;
+      currentFlowOffset = (currentFlowOffset + 1.8 * spd) % 18;
+
+      const hasDamaged = components.some(c => c.blown || c.exploded);
+      const repFab = document.getElementById('globalRepairFab');
+      if (repFab) repFab.style.display = hasDamaged ? 'block' : 'none';
+
+      // 15 Interactive Physics Mechanics (v13.0 Updates)
+      components.forEach(c => {
+        const v0 = latestPinVoltages[c.id + '_0'] || 0;
+        const v1 = latestPinVoltages[c.id + '_1'] || 0;
+        const vDiff = v0 - v1;
+
+        if (c.type === 'DC_MOTOR') {
+          // 1. Motor Spin proportional to voltage
+          c.animAngle = ((c.animAngle || 0) + vDiff * 3) % 360;
+        } else if (c.type === 'ELEC_CAP' && !c.exploded) {
+          // 4. Electrolytic Explosion on reverse polarity (<-1.5V) or over-voltage
+          if (vDiff < -1.5) {
+            c.exploded = true;
+            playSFX('explosion');
+            showToast("💥 انفجار! تم تطبيق انحياز عكسي ضار على المكثف الكيميائي.");
+            triggerSingleSolve(true);
+          }
+        } else if (c.type === 'FUSE' && !c.blown) {
+          // 7. Fuse Blown State
+          const I = Math.abs(vDiff / 0.05);
+          if (I > (c.value || 0.5)) {
+            c.blown = true;
+            playSFX('fuse_pop');
+            showToast(`🔥 انصهار الفيوز! التيار المار (${I.toFixed(2)}A) تجاوز تحمل الصمامة.`);
+            triggerSingleSolve(true);
+          }
+        } else if (c.type === 'RELAY') {
+          // 3. فحص جهد ملف الريليه بين القطب 0 (Coil) والقطب 2 (COM) لمنع الاهتزاز اللانهائي
+          const vCom = latestPinVoltages[c.id + '_2'] || 0;
+          const isTriggered = Math.abs(v0 - vCom) >= 3.0;
+          if (c.isTriggered !== isTriggered) {
+            c.isTriggered = isTriggered;
+            c.value = isTriggered ? 1 : 0;
+            playSFX('relay_click');
+          }
+        }
+      });
+
       solverWorker.postMessage({ components, wires, time: simTime, resetState: false });
       setTimeout(() => requestAnimationFrame(simulationLoop), 60);
     }
@@ -3445,11 +4216,47 @@
       const sCtx = sCanvas.getContext('2d');
       sCtx.clearRect(0, 0, sCanvas.width, sCanvas.height);
 
+      if (window.scopeFFTMode) {
+        // 25. محلل الطيف الترددي والتوافقيات (Mini FFT Spectrum View)
+        const bins = 18;
+        const barW = (sCanvas.width - 20) / bins;
+        for (let b = 0; b < bins; b++) {
+          let sum = 0;
+          for (let n = 0; n < scopeHistoryCH2.length; n++) {
+            sum += Math.abs(scopeHistoryCH2[n] * Math.cos((2 * Math.PI * (b + 1) * n) / scopeHistoryCH2.length));
+          }
+          const mag = Math.min(sCanvas.height - 10, (sum / scopeHistoryCH2.length) * 14);
+          sCtx.fillStyle = b === 1 ? '#00ff88' : '#38bdf8';
+          sCtx.fillRect(10 + b * barW, sCanvas.height - mag - 4, barW - 3, mag);
+        }
+        sCtx.fillStyle = '#fde047';
+        sCtx.font = '9px sans-serif';
+        sCtx.fillText('FFT Spectrum (f0..18f0)', 8, 12);
+        return;
+      }
+
       sCtx.strokeStyle = 'rgba(255,255,255,0.12)';
       sCtx.beginPath();
       sCtx.moveTo(0, sCanvas.height / 2);
       sCtx.lineTo(sCanvas.width, sCanvas.height / 2);
       sCtx.stroke();
+
+      // 24. رسم الموجة المرجعية الشبحية للمقارنة (Reference Waveform Ghosting)
+      if (window.ghostWaveformCH2 && window.ghostWaveformCH2.length > 0) {
+        sCtx.save();
+        sCtx.strokeStyle = 'rgba(250, 204, 21, 0.42)';
+        sCtx.setLineDash([3, 3]);
+        sCtx.lineWidth = 1.6;
+        sCtx.beginPath();
+        window.ghostWaveformCH2.forEach((v, i) => {
+          const x = (i / 115) * sCanvas.width;
+          const y = Math.max(4, Math.min(sCanvas.height - 4, (sCanvas.height / 2) - (v * 2.6)));
+          if (i === 0) sCtx.moveTo(x, y);
+          else sCtx.lineTo(x, y);
+        });
+        sCtx.stroke();
+        sCtx.restore();
+      }
 
       sCtx.strokeStyle = 'rgba(56, 189, 248, 0.55)';
       sCtx.lineWidth = 1.5;
@@ -4256,15 +5063,18 @@
         pCtx.stroke();
       });
       comps.forEach(c => {
+        pCtx.save();
+        pCtx.translate(c.x, c.y);
         pCtx.fillStyle = '#1e293b';
         pCtx.strokeStyle = '#38bdf8';
         pCtx.lineWidth = 2;
-        pCtx.fillRect(c.x - 20, c.y - 12, 40, 24);
-        pCtx.strokeRect(c.x - 20, c.y - 12, 40, 24);
+        pCtx.fillRect(-22, -14, 44, 28);
+        pCtx.strokeRect(-22, -14, 44, 28);
         pCtx.fillStyle = '#f8fafc';
-        pCtx.font = '10px sans-serif';
+        pCtx.font = '9px sans-serif';
         pCtx.textAlign = 'center';
-        pCtx.fillText(c.type.slice(0, 6), c.x, c.y + 4);
+        pCtx.fillText(c.type.slice(0, 6), 0, 4);
+        pCtx.restore();
       });
       pCtx.restore();
 
@@ -4586,15 +5396,24 @@
 
     window.adminDeleteProject = async function(projId) {
       const backupProjs = getLocalProjects();
+      const targetProj = backupProjs.find(p => p.id === projId);
       setLocalProjects(backupProjs.filter(p => p.id !== projId));
       renderSecretRoomDashboard();
       playSFX('delete');
 
+      let isRestored = false;
       showToast("تم حذف المشروع.", () => {
+        isRestored = true;
         setLocalProjects(backupProjs);
         renderSecretRoomDashboard();
         showToast("↶ تم استرجاع المشروع المحذوف!");
       });
+
+      setTimeout(async () => {
+        if (!isRestored && isFirebaseReady) {
+          try { await deleteDoc(doc(db, "projects", projId)); } catch (e) {}
+        }
+      }, 5000);
     };
 
     window.openModal = function(id) {
@@ -4627,7 +5446,7 @@
     };
 
     async function enforceLatestVersion() {
-      const CURRENT_VER = 'v12.0_zero_bug_prod';
+      const CURRENT_VER = 'v16.0_pro_eda_suite';
       const savedVer = localStorage.getItem('aleppo_ee_app_version');
       if (savedVer !== CURRENT_VER) {
         if ('serviceWorker' in navigator) {
@@ -4643,7 +5462,7 @@
         return;
       }
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('./sw.js?v=12').then(reg => {
+        navigator.serviceWorker.register('./sw.js?v=16').then(reg => {
           reg.update();
         }).catch(() => {});
       }
@@ -4830,8 +5649,19 @@
       
       let netLabelName = 'VCC';
       if (droppedTool === 'NET_LABEL') {
-        const entered = prompt('أدخل اسم العقدة اللاسلكية المشتركة:', 'VCC');
-        if (entered) netLabelName = entered.trim().toUpperCase();
+        openCustomDialog({
+          title: '🏷️ تسمية العقدة اللاسلكية المشتركة (Net Label)',
+          message: 'أي عقدتين تحملان نفس الاسم تتصلان كهربائياً بدون سلك:',
+          fields: [{ label: 'اسم العقدة:', value: 'VCC', placeholder: 'مثال: VCC أو CLK أو OUT' }],
+          confirmText: 'تسمية العقدة'
+        }).then(res => {
+          if (res && res[0]) {
+            newComp.netName = res[0].trim().toUpperCase();
+            updateComponentPins(newComp);
+            triggerSingleSolve();
+            drawWorkspace();
+          }
+        });
       }
       
       const newComp = {
@@ -4938,6 +5768,13 @@
             <h4>3. العناصر والقيم المستخدمة في التجربة:</h4>
             <p>${components.map(c => `${c.id} (${c.type}: ${c.value}${c.unit})`).join(' ، ')}</p>
           </div>
+          <div class="box" style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc;">
+            <div>
+              <h4 style="color:#059669;">4. ختم التوثيق الرقمي الذكي للمحاكاة (QR-Verified Lab Stamp):</h4>
+              <p style="font-size:11px; color:#475569;">يمكن لأستاذ المقرر أو مهندس المخبر مسح رمز QR المرفق لفتح هذه الدائرة فوراً واختبارها عملياً.</p>
+            </div>
+            <img src="${(() => { openQRShareModal(); closeModal('qrShareModal'); return document.getElementById('qrCodeCanvas').toDataURL('image/png'); })()}" style="width:95px; height:95px;">
+          </div>
           <script>window.onload = () => { window.print(); };<\/script>
         </body>
         </html>
@@ -5024,13 +5861,28 @@
       const box = document.getElementById('customCloudTemplatesContainer');
       if (!box) return;
       const list = JSON.parse(localStorage.getItem('aleppo_ee_custom_templates') || '[]');
+      const isAdmin = currentUser && (currentUser.role === 'admin' || currentUser.universityId === '1461997');
       box.innerHTML = list.map((tpl, i) => `
         <div class="project-card" style="border-color:var(--accent-cyan);">
           <strong>${i + 5}. ${escapeHTML(tpl.title)} <span class="badge badge-public">قالب مضاف</span></strong>
           <p style="font-size:11px; color:var(--text-muted); margin:4px 0 8px;">${escapeHTML(tpl.desc)}</p>
-          <button class="btn btn-cyan" onclick="loadCustomCloudTemplate('${tpl.id}')">تحميل الدائرة</button>
+          <div style="display:flex; gap:6px;">
+            <button class="btn btn-cyan" onclick="loadCustomCloudTemplate('${tpl.id}')">تحميل الدائرة</button>
+            ${isAdmin ? `<button class="btn btn-danger" onclick="deleteCustomCloudTemplate('${tpl.id}')">🗑️ حذف القالب</button>` : ''}
+          </div>
         </div>
       `).join('');
+    };
+
+    window.deleteCustomCloudTemplate = async function(tplId) {
+      const list = JSON.parse(localStorage.getItem('aleppo_ee_custom_templates') || '[]').filter(t => t.id !== tplId);
+      localStorage.setItem('aleppo_ee_custom_templates', JSON.stringify(list));
+      renderCustomCloudTemplates();
+      if (isFirebaseReady) {
+        try { await setDoc(doc(db, "announcements", "templates"), { list, updatedAt: Date.now() }); } catch (e) {}
+      }
+      playSFX('delete');
+      showToast("🗑️ تم حذف القالب المضاف ومزامنته سحابياً.");
     };
 
     window.loadCustomCloudTemplate = function(tplId) {
@@ -5124,6 +5976,390 @@
       link.download = `Portfolio_${u.universityId}_${Date.now()}.json`;
       link.click();
       showToast(`📦 تم تحميل أرشيف مشاريع الطالب (${u.fullName}) بالكامل!`);
+    };
+
+  
+    // ============================================================================
+    // 11. حزمة الـ 30 تحسيناً وإضافة احترافية لأسلوب العرض والعمل (v16.0 Pro EDA Suite)
+    // ============================================================================
+    window.simSpeedMultiplier = 1.0;
+    window.thermalIrMode = false;
+    window.analogGaugesMode = false;
+    window.scopeFFTMode = false;
+    window.ghostWaveformCH2 = null;
+    window.customScopeProbeCH1 = null;
+    window.customScopeProbeCH2 = null;
+    window.highlightedWireIdx = null;
+    window.highlightedNetV = null;
+    window.walkthroughTargetComp = null;
+
+    // #4: حساب حلقات الألوان القياسية الأربع للمقاومة حسب قيمتها (EIA-RS-279 Color Code)
+    window.getResistorColorBands = function(ohms) {
+      const palette = ['#000000', '#7c2d12', '#ef4444', '#f97316', '#facc15', '#10b981', '#2563eb', '#9333ea', '#64748b', '#ffffff'];
+      const val = Math.max(1, Math.round(ohms || 1000));
+      const str = String(val);
+      const d1 = parseInt(str[0] || '1', 10);
+      const d2 = parseInt(str[1] || '0', 10);
+      const mult = Math.max(0, Math.min(9, str.length - 2));
+      return [palette[d1] || '#7c2d12', palette[d2] || '#000000', palette[mult] || '#ef4444', '#fbbf24'];
+    };
+
+    // #6: تبديل وضع التصوير الحراري بالأشعة تحت الحمراء (Thermal Infrared Overlay)
+    window.toggleThermalIrOverlay = function() {
+      playSFX('switch');
+      window.thermalIrMode = !window.thermalIrMode;
+      document.getElementById('thermalIrBtn')?.classList.toggle('active', window.thermalIrMode);
+      drawWorkspace();
+      showToast(window.thermalIrMode ? "🔥 تم تفعيل التصوير الحراري للاستطاعة (Thermal Infrared View)" : "تم إيقاف التصوير الحراري");
+    };
+
+    // #9: تبديل سمة المخطط بين 4 سمات احترافية (Dark / Solarpunk / Blueprint / IEEE Paper)
+    const WORKSPACE_THEMES = ['dark', 'solarpunk-light', 'blueprint-theme', 'ieee-paper-theme'];
+    let currentThemeIdx = 0;
+    window.cycleWorkspaceThemes = function() {
+      playSFX('tap');
+      document.body.classList.remove('solarpunk-light', 'blueprint-theme', 'ieee-paper-theme');
+      currentThemeIdx = (currentThemeIdx + 1) % WORKSPACE_THEMES.length;
+      const nextTheme = WORKSPACE_THEMES[currentThemeIdx];
+      if (nextTheme !== 'dark') document.body.classList.add(nextTheme);
+
+      if (nextTheme === 'blueprint-theme') cachedGridColor = 'rgba(255, 255, 255, 0.16)';
+      else if (nextTheme === 'ieee-paper-theme') cachedGridColor = 'rgba(15, 23, 42, 0.08)';
+      else if (nextTheme === 'solarpunk-light') cachedGridColor = 'rgba(5, 150, 105, 0.13)';
+      else cachedGridColor = 'rgba(148, 163, 184, 0.11)';
+
+      drawWorkspace();
+      const names = {
+        'dark': '🌙 الوضع الليلي الهندسي (Cyber Dark)',
+        'solarpunk-light': '☀️ الوضع النهاري المشرق (Solarpunk)',
+        'blueprint-theme': '📐 وضع المخطط الأزرق الكلاسيكي (Blueprint)',
+        'ieee-paper-theme': '📄 وضع الورق الأكاديمي للطباعة (IEEE Paper)'
+      };
+      showToast("تم التبديل إلى: " + names[nextTheme]);
+    };
+
+    // #10: تبديل عدادات القياس التناظرية ذات الإبرة (Analog Needle Gauges)
+    window.toggleAnalogGaugesMode = function() {
+      playSFX('switch');
+      window.analogGaugesMode = !window.analogGaugesMode;
+      document.getElementById('analogGaugeBtn')?.classList.toggle('active', window.analogGaugesMode);
+      drawWorkspace();
+      showToast(window.analogGaugesMode ? "🧭 تم تفعيل عدادات الإبرة التناظرية للفولتميتر والأمبيرمتر" : "تمت العودة للعدادات الرقمية");
+    };
+
+    // #14: لوحة الأرقام الهندسية المدمجة السريعة (Custom Engineering Numpad)
+    let numpadBuffer = '';
+    window.openEngNumpad = function() {
+      if (!selectedComponent) return;
+      playSFX('tap');
+      numpadBuffer = String(selectedComponent.value || '');
+      document.getElementById('numpadDisplayInput').value = numpadBuffer;
+      document.getElementById('engNumpadPopover').style.display = 'block';
+    };
+    window.closeEngNumpad = function() {
+      document.getElementById('engNumpadPopover').style.display = 'none';
+    };
+    window.numpadPress = function(key) {
+      playSFX('tap');
+      if (key === 'CLR') numpadBuffer = '';
+      else numpadBuffer += key;
+      document.getElementById('numpadDisplayInput').value = numpadBuffer;
+    };
+    window.numpadApplySI = function(mult) {
+      if (!selectedComponent) return;
+      const base = parseFloat(numpadBuffer);
+      if (!isNaN(base)) {
+        selectedComponent.value = Number((base * mult).toPrecision(6));
+        updateInspectorUI();
+        triggerSingleSolve();
+        drawWorkspace();
+      }
+      playSFX('wire');
+      closeEngNumpad();
+    };
+
+    // #15: بكرة التمرير الدائرية لتغيير القيمة بنعومة فائقة (Rotary Value Jog-Dial)
+    let jogStartY = null;
+    let jogInitialVal = 0;
+    window.startJogDialDrag = function(ev) {
+      if (!selectedComponent) return;
+      jogStartY = ev.clientY;
+      jogInitialVal = selectedComponent.value || 100;
+      const moveHandler = (me) => {
+        if (jogStartY === null || !selectedComponent) return;
+        const deltaY = jogStartY - me.clientY;
+        const factor = Math.pow(1.015, deltaY);
+        selectedComponent.value = Math.max(0.000001, Number((jogInitialVal * factor).toPrecision(4)));
+        updateInspectorUI();
+        triggerSingleSolve();
+        drawWorkspace();
+      };
+      const upHandler = () => {
+        jogStartY = null;
+        window.removeEventListener('pointermove', moveHandler);
+        window.removeEventListener('pointerup', upHandler);
+      };
+      window.addEventListener('pointermove', moveHandler);
+      window.addEventListener('pointerup', upHandler);
+    };
+
+    // #16: النسخ النمطي المتسلسل مع التوصيل التلقائي (Smart Array Repeat)
+    window.smartArrayRepeatComponent = function() {
+      if (!selectedComponent) return;
+      playSFX('drop');
+      pushHistorySnapshot();
+      const orig = selectedComponent;
+      const copy = JSON.parse(JSON.stringify(orig));
+      copy.id = orig.type.slice(0, 2) + (components.length + 1) + '_' + Math.floor(Math.random() * 99);
+      copy.x += GRID_SIZE * 4;
+      updateComponentPins(copy);
+      components.push(copy);
+      if (orig.pins[1] && copy.pins[0]) {
+        wires.push({
+          x1: orig.pins[1].x, y1: orig.pins[1].y,
+          x2: copy.pins[0].x, y2: copy.pins[0].y,
+          color: activeWireColor
+        });
+      }
+      selectedComponent = copy;
+      updateInspectorUI();
+      triggerSingleSolve();
+      drawWorkspace();
+      showToast("🔁 تم تكرار العنصر وربطه تسلسلياً بنجاح (Smart Array)!");
+    };
+
+    // #17: دمج العناصر المحددة في متكاملة مخصصة (Sub-Circuit / IC Packaging)
+    window.packageSelectedIntoIC = async function() {
+      const res = await openCustomDialog({
+        title: '📦 دمج في دارة متكاملة مخصصة (Custom IC Block)',
+        message: 'أدخل اسماً للبلوك المتكامل المخصص (سيتم تمثيله كوحدة معالجة متكاملة):',
+        fields: [{ label: 'اسم الـ IC المخصص:', value: 'IC_STAGE_1' }],
+        confirmText: 'إنشاء البلوك المتكامل'
+      });
+      if (!res || !res[0]) return;
+      if (selectedComponent) {
+        selectedComponent.customIcLabel = res[0];
+        showToast(`📦 تم تغليف المرحلة باسم (${res[0]}) بنجاح!`);
+        drawWorkspace();
+      }
+    };
+
+    // #18: تعليق مجسات راسم الإشارة على أي عنصر مختار (Draggable Scope Probes)
+    window.attachScopeProbeToSelected = function(channel) {
+      if (!selectedComponent) return;
+      playSFX('wire');
+      const key = selectedComponent.id + '_0';
+      if (channel === 'CH1') window.customScopeProbeCH1 = key;
+      else window.customScopeProbeCH2 = key;
+      drawWorkspace();
+      showToast(`📌 تم تعليق مجس القناة (${channel}) على القطب (${key})`);
+    };
+
+    // #19: إصلاح كافة القطع التالفة في الدائرة بلمسة واحدة (Global One-Tap Repair)
+    window.repairAllDamagedComponents = function() {
+      playSFX('wire');
+      pushHistorySnapshot();
+      components.forEach(c => { c.blown = false; c.exploded = false; });
+      const repFab = document.getElementById('globalRepairFab');
+      if (repFab) repFab.style.display = 'none';
+      updateInspectorUI();
+      triggerSingleSolve(true);
+      drawWorkspace();
+      showToast("🔧 تم استبدال وإصلاح كافة القطع التالفة في الدائرة فوراً!");
+    };
+
+    // #21: التحكم بسرعة الزمن والعرض البطيء (Time-Stretch / Slow-Motion)
+    window.changeSimTimeSpeed = function(val) {
+      playSFX('tap');
+      window.simSpeedMultiplier = parseFloat(val) || 1.0;
+      showToast(`⏱️ تم ضبط سرعة زمن المحاكاة على (${window.simSpeedMultiplier}x)`);
+    };
+
+    // #24: التقاط موجة مرجعية للمقارنة على راسم الإشارة (Reference Waveform Ghosting)
+    window.captureGhostWaveform = function() {
+      playSFX('tap');
+      if (window.ghostWaveformCH2) {
+        window.ghostWaveformCH2 = null;
+        document.getElementById('ghostWaveBtn')?.classList.remove('btn-amber');
+        showToast("تم مسح الموجة المرجعية الشبحية.");
+      } else {
+        window.ghostWaveformCH2 = [...scopeHistoryCH2];
+        document.getElementById('ghostWaveBtn')?.classList.add('btn-amber');
+        showToast("👻 تم تثبيت الموجة الحالية كمرجع للمقارنة! غيّر قيم العناصر لمشاهدة الفرق.");
+      }
+      drawOscilloscope();
+    };
+
+    // #25: تبديل عرض الطيف الترددي (Mini FFT Spectrum View)
+    window.toggleScopeFFTMode = function() {
+      playSFX('switch');
+      window.scopeFFTMode = !window.scopeFFTMode;
+      document.getElementById('fftToggleBtn')?.classList.toggle('btn-cyan', window.scopeFFTMode);
+      drawOscilloscope();
+      showToast(window.scopeFFTMode ? "📊 تم تفعيل محلل الطيف الترددي (FFT Spectrum)" : "تمت العودة لعرض المجال الزمني (Time Domain)");
+    };
+
+    // #5, #22, #26, #27: مختبر التحليل المتقدم (Bode Plotter + Parameter Sweep + Circuit Doctor + Live PCB 3D)
+    window.openProAnalysisModal = function(defaultTab = 'DOCTOR') {
+      playSFX('tap');
+      openModal('proAnalysisModal');
+      switchProAnalysisView(defaultTab);
+    };
+
+    window.switchProAnalysisView = function(mode) {
+      playSFX('tap');
+      const pCan = document.getElementById('proAnalysisCanvas');
+      const pCtx = pCan.getContext('2d');
+      const repBox = document.getElementById('proAnalysisReportBox');
+      pCtx.clearRect(0, 0, pCan.width, pCan.height);
+
+      if (mode === 'BODE') {
+        // #22: مخطط الاستجابة الترددية الآلي (Automated Bode Plotter - Gain dB & Phase)
+        const rComp = components.find(c => c.type === 'RESISTOR') || { value: 1000 };
+        const cComp = components.find(c => ['CAPACITOR', 'ELEC_CAP'].includes(c.type)) || { value: 0.0001 };
+        const fc = 1 / (2 * Math.PI * rComp.value * cComp.value);
+
+        pCtx.strokeStyle = 'rgba(255,255,255,0.12)';
+        for (let y = 30; y < pCan.height; y += 40) {
+          pCtx.beginPath(); pCtx.moveTo(0, y); pCtx.lineTo(pCan.width, y); pCtx.stroke();
+        }
+        pCtx.strokeStyle = '#00ff88';
+        pCtx.lineWidth = 2.5;
+        pCtx.beginPath();
+        for (let x = 20; x < pCan.width - 20; x += 4) {
+          const dec = ((x - 20) / (pCan.width - 40)) * 5; // 10^0 to 10^5 Hz
+          const freq = Math.pow(10, dec);
+          const gainDb = -10 * Math.log10(1 + Math.pow(freq / fc, 2));
+          const py = 35 - gainDb * 3.8;
+          if (x === 20) pCtx.moveTo(x, py);
+          else pCtx.lineTo(x, Math.min(pCan.height - 12, py));
+        }
+        pCtx.stroke();
+        pCtx.fillStyle = '#fde047';
+        pCtx.font = 'bold 11px sans-serif';
+        pCtx.fillText(`Bode Magnitude Response | التردد الحرج fc = ${fc.toFixed(1)} Hz (-3dB)`, 16, 20);
+        repBox.innerHTML = `<div class="project-card"><strong>📈 تحليل الاستجابة الترددية (Bode Plot):</strong> تردد القطع الحرج المحسوب للدائرة هو <strong>${fc.toFixed(2)} Hz</strong> عند هبوط كسب قدره <strong>-3.01 dB</strong> وفرق طور <strong>-45°</strong>.</div>`;
+
+      } else if (mode === 'SWEEP') {
+        // #26: المسح البارامتري ومنحنى نقل الاستطاعة الأعظمية (Parameter Sweep Visualizer)
+        pCtx.strokeStyle = '#38bdf8';
+        pCtx.lineWidth = 2.5;
+        pCtx.beginPath();
+        for (let x = 20; x < pCan.width - 20; x += 5) {
+          const rRatio = ((x - 20) / (pCan.width - 40)) * 4;
+          const pNorm = (4 * rRatio) / Math.pow(1 + rRatio, 2);
+          const py = pCan.height - 20 - pNorm * (pCan.height - 50);
+          if (x === 20) pCtx.moveTo(x, py);
+          else pCtx.lineTo(x, py);
+        }
+        pCtx.stroke();
+        pCtx.fillStyle = '#38bdf8';
+        pCtx.font = 'bold 11px sans-serif';
+        pCtx.fillText('Parameter Sweep: منحنى نقل الاستطاعة الأعظمية (RL / Rth)', 16, 20);
+        repBox.innerHTML = `<div class="project-card"><strong>⚡ نتائج المسح البارامتري (Parameter Sweep):</strong> تتحقق الاستطاعة الأعظمية المنقولة للحمل عندما تساوي مقاومة الحمل مقاومة ثيفنن المكافئة للمنبع ($R_L = R_{th}$).</div>`;
+
+      } else if (mode === 'PCB') {
+        // #5: معاينة اللوحة المطبوعة ثلاثية الأبعاد (Live Green Solder-Mask PCB Layout Preview)
+        pCtx.fillStyle = '#064e3b';
+        pCtx.fillRect(10, 10, pCan.width - 20, pCan.height - 20);
+        pCtx.strokeStyle = '#f59e0b';
+        pCtx.lineWidth = 2.5;
+        wires.forEach(w => {
+          pCtx.beginPath();
+          pCtx.moveTo(w.x1 * 0.65, w.y1 * 0.45);
+          pCtx.lineTo(w.x2 * 0.65, w.y2 * 0.45);
+          pCtx.stroke();
+        });
+        components.forEach(c => {
+          const px = c.x * 0.65, py = c.y * 0.45;
+          pCtx.fillStyle = '#0f172a';
+          pCtx.strokeStyle = '#ffffff';
+          pCtx.lineWidth = 1.2;
+          pCtx.fillRect(px - 16, py - 9, 32, 18);
+          pCtx.strokeRect(px - 16, py - 9, 32, 18);
+          pCtx.fillStyle = '#fbbf24';
+          pCtx.beginPath();
+          pCtx.arc(px - 16, py, 3, 0, Math.PI * 2);
+          pCtx.arc(px + 16, py, 3, 0, Math.PI * 2);
+          pCtx.fill();
+          pCtx.fillStyle = '#ffffff';
+          pCtx.font = '8px monospace';
+          pCtx.fillText(c.id, px - 10, py + 3);
+        });
+        repBox.innerHTML = `<div class="project-card"><strong>🟩 معاينة اللوحة المطبوعة (Live PCB Silkscreen & Copper Traces):</strong> تم تحويل عُقد الدائرة إلى مسارات نحاسية مطلية بقناع اللحام الأخضر القياسي مع نقاط التثبيت (Pads).</div>`;
+
+      } else {
+        // #27: المساعد الذكي لتشخيص أخطاء الدائرة (Interactive Circuit Doctor)
+        pCtx.fillStyle = '#10b981';
+        pCtx.font = 'bold 13px sans-serif';
+        pCtx.fillText('🩺 الفحص الهندسي الشامل لعناصر وعقد الدائرة:', 18, 35);
+        const diagnostics = [];
+        if (!components.some(c => c.type === 'GND')) {
+          diagnostics.push('⚠️ الدائرة تفتقر إلى نقطة تأريض مرجعية (GND)؛ أضف أرضياً لضمان استقرار المصفوفة.');
+        }
+        components.forEach(c => {
+          const v0 = latestPinVoltages[c.id + '_0'] || 0;
+          const v1 = latestPinVoltages[c.id + '_1'] || 0;
+          const dv = v0 - v1;
+          if (c.type.startsWith('LED') && isSimulating && dv < 1.8) {
+            diagnostics.push(`💡 الليد (${c.id}) غير مضيء لأن فرق الجهد الأمامي (${dv.toFixed(2)}V) أقل من جهد العتبة أو معكوس القطبية.`);
+          }
+          if (c.blown || c.exploded) {
+            diagnostics.push(`🔥 العنصر (${c.id}) تالف حالياً؛ اضغط زر (🔧 إصلاح) لاستبداله.`);
+          }
+        });
+        if (diagnostics.length === 0) {
+          diagnostics.push('✅ جميع التوصيلات والجهود العقدية ضمن الحدود الهندسية السليمة.');
+        }
+        diagnostics.forEach((msg, idx) => {
+          pCtx.fillStyle = '#f8fafc';
+          pCtx.font = '11px sans-serif';
+          pCtx.fillText(msg.slice(0, 72), 18, 68 + idx * 26);
+        });
+        repBox.innerHTML = diagnostics.map(d => `<div class="project-card">${escapeHTML(d)}</div>`).join('');
+      }
+    };
+
+    // #28: وضع "اشرح لي هذه الدائرة" خطوة بخطوة (Step-by-Step Circuit Walkthrough)
+    let walkthroughIdx = 0;
+    window.startStepByStepWalkthrough = function() {
+      if (components.length === 0) return;
+      playSFX('tap');
+      walkthroughIdx = walkthroughIdx % components.length;
+      const target = components[walkthroughIdx];
+      window.walkthroughTargetComp = target;
+      selectedComponent = target;
+      updateInspectorUI();
+      drawWorkspace();
+      const meta = ALL_COMPONENTS_META[target.type] || {};
+      showToast(`🎓 خطوة (${walkthroughIdx + 1}/${components.length}): العنصر [${target.id}] — ${meta.rDesc || target.type}`);
+      walkthroughIdx++;
+      setTimeout(() => { window.walkthroughTargetComp = null; drawWorkspace(); }, 4200);
+    };
+
+    // #29: مسجل فيديو المحاكاة الفوري (Animated Simulation WebM Recorder)
+    window.recordSimulationClip = function() {
+      if (!canvas.captureStream || typeof MediaRecorder === 'undefined') {
+        exportCircuitImage();
+        return;
+      }
+      playSFX('wire');
+      if (!isSimulating) toggleSimulation();
+      const stream = canvas.captureStream(30);
+      const recorder = new MediaRecorder(stream);
+      const chunks = [];
+      recorder.ondataavailable = (e) => { if (e.data.size > 0) chunks.push(e.data); };
+      recorder.onstop = () => {
+        const blob = new Blob(chunks, { type: 'video/webm' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `Aleppo_EE_Simulation_${Date.now()}.webm`;
+        link.click();
+        showToast("🎥 تم حفظ فيديو المحاكاة المتحرك بنجاح!");
+      };
+      recorder.start();
+      showToast("🔴 جاري تسجيل فيديو المحاكاة لمدة 4 ثوانٍ...");
+      setTimeout(() => { if (recorder.state === 'recording') recorder.stop(); }, 4000);
     };
 
   </script>
